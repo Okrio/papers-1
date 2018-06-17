@@ -1,0 +1,38 @@
+There are eight audio files in this directory.
+
+  * Single channel audio files
+    - single_speaker_mono.wav
+    - two_speakers_mono.wav 
+
+  * Single channel audio files with reverberation
+    - single_speaker_mono_rev_0p2.wav
+    - two_speakers_mono_rev_0p2.wav
+
+  * Two-channel audio files
+    - single_speaker_stereo.wav
+    - two_speakers_stereo.wav
+
+  * Two-channel audio files with 0.2 seconds reverberation.
+    - single_speaker_stereo_rev_0p2.wav
+    - two_speakers_stereo_rev_0p2.wav
+
+For single-speaker audio files, we use the following utterances from
+the DARAPA Resource Management 1 (RM1) database.
+
+  * aem0_2/sb06.wav from the RM1 database.
+
+For two-speaker audio files, we use the following two audio files.
+  * aem0_2/sb06.wav from the RM1 database.
+  * TEST/DR1/FAKS0/SA1.WAV from the TIMIT database.
+For these two-speaker audio files, the power of each speaker is the same,
+which means that the SNR is zero dB. 
+For reverberation simulation, we use the room simulator.
+  * http://google3/speech/dsp/room_acoustics_simulation/
+
+The protocol buffers for each configuration is as follows:
+
+blaze run speech/dsp/room_acoustics_simulation:single_wav_room_acoustics_simulation  -- \
+    --input_signal_wave_file=$input_wav_file  \
+    --input_noise_sources_wave_file=$noise_wav_file  \
+    --input_room_acoustics_params_file=$params_file  \
+    --output_simulated_microphone_signals_file=$output_wav_file  

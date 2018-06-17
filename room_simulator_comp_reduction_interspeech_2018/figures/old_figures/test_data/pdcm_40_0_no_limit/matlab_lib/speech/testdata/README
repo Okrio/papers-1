@@ -1,0 +1,41 @@
+In this directory, there are two files to test "RoomAcoustcisSimulation".
+
+ * target_1channel.wav
+
+    This is the "aem0_2/sb06.wav" of the resource management 1 test set.
+    The format has been changed from the NIST Sphere format to the Microsoft
+    wave format.
+
+ * noise_20channels.wav
+
+    This file contains 20 audio files from the resource management 1 test
+    set as each channel.
+
+     To remove the silence precedeing the actual utterance, the first
+    2 seconds were chopped off. To make the noise file have the same length
+    as the target file,  the next 59904 samples (3.744 seconds) were selected
+    after chopping the first 2-second portion.
+
+    The following is the list of audio files which comprises each chanenl
+    of "noise_20channels.wav" in the increasing order.
+
+    alk0_3/st1782.wav
+    cau0_7/st0172.wav
+    cew0_2/st1327.wav
+    dml0_1/st1166.wav
+    dml0_1/st1390.wav
+    dml0_1/st2105.wav
+    dml0_1/st2178.wav
+    ecd0_1/st0694.wav
+    ecd0_1/st0975.wav
+    ewm0_5/st1166.wav
+    ewm0_5/st1390.wav
+    ewm0_5/st2105.wav
+    exm0_5/st1158.wav
+    exm0_5/st1515.wav
+    exm0_5/st1649.wav
+    pad0_6/st1782.wav
+    rjt0_2/st0694.wav
+    sas0_5/st0437.wav
+    sas0_5/st1211.wav
+    tjs0_1/st1305.wav

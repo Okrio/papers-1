@@ -1,0 +1,20 @@
+Copied from  
+/google/src/cloud/chanwcom/chanwcom-speech9999/google3/experimental/users/chanwcom/work/wavs_to_room_configuration_sstable/wavefiles
+
+The sampling frequency is 16 kHz. Note that the source elevation w.r.t the
+camera is fixed at 90 degrees (horizontal) for these RIRs.
+
+Each RIR wav file has the following naming format:
+<dist>_<azimuth>_<elevation>_rir_<room type>_<sampling frequency>.wav
+dist (meters): distance of sound source from device
+azimuth (degrees): 0, 90, 180, and 270 degrees correspond to DOA from the right,
+front, left, and rear of camera, respectively
+elevation (degrees): 0, 90, 180 correspond to DOA from the top, horizontal, and
+bottom of camera, respectively
+
+
+TODO(chanwcom) What is the original directory location?
+TODO(chanwcom) Makes a program to check the validity of each wavefiles
+
+
+

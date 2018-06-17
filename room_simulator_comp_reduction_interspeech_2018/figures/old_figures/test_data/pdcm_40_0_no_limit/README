@@ -1,0 +1,11 @@
+1. Copy your matlab codes under $OCTAVE_WORK.
+  cp $your_code $OCTAVE_WORK/
+
+2. Run "copy_matlab_lib_here.pl"
+  This command needs to be run on the directory where the main matlab function resides.
+  copy_matlab_lib_here.pl
+  This will copy set_path.m and matlab_lib to the current directory.
+
+3. Add set_path right after the function definition.
+
+4. Run with some samples to check whether the result is expected. 

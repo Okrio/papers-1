@@ -1,0 +1,1254 @@
+
+%% bare_jrnl.tex
+%% V1.4
+%% 2012/12/27
+%% by Michael Shell
+%% see http://www.michaelshell.org/
+%% for current contact information.
+%%
+%% This is a skeleton file demonstrating the use of IEEEtran.cls
+%% (requires IEEEtran.cls version 1.8 or later) with an IEEE journal paper.
+%%
+%% Support sites:
+%% http://www.michaelshell.org/tex/ieeetran/
+%% http://www.ctan.org/tex-archive/macros/latex/contrib/IEEEtran/
+%% and
+%% http://www.ieee.org/
+
+
+
+% *** Authors should verify (and, if needed, correct) their LaTeX system  ***
+% *** with the testflow diagnostic prior to trusting their LaTeX platform ***
+% *** with production work. IEEE's font choices can trigger bugs that do  ***
+% *** not appear when using other class files.                            ***
+% The testflow support page is at:
+% http://www.michaelshell.org/tex/testflow/
+
+
+%%*************************************************************************
+%% Legal Notice:
+%% This code is offered as-is without any warranty either expressed or
+%% implied; without even the implied warranty of MERCHANTABILITY or
+%% FITNESS FOR A PARTICULAR PURPOSE! 
+%% User assumes all risk.
+%% In no event shall IEEE or any contributor to this code be liable for
+%% any damages or losses, including, but not limited to, incidental,
+%% consequential, or any other damages, resulting from the use or misuse
+%% of any information contained here.
+%%
+%% All comments are the opinions of their respective authors and are not
+%% necessarily endorsed by the IEEE.
+%%
+%% This work is distributed under the LaTeX Project Public License (LPPL)
+%% ( http://www.latex-project.org/ ) version 1.3, and may be freely used,
+%% distributed and modified. A copy of the LPPL, version 1.3, is included
+%% in the base LaTeX documentation of all distributions of LaTeX released
+%% 2003/12/01 or later.
+%% Retain all contribution notices and credits.
+%% ** Modified files should be clearly indicated as such, including  **
+%% ** renaming them and changing author support contact information. **
+%%
+%% File list of work: IEEEtran.cls, IEEEtran_HOWTO.pdf, bare_adv.tex,
+%%                    bare_conf.tex, bare_jrnl.tex, bare_jrnl_compsoc.tex,
+%%                    bare_jrnl_transmag.tex
+%%*************************************************************************
+
+% Note that the a4paper option is mainly intended so that authors in
+% countries using A4 can easily print to A4 and see how their papers will
+% look in print - the typesetting of the document will not typically be
+% affected with changes in paper size (but the bottom and side margins will).
+% Use the testflow package mentioned above to verify correct handling of
+% both paper sizes by the user's LaTeX system.
+%
+% Also note that the "draftcls" or "draftclsnofoot", not "draft", option
+% should be used if it is desired that the figures are to be displayed in
+% draft mode.
+%
+\documentclass[journal]{IEEEtran}
+%
+% If IEEEtran.cls has not been installed into the LaTeX system files,
+% manually specify the path to it like:
+% \documentclass[journal]{../sty/IEEEtran}
+
+
+% Some very useful LaTeX packages include:
+% (uncomment the ones you want to load)
+
+
+% *** MISC UTILITY PACKAGES ***
+%
+%\usepackage{ifpdf}
+% Heiko Oberdiek's ifpdf.sty is very useful if you need conditional
+% compilation based on whether the output is pdf or dvi.
+% usage:
+% \ifpdf
+%   % pdf code
+% \else
+%   % dvi code
+% \fi
+% The latest version of ifpdf.sty can be obtained from:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/oberdiek/
+% Also, note that IEEEtran.cls V1.7 and later provides a builtin
+% \ifCLASSINFOpdf conditional that works the same way.
+% When switching from latex to pdflatex and vice-versa, the compiler may
+% have to be run twice to clear warning/error messages.
+
+
+% *** CITATION PACKAGES ***
+%
+%\usepackage{cite}
+% cite.sty was written by Donald Arseneau
+% V1.6 and later of IEEEtran pre-defines the format of the cite.sty package
+% \cite{} output to follow that of IEEE. Loading the cite package will
+% result in citation numbers being automatically sorted and properly
+% "compressed/ranged". e.g., [1], [9], [2], [7], [5], [6] without using
+% cite.sty will become [1], [2], [5]--[7], [9] using cite.sty. cite.sty's
+% \cite will automatically add leading space, if needed. Use cite.sty's
+% noadjust option (cite.sty V3.8 and later) if you want to turn this off
+% such as if a citation ever needs to be enclosed in parenthesis.
+% cite.sty is already installed on most LaTeX systems. Be sure and use
+% version 4.0 (2003-05-27) and later if using hyperref.sty. cite.sty does
+% not currently provide for hyperlinked citations.
+% The latest version can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/cite/
+% The documentation is contained in the cite.sty file itself.
+
+
+
+
+
+
+% *** GRAPHICS RELATED PACKAGES ***
+%
+\ifCLASSINFOpdf
+  % \usepackage[pdftex]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../pdf/}{../jpeg/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.pdf,.jpeg,.png}
+\else
+  % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
+  % will default to the driver specified in the system graphics.cfg if no
+  % driver is specified.
+  % \usepackage[dvips]{graphicx}
+  % declare the path(s) where your graphic files are
+  % \graphicspath{{../eps/}}
+  % and their extensions so you won't have to specify these with
+  % every instance of \includegraphics
+  % \DeclareGraphicsExtensions{.eps}
+\fi
+% graphicx was written by David Carlisle and Sebastian Rahtz. It is
+% required if you want graphics, photos, etc. graphicx.sty is already
+% installed on most LaTeX systems. The latest version and documentation
+% can be obtained at: 
+% http://www.ctan.org/tex-archive/macros/latex/required/graphics/
+% Another good source of documentation is "Using Imported Graphics in
+% LaTeX2e" by Keith Reckdahl which can be found at:
+% http://www.ctan.org/tex-archive/info/epslatex/
+%
+% latex, and pdflatex in dvi mode, support graphics in encapsulated
+% postscript (.eps) format. pdflatex in pdf mode supports graphics
+% in .pdf, .jpeg, .png and .mps (metapost) formats. Users should ensure
+% that all non-photo figures use a vector format (.eps, .pdf, .mps) and
+% not a bitmapped formats (.jpeg, .png). IEEE frowns on bitmapped formats
+% which can result in "jaggedy"/blurry rendering of lines and letters as
+% well as large increases in file sizes.
+%
+% You can find documentation about the pdfTeX application at:
+% http://www.tug.org/applications/pdftex
+
+
+% *** MATH PACKAGES ***
+%
+\usepackage[cmex10]{amsmath}
+% A popular package from the American Mathematical Society that provides
+% many useful and powerful commands for dealing with mathematics. If using
+% it, be sure to load this package with the cmex10 option to ensure that
+% only type 1 fonts will utilized at all point sizes. Without this option,
+% it is possible that some math symbols, particularly those within
+% footnotes, will be rendered in bitmap form which will result in a
+% document that can not be IEEE Xplore compliant!
+%
+% Also, note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+%\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/amslatex/math/
+
+
+
+
+
+% *** SPECIALIZED LIST PACKAGES ***
+%
+%\usepackage{algorithmic}
+% algorithmic.sty was written by Peter Williams and Rogerio Brito.
+% This package provides an algorithmic environment fo describing algorithms.
+% You can use the algorithmic environment in-text or within a figure
+% environment to provide for a floating algorithm. Do NOT use the algorithm
+% floating environment provided by algorithm.sty (by the same authors) or
+% algorithm2e.sty (by Christophe Fiorio) as IEEE does not use dedicated
+% algorithm float types and packages that provide these will not provide
+% correct IEEE style captions. The latest version and documentation of
+% algorithmic.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithms/
+% There is also a support site at:
+% http://algorithms.berlios.de/index.html
+% Also of interest may be the (relatively newer and more customizable)
+% algorithmicx.sty package by Szasz Janos:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/algorithmicx/
+
+
+
+
+% *** ALIGNMENT PACKAGES ***
+%
+%\usepackage{array}
+% Frank Mittelbach's and David Carlisle's array.sty patches and improves
+% the standard LaTeX2e array and tabular environments to provide better
+% appearance and additional user controls. As the default LaTeX2e table
+% generation code is lacking to the point of almost being broken with
+% respect to the quality of the end results, all users are strongly
+% advised to use an enhanced (at the very least that provided by array.sty)
+% set of table tools. array.sty is already installed on most systems. The
+% latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/required/tools/
+
+
+% IEEEtran contains the IEEEeqnarray family of commands that can be used to
+% generate multiline equations as well as matrices, tables, etc., of high
+% quality.
+
+
+
+% *** SUBFIGURE PACKAGES ***
+\ifCLASSOPTIONcompsoc
+  \usepackage[caption=false,font=normalsize,labelfont=sf,textfont=sf]{subfig}
+\else
+  \usepackage[caption=false,font=footnotesize]{subfig}
+\fi
+% subfig.sty, written by Steven Douglas Cochran, is the modern replacement
+% for subfigure.sty, the latter of which is no longer maintained and is
+% incompatible with some LaTeX packages including fixltx2e. However,
+% subfig.sty requires and automatically loads Axel Sommerfeldt's caption.sty
+% which will override IEEEtran.cls' handling of captions and this will result
+% in non-IEEE style figure/table captions. To prevent this problem, be sure
+% and invoke subfig.sty's "caption=false" package option (available since
+% subfig.sty version 1.3, 2005/06/28) as this is will preserve IEEEtran.cls
+% handling of captions.
+% Note that the Computer Society format requires a larger sans serif font
+% than the serif footnote size font used in traditional IEEE formatting
+% and thus the need to invoke different subfig.sty package options depending
+% on whether compsoc mode has been enabled.
+%
+% The latest version and documentation of subfig.sty can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/subfig/
+
+
+
+
+% *** FLOAT PACKAGES ***
+%
+%\usepackage{fixltx2e}
+% fixltx2e, the successor to the earlier fix2col.sty, was written by
+% Frank Mittelbach and David Carlisle. This package corrects a few problems
+% in the LaTeX2e kernel, the most notable of which is that in current
+% LaTeX2e releases, the ordering of single and double column floats is not
+% guaranteed to be preserved. Thus, an unpatched LaTeX2e can allow a
+% single column figure to be placed prior to an earlier double column
+% figure. The latest version and documentation can be found at:
+% http://www.ctan.org/tex-archive/macros/latex/base/
+
+
+%\usepackage{stfloats}
+% stfloats.sty was written by Sigitas Tolusis. This package gives LaTeX2e
+% the ability to do double column floats at the bottom of the page as well
+% as the top. (e.g., "\begin{figure*}[!b]" is not normally possible in
+% LaTeX2e). It also provides a command:
+%\fnbelowfloat
+% to enable the placement of footnotes below bottom floats (the standard
+% LaTeX2e kernel puts them above bottom floats). This is an invasive package
+% which rewrites many portions of the LaTeX2e float routines. It may not work
+% with other packages that modify the LaTeX2e float routines. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/sttools/
+% Do not use the stfloats baselinefloat ability as IEEE does not allow
+% \baselineskip to stretch. Authors submitting work to the IEEE should note
+% that IEEE rarely uses double column equations and that authors should try
+% to avoid such use. Do not be tempted to use the cuted.sty or midfloat.sty
+% packages (also by Sigitas Tolusis) as IEEE does not format its papers in
+% such ways.
+% Do not attempt to use stfloats with fixltx2e as they are incompatible.
+% Instead, use Morten Hogholm'a dblfloatfix which combines the features
+% of both fixltx2e and stfloats:
+%
+% \usepackage{dblfloatfix}
+% The latest version can be found at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/dblfloatfix/
+
+
+
+
+%\ifCLASSOPTIONcaptionsoff
+%  \usepackage[nomarkers]{endfloat}
+% \let\MYoriglatexcaption\caption
+% \renewcommand{\caption}[2][\relax]{\MYoriglatexcaption[#2]{#2}}
+%\fi
+% endfloat.sty was written by James Darrell McCauley, Jeff Goldberg and 
+% Axel Sommerfeldt. This package may be useful when used in conjunction with 
+% IEEEtran.cls'  captionsoff option. Some IEEE journals/societies require that
+% submissions have lists of figures/tables at the end of the paper and that
+% figures/tables without any captions are placed on a page by themselves at
+% the end of the document. If needed, the draftcls IEEEtran class option or
+% \CLASSINPUTbaselinestretch interface can be used to increase the line
+% spacing as well. Be sure and use the nomarkers option of endfloat to
+% prevent endfloat from "marking" where the figures would have been placed
+% in the text. The two hack lines of code above are a slight modification of
+% that suggested by in the endfloat docs (section 8.4.1) to ensure that
+% the full captions always appear in the list of figures/tables - even if
+% the user used the short optional argument of \caption[]{}.
+% IEEE papers do not typically make use of \caption[]'s optional argument,
+% so this should not be an issue. A similar trick can be used to disable
+% captions of packages such as subfig.sty that lack options to turn off
+% the subcaptions:
+% For subfig.sty:
+% \let\MYorigsubfloat\subfloat
+% \renewcommand{\subfloat}[2][\relax]{\MYorigsubfloat[]{#2}}
+% However, the above trick will not work if both optional arguments of
+% the \subfloat command are used. Furthermore, there needs to be a
+% description of each subfigure *somewhere* and endfloat does not add
+% subfigure captions to its list of figures. Thus, the best approach is to
+% avoid the use of subfigure captions (many IEEE journals avoid them anyway)
+% and instead reference/explain all the subfigures within the main caption.
+% The latest version of endfloat.sty and its documentation can obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/endfloat/
+%
+% The IEEEtran \ifCLASSOPTIONcaptionsoff conditional can also be used
+% later in the document, say, to conditionally put the References on a 
+% page by themselves.
+
+
+
+
+% *** PDF, URL AND HYPERLINK PACKAGES ***
+%
+%\usepackage{url}
+% url.sty was written by Donald Arseneau. It provides better support for
+% handling and breaking URLs. url.sty is already installed on most LaTeX
+% systems. The latest version and documentation can be obtained at:
+% http://www.ctan.org/tex-archive/macros/latex/contrib/url/
+% Basically, \url{my_url_here}.
+
+
+
+
+% *** Do not adjust lengths that control margins, column widths, etc. ***
+% *** Do not use packages that alter fonts (such as pslatex).         ***
+% There should be no need to do such things with IEEEtran.cls V1.6 and later.
+% (Unless specifically asked to do so by the journal or conference you plan
+% to submit to, of course. )
+
+
+% correct bad hyphenation here
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\usepackage{dsfont}
+\usepackage{tikz}
+\usetikzlibrary{arrows,decorations.markings}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\large]
+\begin{document}
+%
+% paper title
+% can use linebreaks \\ within to get better formatting as desired
+% Do not put math or special symbols in the title.
+\title{Efficient Microphone Phase Offset Compensation Algorithm for Signal Separation}
+%
+%
+% author names and IEEE memberships
+% note positions of commas and nonbreaking spaces ( ~ ) LaTeX will not break
+% a structure at a ~ so this keeps an author's name from being broken across
+% two lines.
+% use \thanks{} to gain access to the first footnote area
+% a separate \thanks must be used for each paragraph as LaTeX2e's \thanks
+% was not built to handle multiple paragraphs
+%
+
+\author{Chanwoo~Kim,~\IEEEmembership{Member,~IEEE,}
+        Kean~K~Chin,~\IEEEmembership{Member,~IEEE,}
+        and~Michiel~Bacchiani,~\IEEEmembership{Member,~IEEE,}% <-this % stops a space
+\thanks{M. Shell is with the Department
+of Electrical and Computer Engineering, Georgia Institute of Technology, Atlanta,
+GA, 30332 USA e-mail: (see http://www.michaelshell.org/contact.html).}% <-this % stops a space
+\thanks{J. Doe and J. Doe are with Anonymous University.}% <-this % stops a space
+\thanks{Manuscript received April 19, 2005; revised December 27, 2012.}}
+
+% note the % following the last \IEEEmembership and also \thanks - 
+% these prevent an unwanted space from occurring between the last author name
+% and the end of the author line. i.e., if you had this:
+% 
+% \author{....lastname \thanks{...} \thanks{...} }
+%                     ^------------^------------^----Do not want these spaces!
+%
+% a space would be appended to the last name and could cause every name on that
+% line to be shifted left slightly. This is one of those "LaTeX things". For
+% instance, "\textbf{A} \textbf{B}" will typeset as "A B" not "AB". To get
+% "AB" then you have to do: "\textbf{A}\textbf{B}"
+% \thanks is no different in this regard, so shield the last } of each \thanks
+% that ends a line with a % and do not let a space in before the next \thanks.
+% Spaces after \IEEEmembership other than the last one are OK (and needed) as
+% you are supposed to have spaces between the names. For what it is worth,
+% this is a minor point as most people would not even notice if the said evil
+% space somehow managed to creep in.
+
+
+
+% The paper headers
+\markboth{Journal of \LaTeX\ Class Files,~Vol.~11, No.~4, December~2012}%
+{Shell \MakeLowercase{\textit{et al.}}: Bare Demo of IEEEtran.cls for Journals}
+% The only time the second header will appear is for the odd numbered pages
+% after the title page when using the twoside option.
+% 
+% *** Note that you probably will NOT want to include the author's ***
+% *** name in the headers of peer review papers.                   ***
+% You can use \ifCLASSOPTIONpeerreview for conditional compilation here if
+% you desire.
+
+
+
+
+% If you want to put a publisher's ID mark on the page you can do it like
+% this:
+%\IEEEpubid{0000--0000/00\$00.00~\copyright~2012 IEEE}
+% Remember, if you use this you must call \IEEEpubidadjcol in the second
+% column for its text to clear the IEEEpubid mark.
+
+
+
+% use for special paper notices
+%\IEEEspecialpapernotice{(Invited Paper)}
+
+
+
+
+% make the title area
+\maketitle
+
+% As a general rule, do not put math, special symbols or citations
+% in the abstract or keywords.
+\begin{abstract}
+In this paper, we present a new dereverberation algorithm 
+called Temporal Masking and Thresholding
+(TMT) to enhance the temporal spectral of spectral features
+for robust speech recognition under reverberant environments.
+This algorithm is motivated by the precedence effects and
+temporal masking of human auditory perception. 
+This work is an improvement of our previous dereverberation
+work called Suppression of Slowly-varying components and
+the falling edge of the power envelope (SSF). In TMT
+algorithm compared to SSF, we use a different mathematical
+model to model the temporal masking and thresholding.
+Speech recognition results show that TMT algorithm is 
+superior to other algorithms such as LTLSS, VTS, or SSF
+for reverberation.
+\end{abstract}
+
+% Note that keywords are not normally used for peerreview papers.
+\begin{IEEEkeywords}
+Robust speech recognition, speech enhancement, reverberation,
+temporal masking, precedence effect
+\end{IEEEkeywords}
+
+% For peer review papers, you can put extra information on the cover
+% page as needed:
+% \ifCLASSOPTIONpeerreview
+% \begin{center} \bfseries EDICS Category: 3-BBND \end{center}
+% \fi
+%
+% For peerreview papers, this IEEEtran command inserts a page break and
+% creates the second title. It will be ignored for other modes.
+\IEEEpeerreviewmaketitle
+
+
+
+
+% An example of a floating figure using the graphicx package.
+% Note that \label must occur AFTER (or within) \caption.
+% For figures, \caption should occur after the \includegraphics.
+% Note that IEEEtran v1.7 and later has special internal code that
+% is designed to preserve the operation of \label within \caption
+% even when the captionsoff option is in effect. However, because
+% of issues like this, it may be the safest practice to put all your
+% \label just after \caption rather than within \caption{}.
+%
+% Reminder: the "draftcls" or "draftclsnofoot", not "draft", class
+% option should be used if it is desired that the figures are to be
+% displayed while in draft mode.
+%
+%\begin{figure}[!t]
+%\centering
+%\includegraphics[width=2.5in]{myfigure}
+% where an .eps filename suffix will be assumed under latex, 
+% and a .pdf suffix will be assumed for pdflatex; or what has been declared
+% via \DeclareGraphicsExtensions.
+%\caption{Simulation Results.}
+%\label{fig_sim}
+%\end{figure}
+
+% Note that IEEE typically puts floats only at the top, even when this
+% results in a large percentage of a column being occupied by floats.
+
+
+% An example of a double column floating figure using two subfigures.
+% (The subfig.sty package must be loaded for this to work.)
+% The subfigure \label commands are set within each subfloat command,
+% and the \label for the overall figure must come after \caption.
+% \hfil is used as a separator to get equal spacing.
+% Watch out that the combined width of all the subfigures on a 
+% line do not exceed the text width or a line break will occur.
+%
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results.}
+%\label{fig_sim}
+%\end{figure*}
+%
+% Note that often IEEE papers with subfigures do not employ subfigure
+% captions (using the optional argument to \subfloat[]), but instead will
+% reference/describe all of them (a), (b), etc., within the main caption.
+
+
+% An example of a floating table. Note that, for IEEE style tables, the 
+% \caption command should come BEFORE the table. Table text will default to
+% \footnotesize as IEEE normally uses this smaller font for tables.
+% The \label must come after \caption as always.
+%
+%\begin{table}[!t]
+%% increase table row spacing, adjust to taste
+%\renewcommand{\arraystretch}{1.3}
+% if using array.sty, it might be a good idea to tweak the value of
+% \extrarowheight as needed to properly center the text within the cells
+%\caption{An Example of a Table}
+%\label{table_example}
+%\centering
+%% Some packages, such as MDW tools, offer better commands for making tables
+%% than the plain LaTeX2e tabular which is used here.
+%\begin{tabular}{|c||c|}
+%\hline
+%One & Two\\
+%\hline
+%Three & Four\\
+%\hline
+%\end{tabular}
+%\end{table}
+
+
+% Note that IEEE does not put floats in the very first column - or typically
+% anywhere on the first page for that matter. Also, in-text middle ("here")
+% positioning is not used. Most IEEE journals use top floats exclusively.
+% Note that, LaTeX2e, unlike IEEE journals, places footnotes above bottom
+% floats. This can be corrected via the \fnbelowfloat command of the
+% stfloats package.
+
+
+
+\section{Introduction}
+% The very first letter is a 2 line initial drop letter followed
+% by the rest of the first word in caps.
+% 
+% form to use if the first word consists of a single letter:
+% \IEEEPARstart{A}{demo} file is ....
+% 
+% form to use if you need the single drop letter followed by
+% normal text (unknown if ever used by IEEE):
+% \IEEEPARstart{A}{}demo file is ....
+% 
+% Some journals put the first two words in caps:
+% \IEEEPARstart{T}{his demo} file is ....
+% 
+% Here we have the typical use of a "T" for an initial drop letter
+% and "HIS" in caps to complete the first word.
+\IEEEPARstart{I}{n} recent years, advances in machine learning
+techniques such as Deep Neural Network TODO(chanwcom) 
+%cite DNN papers
+and enhanced computational power TODO(chanwcom) 
+%cite GPU papers
+have greatly improved the performance of speech recognition systems
+especially in clean environments. Nevertheless, the performance
+under noisy environments still needs to be significantly improved
+to be useful for far-field speech recognition applications.
+
+Thus far, many researchers have proposed various kinds of algorithms
+to address this problem (\emph{e.g.} \cite{P_J_Moreno_ICASSP_1996,
+R_M_Stern_ETRW_1997, C_Kim_ASRU_2009_2, C_Kim_ICASSP_2012_1,
+C_Kim_ICASSP_2012_2}). To some degrees, these efforts have been
+successful for the near-field additive noise, however,
+for far-field reverberant speech, the same algorithms usually
+haven't shown the same amount of improvement.
+
+Many hearing researchers believe that human perception in 
+reverberation is enabled by ``precedence effect", which refers to
+an emphasis that appears to be given to the first-arriving
+wave-front of a complex signal in sound localization and
+possibly speech perception (\emph{e.g.} 
+\cite{P_M_Zurek_DirectionalHearing_SpringerVerlag_1987}).
+To detect the first wave-front, we can either measure the
+envelope of the signal or energy in the frame (\emph{e.g.}
+\cite{K_D_Martin_ASPAA_1997, Y_Park_IEICE_ElectronicsExpress_2008})
+
+
+Motivated by this, in our previous work, we introduced 
+an algorithm called Suppression of Slowly varying-components and the Falling
+edge of the power envelope (SSF) to enhance speech recognition
+accuracy under reverberant environments \cite{C_Kim_INTERSPEECH_2010_2}.
+This algorithm has been especially successful for reverberation, but
+the processing introduces distortion in the resynthesized speech.
+The nonlinear high-pass filtering in \cite{C_Kim_INTERSPEECH_2010_2}
+is an effective model to detect the first-arriving wavefront, but
+it might not be very close to how actual human beings perceive
+sound.
+
+In this paper, we introduce a new algorithm named Temporal
+Masking and Thresholding (TMT). In this algorithm,
+temporal masks are constructed to suppress reflected wave files
+under reverberant environments. We estimate the perceived 
+peak sound level after applying the power-law nonlinearity,
+and apply a temporal masking based on this. We also apply 
+thresholding based on the peak power.
+
+%\begin{figure}
+%    \begin{center}
+%    \resizebox{60mm}{!}{\input{../figures/TMT_block_diagram.tex}}
+%    \caption {
+%    		The structure of the TMT algorithm to obtain the normalized 
+%    		speech from the original input speech.
+%    	}
+%    	\label{fig:TMT_block_diagram}
+%    \end{center} \vspace{-5mm}
+%\end{figure}
+%
+%
+%
+
+However, in the real situations, even if the target is located along
+the perpendicular bisector of the line connecting two microphones,
+the phase difference would not be zero. 
+Even if two microphones are of the same model, these real two microphones
+are not exactly identical in physical characteristics, and
+the recording circuity may also add some non-uniform delay.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Subsection
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{No smoothing vs rectangular vs gammatone smoothing}
+
+TODO(chanwcom) Modify the following sentence.
+Let's do the experiments with the following configuration.
+
+In our previous research, it has been frequently observed that
+
+\begin{itemize}
+  \item compensation for each frequency index
+  \item compensation using the rectangular frequency response
+  \item compensation using the gammatone-shape frequency response
+\end{itemize}
+
+The advantage of the rectangular frequency response over the
+gammatone-shape frequency response is the rectangular frequency response
+approach is simpler, and requires less computation for frequency domain
+
+
+TODO(chanwcom)
+Explanation about the gammatone weighting.
+
+The advantage of the rectangular smoothing is computational cost
+is significantly less
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Subsection
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Review on finding the from the phase difference}
+\label{sec:review_}
+
+In this section, we review the procedure TODO(chanwcom) citing references.
+TODO(chanwcom) Also look at some of my previous papers.
+%
+Let $x_0[n]$ and $x_1[n]$ represent signals from the left and right
+microphones, respectively. To represent the narrowband short-time signals,
+we use the symbols $x_0[n; m, \omega_k]$ and 
+$x_1[n; m, \omega_k]$, respectively, where $m$ is the frame index,
+and $\omega_k$ is the discrete-time frequency defined by 
+$\omega_k = \frac{2 \pi k}{N}, 0 \le k \le N - 1$. These signals are
+narrowband signals centered at frequency $\omega_k$.
+
+
+
+Suppose that we have signals from a pair of microphones represented by
+$X_0[m, e^{j \omega_k})$ and $X_1[m, e^{j \omega_k})$.
+Suppose that we have signals the two microphones represented by
+$x_0[n]$ and $x_1[n]$. By applying successive Hamming windows to the
+speech signals, we obtain the Short-Time Fouer
+TODO(chanwcom) citing the SMAD paper, and also all of my previous papers
+Suppose that $X_0[m, e^{j \omega_k})$ and $X_1[m, e^{j \omega_k})$.
+We refer to $\tau[m, e^{j \omega_k})$ as the ITD at frame index at $m$
+and frequency $\omega_k$. Then
+Suppose that 
+
+
+As the simplest case, suppose that we have two signals 
+$x_0[n; m, \omega_k)$ and
+$x_1[n; m, \omega_k)$. 
+\begin{eqnarray}
+  x_0[n; m, \omega_k] = x_1[n - \tau[m, \omega_k); m, \omega_k]
+    \label{eq:two_mic_signals_time_domain}
+\end{eqnarray}
+Performing the Fourier transform of \eqref{eq:two_mic_signals_time_domain},
+ we obtain the following relation:
+\begin{eqnarray}
+  X_0[m, e^{j \omega_k})
+      = e^{-j \omega_k \tau[m, \omega_k)} X_1[m; e^{j \omega_k})
+    \label{eq:two_mic_signals_freq_domain}
+\end{eqnarray}
+%
+From \eqref{eq:two_mic_signals_freq_domain}, we find that the phase
+difference between two spectra is given by the following equation:
+\begin{eqnarray}
+  \Delta \phi[m, e^{j \omega_k}) & = & \angle{X_L[m, e^{j \omega_k})}
+      - \angle{X_R[m, e^{j \omega_k})} \nonumber \\
+               & = & \omega_k \tau[m, e^{j \omega_k})  + 2 \pi l
+\end{eqnarray}
+where $l$ is an integer.
+
+We define $\phi_{\tau}[m, e^{j \omega_k})$ as follows \cite{C_Kim_ICASSP_2012_2}:
+\begin{eqnarray}
+  \phi_{\tau}[m, e^{j \omega_k}) = 
+    \begin{cases}
+        \Delta \phi[m, e^{j \omega_k}),   \\
+            \qquad \text{if } \big| \Delta \phi[m, e^{j \omega_k}) \big|
+                \le \pi  \\
+        \Delta \phi[m, e^{j \omega_k}) - 2 \pi,    \\
+            \qquad \text{if } \Delta \phi[m, e^{j \omega_k}) 
+                \ge \pi  \\
+        \Delta \phi[m, e^{j \omega_k}) + 2 \pi,    \\
+              \qquad \text{if } \Delta \phi[m, e^{j \omega_k})  \le -\pi 
+    \end{cases}  
+\end{eqnarray}
+
+As shown in Fig. \ref{fig:two_mics_block_diagram},
+if the sound source is located along a line of angle 
+$\theta[m, \omega_k)$, with respect to the perpendicular 
+bisector to the line between two
+ microphones, geometric consideration determine the ITD in the
+discrete-time domain $\tau[m, \omega_k)$ to be 
+\begin{eqnarray}
+  \tau[m, \omega_k) 
+      = \frac{d \sin \left( \theta[m, \omega_k )  \right) f_s}
+          {c_{air}}
+\end{eqnarray}
+
+
+The above relation may be simplified using the modular operation:
+\begin{eqnarray}
+  \phi_{\tau}[m, \omega_k) 
+      = \left[\left(
+          \Delta \phi[m, e^{j \omega_k}) + \pi\right) \mod 2 \pi \right]
+              - \pi
+\end{eqnarray}
+where $\mod$ is a modulo operation.
+
+The relationship between $\theta$ and $\phi$ is given as 
+follows \cite{C_Kim_ICASSP_2012_2}:
+\begin{eqnarray}
+  \theta[m, e^{j \omega_k}) = \sin^{(-1)} 
+      \left(  
+          \frac{c_{air} \phi_{\tau}[m, e^{j \omega_k})}{\omega_k f_s d} 
+              \right)
+\end{eqnarray}
+where $c_{air}$ is the speed of the sound air (assumed to be 343.0 $m/s$ 
+in our work) and $f_s$ is the sampling rate, and $d$ is the distance 
+between two microphones. In our work, we used the distance of 
+$d = 0.02 \, m$.
+
+
+TODO(chanwcom) Finding Kiwan-Eom paper.
+
+\subsection{Search for the offset angle}
+
+TODO(chanwcom) Adding a figure when smoothing is not performed.
+In this section, we describe how to estimate the phase offset 
+$\theta_o(\omega_k)$ at the frequency $\omega_k$.
+For each channel $l$, we collect the following data:
+$\phi[m, e^{j \omega_k}), $.
+For each frequency component we apply weighted averaging.
+
+\begin{figure}
+    \begin{center}
+    \resizebox{35mm}{!}{\input{../figures/two_mics.tex}}
+    \caption {
+        Two microphones and a sound source
+    	}
+    	\label{fig:two_mics_block_diagram}
+    \end{center} \vspace{-5mm}
+\end{figure}
+
+Many researchers have tried to describe how the physical 
+frequency of an incoming signal is related to the representation 
+of that frequency by the human auditory system.  
+As one of such works, Moore and Glasberg \cite{B_C_J_Moore_ActaAcustica_1996}, 
+proposed the Equivalent Rectangular Bandwidth (ERB) scale modifying Zwicker’s loudness model. 
+The ERB scale is a measure that gives
+an approximation to the bandwidth of filters in human hearing using 
+rectangular bandpass filters; several different approximations of 
+the ERB scale exist. The following relation is used in our work
+to relate the frequency $f$ in $Hz$ with the ERB rate scale $r$
+ \cite{M_Brookes_VoiceBox}:
+\begin{eqnarray}
+  r & = & \text{ERBS}(f) \nonumber  \\
+    & = & 11.17268 \ln\left(1 + \frac{46.06538 f}{f + 14678.49} \right) \\
+  f & = & \text{ERBS}^{-1}(r) \nonumber \\
+    & = & \frac{676170.4}{47.06538-\exp\left(0.08950404 - r \right)} \nonumber \\ 
+    &   &   - 14678.49 
+\end{eqnarray}
+where $f$ is the frequency in $kHz$. Fig. \ref{fig:plot_freq_vs_erb} shows the relation
+between the frequency and the ERB scale.
+%
+%
+%
+\begin{figure}
+    \begin{center}
+    {\includegraphics[width=65mm]{../figures/plot_freq_vs_erb.eps}}  \\
+    \caption {
+        The relationship between the frequency ({\it Hz }) and 
+        the ERB scale.
+    	}
+    	\label{fig:plot_freq_vs_erb}
+    \end{center} 
+\end{figure}
+%
+%
+%
+\begin{eqnarray}
+  \Phi = \left\{ \phi \Big| \phi_t - \frac{\phi_w}{2}  \le \phi \le \phi_t + \frac{\phi_w}{2} \right\}
+\end{eqnarray}
+We convert the linear frequency into the Equivalent Rectangular Bandwidth
+(ERB) scale, 
+
+
+We define the following terms:
+\begin{eqnarray}
+  \psi[m, e^{j\omega_k}) & = &
+        \mathds{1}_{\Phi} 
+        (\phi[m, e^{j\omega_k'}]) \big|X_A[m,  e^{j\omega_k'})\big|^ 2 \nonumber \\
+                         & &   \times  \phi[m, e^{j\omega_k'}] \\
+  \xi[m, e^{j\omega_k}) & = &
+        \mathds{1}_{\Phi}(\phi[m, e^{j\omega_k'}])
+            \big|X_A[m,  e^{j\omega_k'})\big|^2
+\end{eqnarray}
+where $\mathds{1}()$ is the indicator function.
+
+\begin{eqnarray}
+  \phi_o(\omega_k) = 
+      \frac{
+          \sum_{m = 0} ^ {M - 1} 
+              \sum_{k' = g\left(l\left(\omega_k\right)\right)}
+                  ^{g\left(u(\omega_k)\right)} 
+                      \psi[m, e^{j\omega_k})
+            }
+            {
+              \sum_{m = 0} ^ {M - 1} 
+                  \sum_{k' = g\left(l\left(\omega_k\right)\right)}
+                      ^{g\left(u(\omega_k)\right)} 
+                          \xi[m, e^{j\omega_k})
+            }
+\end{eqnarray}
+where $l(\omega_k)$ is defined as follows: 
+\begin{eqnarray}
+  l(\omega_k) = \frac{2 \pi}{f_s} \text{ERBS}^{-1}
+      \left(\max\left\{r(\omega_k) - \frac{b}{2}, 0 \right\}\right)
+\end{eqnarray}
+where $r$ is defined by:
+\begin{eqnarray}
+  r(\omega_k) = \text{ERBS} \left(\frac{\omega_k}{2 \pi} f_s\right) 
+\end{eqnarray}
+Similarly, $u(\omega_k)$ are defined as follows: 
+\begin{eqnarray}
+  u(\omega_k) = \frac{2 \pi}{f_s} \text{ERBS}^{-1}
+      \left(r(\omega_k) + b \right)
+\end{eqnarray}
+$g(\omega)$ is a function to obtain the discrete frequency index $k$
+from the discrete-time frequency $\omega$. Since the relation is given by
+$\omega = \frac{2 \pi k}{N}$, $g(\omega)$ is defined as follows:
+\begin{eqnarray}
+  k = g(\omega) = \left\lceil\frac{\omega N}{2 \pi} + 0.5\right\rceil
+\end{eqnarray}
+where $N$ is the FFT size.
+Usually, the phase offset is a function of the frequency $\omega_k$,
+thus we represent it by $\theta_o(l)$. 
+
+TODO(chanwcom) Mentioning the SMAD paper
+where $X_A[m, e^{j \omega_k}]$ is the average of the spectra
+from the left and right microphones defined by:
+\begin{eqnarray}
+  X_A[m, e^{j \omega_k}) = \frac{X_R[m, e^{j \omega_k}) + X_L[m, e^{j \omega_k})}{2}
+\end{eqnarray}
+
+
+For each channel $l$, we calculate the following power:
+
+In this section, we discuss how to estimate the offset value. For
+a certain channel $l$, suppose that the offset is 
+We consider the following bin $[\theta - \theta_0, \theta + \theta_0]$.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Subsection
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{On-line implementation of POC algorithm}
+
+
+\subsection{Review on finding the from the phase difference}
+
+\section{Structure of POC processing}
+\label{sec:structure_of_TMT_processing}
+
+Figure \ref{fig:TMT_block_diagram} shows the entire structure of 
+TMT processing. In the discussion below, we assume that the
+sampling rate of the speech signal is 16 {\it kHz}, however this algorithm
+may be applied for other sampling rates as well.
+%
+%
+TODO(chanwcom) % Obtain the optimal frame length by experiments.
+Speech is segmented into 100 ms frames with 10 ms intervals between
+adjacent frames. A Hamming window is applied for each frame, and
+Short-time Fourier Transform (STFT) is performed. 
+Spectral power in 40 analysis bands is obtained. Temporal masking
+and thresholding are performed for each channel, and the speech
+spectrum is reshaped based on these processing. Finally, the
+output speech is resynthesized using the IFFT and the OverLap Addition
+(OLA) method. The following subsections describe each stage in more detail.
+
+\begin{figure}
+    \begin{center}
+    {\includegraphics[width=65mm]{../figures/draw_filter_bank_responses.eps}}
+    \caption {
+      The shape of the gammatone filterbank frequency responses whose
+      amplitudes are normalized using \eqref{eq:unity_constraint}.
+    	}
+    	\label{fig:TMT_block_diagram}
+    \end{center} \vspace{-5mm}
+\end{figure}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Subsection
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Gammatone frequency integration and auditory nonlinearity}
+%
+As shown in Fig. \ref{fig:TMT_block_diagram}, the first step
+of TMT processing is performing Short-Time Fourier Transform (STFT) using
+Hamming windows of duration 100 ms. We use this medium-duration window 
+which is longer than those used in ordinary speech processing, since 
+it has been frequently observed that medium-duration windows are better
+suited for noise suppression \cite{C_Kim_INTERSPEECH_2009_1, 
+C_Kim_ASRU_2009_1}.
+%
+%
+TODO(chanwcom) % Check what would be a good window length.
+ As in \cite{C_Kim_IEEETran_2014_1}, the gammatone spectral integration
+is done by the following equation:
+%
+\begin{eqnarray}
+  P[m, l] = \sum_{k = 0}^{K / 2}
+      \Big| X[m, e^{j \omega_k}] H_l(e^{j \omega_k}) \Big|^2  
+          \label{eq:spectral_integration}
+\end{eqnarray}
+%
+where $K$ is the DFT size, $m$ and $l$ represent the frame and
+channel indices respectively. $\omega_k$ is a discrete-frequency
+defined by $\omega_k = \frac{2 \pi k}{K}$, and $H_l(e^{j \omega_k})$
+is the gammatone response for the $l$-th channel. $P[m, l]$ is the
+power obtained for the time-frequency bin $[m, l]$.
+
+The gammatone responses $H_l(e^{j \omega_k})$ are slightly different
+from those used in our previous research in \cite{C_Kim_IEEETran_2014_1,
+C_Kim_ASRU_2009_2}. The frequency responses are modified to satisfy
+the following constraint:
+%
+\begin{eqnarray}
+  \sum_{l = 0}^{L - 1} H(e^{j \omega_k}) = 1.  \label{eq:unity_constraint}
+\end{eqnarray}
+%
+where $L$ is the number of the gammatone channels. The reason for this
+constraint will be explained in Sec. \ref{sec:spectral_reshaping}.
+Even though frequency responses $Q_l(e^{j \omega_k})$ of an ordinary 
+filter bank usually do not satisfy \eqref{eq:unity_constraint}, we may 
+normalize the filter response to make them satisfy 
+\eqref{eq:unity_constraint} by normalizing them as follows:
+%
+\begin{eqnarray} 
+    H_l(e^{j\omega_k}) = \frac{\big|Q_l(e^{j\omega_k}) \big|}
+        {\sum_{l = 0}^{L - 1} \big| Q_l(e^{j\omega_k}) \big|}.
+\end{eqnarray}
+%
+Since the power $P[m, l]$ in \eqref{eq:spectral_integration} is not
+directly related to how human beings perceive the sound level, we
+apply the power function based nonlinearity \cite{C_Kim_PhDThesis,
+C_Kim_IEEETran_2014_1}.
+\begin{eqnarray}
+  S[m, l] = P[m, l]^{a_0}     \label{eq:compressive_nonlinearity}  
+\end{eqnarray}
+As in \cite{C_Kim_IEEETran_2014_1, C_Kim_INTERSPEECH_2010_1, 
+C_Kim_ICASSP_2010_1}, 
+we use the power coefficient of $a_0 = \frac{1}{15}$.
+
+\subsection{Peak sound level estimation and binary mask generation}
+\label{sec:peak_sound_level_estimation}
+
+From $S[m, l]$, we obtain the peak sound level for each channel
+$l$. The peak sound level is the upper envelope of the $S[m, l]$
+as shown in Fig. TODO(chanwcom) XXX. We use the following simple
+mathematical model.
+\begin{eqnarray}
+  T[m, l] = \max(\lambda T[m - 1, l], S[m, l]) 
+\end{eqnarray}
+Using the peak sound level $T[m, l]$, the binary mask $\mu[m, l]$ 
+is constructed using the following criterion:
+\begin{eqnarray}
+  \mu[m, l] = 
+  \begin{cases}
+      1, \qquad \text{if } S[m, l] \ge T[m, l]  \\
+      0, \qquad \text{if } S[m, l] < T[m, l].
+        \label{eq:binary_masking_coeff}
+  \end{cases} 
+\end{eqnarray}
+In our previous SSF algorithm \cite{C_Kim_INTERSPEECH_2010_2}, we
+used the 1st-order IIR lowpass filter output for a similar purpose,
+but in this work, we use a model more closely related to human 
+perception.
+In binary masking, it has been frequently observed that 
+a suitable flooring is necessary (\emph{e.g.}\cite{C_Kim_INTERSPEECH_2009_1, 
+C_Kim_ICASSP_2012_2}). In many previous approaches, usually
+fixed multiplier values like 0.01, or 0.001 were used for masked
+time-frequency bins to prevent them from having zero power 
+(\emph{e.g.} \cite{C_Kim_INTERSPEECH_2009_1}). 
+In TMT algorithm, instead of using such scaling constants, we use a 
+a threshold power level $\rho[m, l]$, which depends on the peak sound
+level $T[m, l]$ for each time-frequency bin:
+\begin{eqnarray}
+  \rho[m, l] = \rho_0 {T[m, l]}^{\frac{1}{a_0}}
+            \label{eq:flooring_level}
+\end{eqnarray}
+where $a_0$ is the power coefficient for the compressive nonlinearty 
+in \eqref{eq:compressive_nonlinearity}. Since the compressive nonlineary
+is expanded in \eqref{eq:flooring_level}, it is evident that the 
+threshold power level $\rho[m, l]$ is 30 dB below the time-varying 
+peak power. 
+This thresholding scheme is also motivated by human auditory masking
+effect.
+We believe this thresholding approach is closer to the actual human
+perception rather than just using some fixed constants like 0.01. 
+
+The final masking coefficients $\mu_f[m, l]$ are obtained using
+the threshold level $\rho[m, l]$ as follows:
+\begin{eqnarray}
+    \mu_f[m, l] = \max \left(\mu[m, l], \frac{\rho[m, l]}{P[m, l]}  \right).
+\end{eqnarray}
+where $P[m, l]$ is the power in the time-frequency bin $[m, l]$ in 
+\eqref{eq:spectral_integration}.
+
+%
+%
+%
+\subsection{Spectral reshaping}
+  \label{sec:spectral_reshaping}
+%
+Using the $\mu[m, l]$ masking coefficients obtained in 
+\eqref{eq:binary_masking_coeff}, we obtain the enhanced spectrum 
+$Y[m, l]$ using the spectral reshaping technique 
+\cite{C_Kim_ASRU_2009_2, C_Kim_INTERSPEECH_2010_2}. 
+\begin{eqnarray}
+  Y[m, e^{j \omega_k}) = \sum_{l = 0}^{L - 1} 
+      \left( \sqrt{\mu_f[m, l]} X[m, e^{j \omega_k})
+           H_l(e^{j \omega_k}) \right)  
+              \label{eq:spectral_reshaping}
+\end{eqnarray}
+We square rooted the floored masking coefficient $\mu_f[m, l]$ in
+the above equation, because, the masking coefficients in Sec.
+\ref{sec:peak_sound_level_estimation} is defined for power.
+Now, it is time to discuss why the unity constraint in 
+\eqref{eq:unity_constraint} needs to hold for the frequency 
+responses.
+In \eqref{eq:spectral_reshaping}, if $\mu_f[m, l] = 1$ for 
+all $0 \le l \le L - 1$ at a certain frame $m$, then we expect
+the output $Y[m, e^{j \omega_k})$ to be the same as the input
+$X[m, e^{j \omega_k})$. From this, it is obvious that the 
+filter bank needs to satisfy \eqref{eq:unity_constraint}. 
+As before, $m$ and $l$ are the frame and channel indices, and $L$ is the
+number of channels.  After obtaining the enhanced spectrum $Y[m, l]$, 
+the output speech is resynthesized using the IFFT and the OverLap 
+Addition (OLA).
+
+In Fig. \label{fig:comparisons_of_spectrograms}, we compare the
+spectrograms obtained from the original clean speech 
+(Fig. \ref{fig:clean_speech_spectrogram}),
+from the reverberant speech
+(Fig. \ref{fig:reverb_speech_spectrogram}), and
+the same reverberant speech when processed with this TMT processing
+(Fig. \ref{fig:tmt_reverb_speech_spectrogram}). The reverberation
+time ($T_{60}$) is 500 {\it ms}. As can clearly seen in these figures,
+TMT processing has the effect of keeping the first arriving wavefront
+and suppressing the following reflected waves.
+
+%
+%  
+
+%\begin{figure*}[!t]
+%\centering
+%\subfloat[Case I]{\includegraphics[width=2.5in]{box}%
+%\label{fig_first_case}}
+%\hfil
+%\subfloat[Case II]{\includegraphics[width=2.5in]{box}%
+%\label{fig_second_case}}
+%\caption{Simulation results.}
+%\label{fig_sim}
+%\end{figure*}
+%
+\begin{figure}
+  \begin{center}
+    \begin{tabular}{l}
+      \subfloat[\label{fig:clean_speech_spectrogram}]
+        {\includegraphics[width=85mm]{../figures/clean_speech_spectrogram.eps}} \\
+      \subfloat[\label{fig:reverb_speech_spectrogram}]
+        {\includegraphics[width=85mm]{../figures/reverb_speech_spectrogram.eps}} \\
+      \subfloat[\label{fig:tmt_reverb_speech_spectrogram}]
+        {\includegraphics[width=85mm]{../figures/tmt_reverb_speech_spectrogram.eps}} \\
+    \end{tabular}
+  \end{center}
+  \caption{Comparisons of spectrograms: 
+      (\ref{fig:clean_speech_spectrogram}) Clean speech,
+      (\ref{fig:reverb_speech_spectrogram}) 
+          Reverberant speech when $T_{60} = 500$ {\it ms},
+      (\ref{fig:tmt_reverb_speech_spectrogram}) 
+          Reverberant speech processed by the TMT algorithm when $T_{60} = 500$ {\it ms}.}
+  \label{fig:comparisons_of_spectrograms}
+\end{figure}
+
+\section{Experimental Results}
+%
+TODO(chanwcom) 
+% Improve database description and add experimental results.
+In this section we describe experimental results obtained
+on the DARPA Resource Management 1 (RM1) database and the large scale
+English and Icelandic databases used in Google. For the RM1 experiment
+we use the Sphinx 3 speech recognition system for acoustic modeling
+and decoding, and for the Google speech recognition databases, we
+used the state-of-the-art DNN training system, and the GRECO3
+decoder. 
+TODO(chanwcom)
+% Add reference about Google speech recognition system.
+
+\section{Conclusion}
+TODO(chanwcom)
+% Revise the conclusion
+In this paper, we describe a new dereverberation algorithm,
+TMT, that is based on temporal enhancement by estimating the
+peak sound level and applying the temporal masking. In the
+experimental results, we have observed that TMT algorithm
+is simple, but has shown better speech recognition accuracies
+than existing algorithms like LTLSS or VTS. The matlab code
+for this algorithm may be found at TODO.
+
+% use section* for acknowledgement
+\section*{Acknowledgements}
+This research was supported by Google. 
+
+
+
+
+\bibliographystyle{IEEEtran}
+\bibliography{../../common_bib_file/bibfileinshortformCommon}
+
+
+
+
+% trigger a \newpage just before the given reference
+% number - used to balance the columns on the last page
+% adjust value as needed - may need to be readjusted if
+% the document is modified later
+%\IEEEtriggeratref{8}
+% The "triggered" command can be changed if desired:
+%\IEEEtriggercmd{\enlargethispage{-5in}}
+
+% references section
+
+% can use a bibliography generated by BibTeX as a .bbl file
+% BibTeX documentation can be easily obtained at:
+% http://www.ctan.org/tex-archive/biblio/bibtex/contrib/doc/
+% The IEEEtran BibTeX style support page is at:
+% http://www.michaelshell.org/tex/ieeetran/bibtex/
+%\bibliographystyle{IEEEtran}
+% argument is your BibTeX string definitions and bibliography database(s)
+%\bibliography{IEEEabrv,../bib/paper}
+%
+
+% biography section
+% 
+% If you have an EPS/PDF photo (graphicx package needed) extra braces are
+% needed around the contents of the optional argument to biography to prevent
+% the LaTeX parser from getting confused when it sees the complicated
+% \includegraphics command within an optional argument. (You could create
+% your own custom macro containing the \includegraphics command to make things
+% simpler here.)
+%\begin{IEEEbiography}[{\includegraphics[width=1in,height=1.25in,clip,keepaspectratio]{mshell}}]{Michael Shell}
+% or if you just want to reserve a space for a photo:
+
+\begin{IEEEbiography}{Michael Shell}
+Biography text here.
+\end{IEEEbiography}
+
+% if you will not have a photo at all:
+\begin{IEEEbiographynophoto}{John Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% insert where needed to balance the two columns on the last page with
+% biographies
+%\newpage
+
+\begin{IEEEbiographynophoto}{Jane Doe}
+Biography text here.
+\end{IEEEbiographynophoto}
+
+% You can push biographies down or up by placing
+% a \vfill before or after them. The appropriate
+% use of \vfill depends on what kind of text is
+% on the last page and whether or not the columns
+% are being equalized.
+
+%\vfill
+
+% Can be used to pull up biographies so that the bottom of the last one
+% is flush with the other column.
+%\enlargethispage{-5in}
+
+
+
+% that's all folks
+\end{document}

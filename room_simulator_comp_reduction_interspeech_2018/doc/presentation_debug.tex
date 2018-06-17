@@ -1,0 +1,102 @@
+\documentclass[a4paper]{article}
+\usepackage{INTERSPEECH2014,amssymb,amsmath,epsfig,url}
+\setcounter{page}{1}
+\sloppy     % better line breaks
+\ninept
+%SM below a registered trademark definition
+\def\reg{{\rm\ooalign{\hfil
+     \raise.07ex\hbox{\scriptsize R}\hfil\crcr\mathhexbox20D}}}
+
+%% \newcommand{\reg}{\textsuperscript{\textcircled{\textsc r}}}
+\title{Robust speech recognition using temporal masking and thresholding algorithm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% If multiple authors, uncomment and edit the lines shown below.       %%
+%% Note that each line must be emphasized {\em } by itself.             %%
+%% (by Stephen Martucci, author of spconf.sty).                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\makeatletter
+%\def\name#1{\gdef\@name{#1\\}}
+%\makeatother
+%%%%%%%%%%%%%%% End of required multiple authors changes %%%%%%%%%%%%%%%%%
+
+\makeatletter
+\def\name#1{\gdef\@name{#1\\}}
+\makeatother \name{{\em Chanwoo~Kim$^1$, Kean~K.~Chin$^1$, Michiel~Bacchiani$^1$, Richard~M.~Stern$^2$}}
+
+\address{Google, Mountain View CA 94043 USA $^1$\\
+  Carnegie Mellon University, Pittsburgh PA 15213 USA $^2$\\
+{\small \tt \{chanwcom, kkchin, michiel\}@google.com, rms@cs.cmu.edu}}
+
+%\twoauthors{Karen Sp\"{a}rck Jones.}{Department of Speech and Hearing \\
+%  Brittania University, Ambridge, Voiceland \\
+%  {\small \tt Karen@sh.brittania.edu} }
+%  {Rose Tyler}{Department of Linguistics \\
+%  University of Speechcity, Speechland \\
+%  {\small \tt RTyler@ling.speech.edu} }
+
+%
+\usepackage{tikz}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\large]
+\usepackage[caption=false,font=footnotesize]{subfig}
+\begin{document}
+\maketitle
+%
+\begin{abstract}
+In this paper, we present a new dereverberation algorithm called
+ Temporal Masking and Thresholding (TMT) to enhance the temporal
+ spectra of spectral features for robust speech recognition
+ in reverberant environments. This algorithm is motivated
+ by the precedence effect and temporal masking of human
+ auditory perception. This work is an improvement
+ of our previous dereverberation work called Suppression of 
+ Slowly-varying components and the falling edge of the power
+ envelope (SSF).  The TMT algorithm  uses a different mathematical
+ model to characterize temporal masking and thresholding compared
+ to the model that had been used to characterize the SSF algorithm.
+ Specifically, the nonlinear highpass filtering used in the SSF
+ algorithm has been replaced by a masking mechanism
+ based on a combination of peak detection and dynamic thresholding.
+ Speech recognition results show that the TMT algorithm provides
+ superior recognition accuracy compared to other algorithms such
+ as LTLSS, VTS, or SSF in reverberant environments.
+
+\end{abstract}
+\noindent{\bf Index Terms}: Robust speech recognition, speech enhancement, reverberation,
+temporal masking, precedence effect
+
+
+%
+\section{Introduction}
+
+\begin{eqnarray}
+  y[n] & = & x[n] * h[n]  \nonumber \\
+  \log (Y[m, e^{j \omega_k})) & = & \log(X[m, e^{j \omega_k}))  \nonumber \\
+            && + \log(H[m, e^{j \omega_k}))  \nonumber
+\end{eqnarray}
+
+\begin{eqnarray}
+ \log   \left(\Big| Z[m, e^{j \omega_k}) \Big| \right)  & = &  \log \left(\Big| Y[m, e^{j \omega_k}) \Big| \right)  
+  - \frac{1}{M} \log \left( \sum_{m = 0}^{M - 1} \Big| Y[m, e^{j \omega_k}) \Big| \right) \nonumber \\
+&=& \log \left(\Big| X[m, e^{j \omega_k}) \Big| \right) 
+ - \frac{1}{M} \log \left( \sum_{m = 0}^{M - 1} \Big| X[m, e^{j \omega_k}) \Big| \right) \nonumber
+\end{eqnarray}
+
+
+\section{Conclusion}
+%TODO(chanwcom)
+% Revise the conclusion
+In this paper, we describe a new dereverberation algorithm,
+TMT, that is based on temporal enhancement by estimating the
+peak sound level and applying the temporal masking. In the
+experimental results, we have observed that TMT algorithm
+is simple, but has shown better speech recognition accuracies
+than existing algorithms like LTLSS or VTS. The matlab code
+for this algorithm may be found at 
+\url{http://www.cs.cmu.edu/~robust/archive/algorithms/tmt}.
+
+% use section* for acknowledgement
+\section{Acknowledgements}
+This research was supported by Google.
+
+\end{document}

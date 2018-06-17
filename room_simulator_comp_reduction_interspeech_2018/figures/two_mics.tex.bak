@@ -1,0 +1,193 @@
+% Graphic for TeX using PGF
+% Title: /google/src/cloud/chanwcom/chanwcom-speech/google3/experimental/chanwcom/my_papers/papers_working/mic_offset_compensation/figures/two_mics.dia
+% Creator: Dia v0.97.2
+% CreationDate: Sun May 11 02:32:41 2014
+% For: chanwcom
+% \usepackage{tikz}
+% The following commands are not supported in PSTricks at present
+% We define them conditionally, so when they are implemented,
+% this pgf file will use them.
+\ifx\du\undefined
+  \newlength{\du}
+\fi
+\setlength{\du}{15\unitlength}
+\tikzset{
+  big arrow/.style={
+    decoration={markings, 
+        mark=at position 0 with {\arrowreversed[scale=3,#1]{>};}, 
+        mark=at position 1 with {\arrow[scale=3, #1]{>};}},
+    postaction={decorate},
+    shorten >=0.4pt},
+  big arrow/.default=black}
+
+
+  
+
+\pgfarrowsdeclare{arcs}{arcs} 
+{ 
+  \arrowsize=1pt 
+  \advance\arrowsize by .5\pgflinewidth 
+  \pgfarrowsleftextend{-5\arrowsize-.5\pgflinewidth} 
+  \pgfarrowsrightextend{.5\pgflinewidth} 
+} 
+{ 
+  \arrowsize=1pt 
+  \advance\arrowsize by .5\pgflinewidth 
+  \pgfsetdash{}{0pt} % do not dash 
+  \pgfsetroundjoin   % fix join 
+  \pgfsetroundcap    % fix cap 
+  \pgfpathmoveto{\pgfpoint{-5\arrowsize}{5\arrowsize}} 
+  \pgfpatharc{180}{270}{5\arrowsize} 
+  \pgfusepathqstroke 
+  \pgfpathmoveto{\pgfpointorigin} 
+  \pgfpatharc{90}{180}{5\arrowsize} 
+  \pgfusepathqstroke 
+} 
+
+
+\begin{tikzpicture}
+\pgftransformxscale{1.000000}
+\pgftransformyscale{-1.000000}
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\definecolor{dialinecolor}{rgb}{1.000000, 1.000000, 1.000000}
+\pgfsetfillcolor{dialinecolor}
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetfillcolor{dialinecolor}
+\fill (23.000000\du,-17.000000\du)--(23.000000\du,-10.550000\du)--(25.000000\du,-10.550000\du)--(25.000000\du,-17.000000\du)--cycle;
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetmiterjoin
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\draw (23.000000\du,-17.000000\du)--(23.000000\du,-10.550000\du)--(25.000000\du,-10.550000\du)--(25.000000\du,-17.000000\du)--cycle;
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node at (24.000000\du,-13.580000\du){};
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetfillcolor{dialinecolor}
+\fill (31.000000\du,-17.000000\du)--(31.000000\du,-10.550000\du)--(33.000000\du,-10.550000\du)--(33.000000\du,-17.000000\du)--cycle;
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetmiterjoin
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\draw (31.000000\du,-17.000000\du)--(31.000000\du,-10.550000\du)--(33.000000\du,-10.550000\du)--(33.000000\du,-17.000000\du)--cycle;
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node at (32.000000\du,-13.580000\du){};
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetbuttcap
+{
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetfillcolor{dialinecolor}
+% was here!!!
+\pgfsetarrowsstart{arcs}
+\pgfsetarrowsend{arcs}
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\draw (26.000000\du,-18.000000\du)--(30.000000\du,-18.000000\du);
+}
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetbuttcap
+{
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetfillcolor{dialinecolor}
+% was here!!!
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\draw (28.000000\du,-36.000000\du)--(28.000000\du,-18.000000\du);
+}
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetbuttcap
+{
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetfillcolor{dialinecolor}
+% was here!!!
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\draw (35.000000\du,-35.000000\du)--(28.000000\du,-18.000000\du);
+}
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetbuttcap
+{
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetfillcolor{dialinecolor}
+% was here!!!
+%\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\pgfpathmoveto{\pgfpoint{31.000019\du}{-24.999975\du}}
+\pgfsetarrowsstart{arcs}
+\pgfsetarrowsend{arcs}
+\pgfpatharc{323}{255}{2.819477\du and 2.819477\du}
+\pgfusepath{stroke}
+}
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node[anchor=west] at (29.000000\du,-27.000000\du){\huge$\theta$};
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node[anchor=west] at (27.000000\du,-16.000000\du){\huge$d$};
+\definecolor{dialinecolor}{rgb}{0.749020, 0.749020, 0.749020}
+\pgfsetfillcolor{dialinecolor}
+\pgfpathellipse{\pgfpoint{32.000000\du}{-17.823318\du}}{\pgfpoint{2.000000\du}{0\du}}{\pgfpoint{0\du}{2.176682\du}}
+\pgfusepath{fill}
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetmiterjoin
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\pgfpathellipse{\pgfpoint{32.000000\du}{-17.823318\du}}{\pgfpoint{2.000000\du}{0\du}}{\pgfpoint{0\du}{2.176682\du}}
+\pgfusepath{stroke}
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node at (32.000000\du,-17.628318\du){};
+\definecolor{dialinecolor}{rgb}{0.749020, 0.749020, 0.749020}
+\pgfsetfillcolor{dialinecolor}
+\pgfpathellipse{\pgfpoint{24.000000\du}{-17.823318\du}}{\pgfpoint{2.000000\du}{0\du}}{\pgfpoint{0\du}{2.176682\du}}
+\pgfusepath{fill}
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetmiterjoin
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\pgfpathellipse{\pgfpoint{24.000000\du}{-17.823318\du}}{\pgfpoint{2.000000\du}{0\du}}{\pgfpoint{0\du}{2.176682\du}}
+\pgfusepath{stroke}
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node at (24.000000\du,-17.628318\du){};
+\definecolor{dialinecolor}{rgb}{1.000000, 1.000000, 1.000000}
+\pgfsetfillcolor{dialinecolor}
+\pgfpathellipse{\pgfpoint{34.706728\du}{-34.323318\du}}{\pgfpoint{1.706728\du}{0\du}}{\pgfpoint{0\du}{1.676682\du}}
+\pgfusepath{fill}
+\pgfsetlinewidth{0.100000\du}
+\pgfsetdash{}{0pt}
+\pgfsetdash{}{0pt}
+\pgfsetmiterjoin
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\pgfpathellipse{\pgfpoint{34.706728\du}{-34.323318\du}}{\pgfpoint{1.706728\du}{0\du}}{\pgfpoint{0\du}{1.676682\du}}
+\pgfusepath{stroke}
+% setfont left to latex
+\definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
+\pgfsetstrokecolor{dialinecolor}
+\node at (34.706728\du,-34.128318\du){};
+\end{tikzpicture}
