@@ -22,6 +22,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{tikz,placeins}
 \usepackage{subcaption}
+\usepackage{algpseudocode}
 %\usepackage[caption = false]{subfig}
 \usepackage{amssymb,amsmath,bm}
 \usetikzlibrary{arrows,decorations.markings}
@@ -168,43 +169,36 @@ structure is very simple and somewhat similar to that of CTC shown in TODO
 In this section, we describe how to train SHC. The procedure is summarized
 in the following table.
 
-\section{Structure of the Recurrent Sequence Recognizer}
-\subsection{Review of the Room Simulator for Data Augmentation}
-%
-%
-\begin{figure}
-  \centering
-    \begin{subfigure}{\linewidth}
-      \centering
-      \includegraphics[width=70mm]{room_diagram.eps}
-      \caption{}
-      \label{fig:room_diagram}
-    \end{subfigure}
-   \\
-    \begin{subfigure}{\linewidth}
-      \centering
-      \includegraphics[width=70mm]{image_method.eps}
-      \caption{}
-      \label{fig:image_method}
-    \end{subfigure}
-    \caption{
-    (a) A simulated room: There may be multiple microphones, a single target
-    sound source, multiple noise sources in a cuboid-shape room with
-    acoustically reflective walls. (b) A diagram showing the location
-    of the real and the virtual sound sources assuming that the walls
-    reflects acoustic wave like a mirror \cite{C_Kim_INTERSPEECH_2017_1}.}
-  \vspace{-10mm}
-\end{figure}
-%
-%
-%
 \subsection{Viterbi alignment and N-best alignment}
 
-In conventional frame-wise CE-training, forced-alignment 
-has been performed to obtain the frame-level acoustic unit  
-boundaries. TODO(chanwcom) Even though the Viterbi algorithm
+In conventional frame-wise CE-training, Viterbi alignment 
+(a.k.a forced alignment) has been performed to obtain the frame-level 
+acoustic unit  boundaries TODO(chanwcom). Even though the Viterbi algorithm
 has advantages in simplicity and efficiency, it is based on
 the conditional independence assumption.
+
+In TFSC, we propose the following N-best alignment approach rather than
+the Viterbi alignment algorithm to find the alignment information.
+
+\begin{algorithmic}
+
+\For {$m = 0, . . . , M-1$}
+	\For {$l = 0, . . . , N_b-1$}
+		\State {$\pi^{(l)}[m]$}
+	\EndFor
+\EndFor
+
+\If {$i\geq maxval$}
+    \State $i\gets 0$
+\Else
+    \If {$i+k\leq maxval$}
+        \State $i\gets i+k$
+    \EndIf
+\EndIf
+\label{algorithm:n_best_alignment}
+\end{algorithmic}
+
+
 
 
 \subsection{Feature extraction}
