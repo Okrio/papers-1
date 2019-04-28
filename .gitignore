@@ -1,6 +1,7 @@
 # Ignores intermediate files in converting a tex into a pdf.
 
 *.aux
+*.bbl
 *.blg
 *.dvi
 *.log
