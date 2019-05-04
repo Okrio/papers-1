@@ -1,0 +1,377 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2017
+%
+% to avoid loading the natbib package, add option nonatbib:
+%\usepackage[nonatbib]{nips_2017}
+
+\usepackage{neurips_2019}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+% \usepackage[final]{nips_2017}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{tikz,placeins}
+\usepackage{subcaption}
+\usepackage{algpseudocode}
+%\usepackage[caption = false]{subfig}
+\usepackage{amssymb,amsmath,bm}
+\usetikzlibrary{arrows,decorations.markings}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\large]
+
+\graphicspath{{../figures/}}
+
+\title{A state of the art end-to-end speech recognition algorithm with
+a homogenous structure.}
+
+%\renewcommand{\vec}[1]{\mathbf{#1}}
+
+\newcommand{\chanwcom}{Chanwoo Kim}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+\author{
+  David S.~Hippocampus\thanks{Use footnote for providing further
+    information about author (webpage, alternative
+    address)---\emph{not} for acknowledging funding agencies.} \\
+  Department of Computer Science\\
+  Cranberry-Lemon University\\
+  Pittsburgh, PA 15213 \\
+  \texttt{hippo@cs.cranberry-lemon.edu} \\
+  %% examples of more authors
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+\begin{document}
+% \nipsfinalcopy is no longer used
+
+\maketitle
+
+\begin{abstract}
+TODO(chanw.com) Revise the abstract.
+This paper proposes a new end-to-end speech recognition system referred to
+as Recurrent neural network Sequence Classification (RSC). Recently, end-to-end speech
+recognition systems have been gaining more attention from researchers and
+several different structures have been proposed. Typical examples  
+include Connectionist Temporal Classification (CTC), Recurrent Neural Network
+  Transducer (RNN-T), and Sequence-to-Sequence Modeling using the attention
+mechanism. The CTC-based approaches are using the CTC loss assuming the
+conditional independence property. Although the structure of CTC is simpler
+than other end-to-end systems, the performance is worse due to this conditional
+independence assumption. RNN-T and attention-based approaches have distinct
+components such as the prediction network  and encoder in RNN-T, and
+the encoder, the decoder, and the attention layer in the attention-based model.
+Compared to these models, FSC has a homogeneous structure from the bottom to 
+the top layer. LSTM and max-pooling layer are repeated followed by the top
+softmax layer. The embedded softmax output is fed back as input of each RNN
+layer. The training starts with flat initialization and alignment is made
+after every epoch. The loss is the Cross Entropy (CE) loss using this 
+alignment result. In our experimental results, FSC algorithm has shown 
+better performance than more complicated attention-based end-to-end speech
+recognition system. Another major advantage is training is significantly
+faster.
+\end{abstract}
+
+\section{Introduction}
+Recently, there has been tremendous improvements in speech recognition
+systems fueled by advances in deep neural networks
+\cite{
+  Yu2013FeatureLearningDNN, 
+  g_hinton_ieee_signal_processing_mag_2012,
+  Seltzer2013DNNAurora4, 
+  t_sainath_taslp_2017_00,
+  t_sainath_book_chapter_2017_00,
+  v_vanhoucke_nips_workshop_2011_00}.
+
+TODO(chanw.com) Talk about the AI speakers.
+
+
+TODO(chanw.com) Talk about the advancements of the end-to-end systems.
+
+
+Recently, it has been frequently observed that if 
+sequence-to-sequence end-to-end ASR systems are trained on sufficiently 
+large amounts of acoustic training data, they can outperform
+conventional HMM-DNN/RNN hybrid systems \cite{c_chiu_icassp_2018_00, 
+c_kim_interspeech_2019_00}.
+
+
+Recently, we observed that training with large-scale noisy data generated
+by a \textit{Room Simulator} \cite{C_Kim_INTERSPEECH_2017_1}
+improves speech recognition accuracy dramatically.
+This system has been successfully employed
+for training acoustic models for Google Home or Google voice
+search \cite{C_Kim_INTERSPEECH_2017_1}.
+
+
+\section{Review on sequence-to-sequence speech recognition algorithms}
+
+In this section, we review well-known {\it sequence-to-sequence} algorithms
+used in speech recognition.
+\cite{
+j_chorowski_nips_2015_00, 
+a_graves_corr_2012_00, 
+y_he_icassp_2019_00,
+r_prabhavalkar_interspeech_2017_00}. 
+A sequence-to-sequence
+model maps a sequence of input acoustic features into a sequence 
+of graphemes or words \cite{r_prabhavalkar_interspeech_2017_00}. 
+We denote a sequence of input acoustic feature vectors by 
+$\mathcal{X}_{0}^{M-1}$ and a sequence of target labels by 
+$\mathcal{Y}_{0}^{L-1}$:
+\begin{subequations}
+  \begin{align}
+    \mathcal{X}_{0}^{}  =  
+      \left\{\vec{x}[0], \, \vec{x}[1], 
+        \, \cdots, \, \vec{x}[M-1] \right\},  \\
+    \mathcal{Y}_{0}^{}  =  
+      \left\{y_0, \, y_1, \,  \cdots, \, y_{L-1} \right\},
+  \end{align}
+\end{subequations}
+where $M$ is the number of frames in the input feature sequence and
+$L$ is the number of labels in the output target sequence. In Fig. 
+\ref{fig:ctc_diagram} $\sim$ \ref{fig:attention_diagram}, we show
+block diagrams of CTC \cite{a_graves_icml_2006_00}, 
+RNN-T \cite{a_graves_corr_2012_00, a_graves_icassp_2013_00}, and 
+the attention-based model 
+\cite{
+j_chorowski_nips_2015_00,
+w_chan_icassp_2016_00} respectively. CTC in Fig. \ref{fig:ctc_diagram} 
+and RNN-T in Fig. \ref{fig:rnn_t_diagram} are {\it frame-synchronous}, 
+which means that the ASR system generates the output target for each 
+input frame.
+
+
+
+
+
+\subsection{Connectionist Temporal Classification}
+
+Fig. \ref{fig:ctc_diagram} shows the entire structure of the 
+Connectionist Temporal Classification (CTC) 
+\cite{a_graves_icml_2006_00}. In CTC, we use the following CTC loss
+\cite{a_graves_icml_2006_00, y_he_icassp_2019_00}:
+\begin{align}
+  P\left(\mathcal{Y}_{0}^{L-1} | \mathcal{X}_{0}^{M-1}\right) = 
+    \sum_{\mathcal{Z}_{0}^{M-1} \in 
+      \mathcal{A}_{CTC} 
+        \left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1} \right)}
+          \Pi_{m=0}^{M-1}
+            P\left(\vec{z}[m] | \mathcal{X}_{0}^{M-1} \right),
+\end{align}
+where $\mathcal{A}_{CTC} \left(\mathcal{X}_{0}^{M-1}, 
+\mathcal{Y}_{0}^{L-1} \right)$ correspond to frame-level alignments
+of length $M$ such that removing blanks and repeated symbols from 
+$\mathcal{Z}_{0}^{M-1}$ yields $\mathcal{Y}_{0}^{L-1}$.
+
+
+
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.35\textwidth}
+    \centering
+    \resizebox{23mm}{!}{
+      \input{../figures/ctc_diagram.tex}
+    } 
+    \caption {
+      Connectionist Temporal Classification (CTC) Model.
+      \label{fig:ctc_diagram}
+    }
+  \end{subfigure}
+  \begin{subfigure}[b]{0.60\textwidth}
+    \centering
+    \resizebox{78mm}{!}{
+      \input{../figures/rnn_t_diagram.tex}
+    }
+    \caption {
+      RNN-T Model.
+      \label{fig:rnn_t_diagram}
+    }
+  \end{subfigure}
+
+  \begin{subfigure}[b]{0.55\textwidth}
+    \centering
+    \resizebox{53mm}{!}{
+      \input{../figures/attention_diagram.tex}
+    }
+    \caption {
+      Attention-based Model.
+      \label{fig:attention_diagram}
+    }
+  \end{subfigure}
+  \begin{subfigure}[b]{0.3\textwidth}
+    \centering
+    \resizebox{26mm}{!}{
+      \input{../figures/fsc_diagram.tex}
+    }
+    \caption {
+      Feedback Sequence Classifier (FSC) Model.
+      \label{fig:fsc_diagram}
+    }
+  \end{subfigure}
+  \caption{
+    Comparison of block diagrams of different sequence-to-sequence speech
+    recognition approaches.
+    The proposed Feedback Sequence Classifier (FSC) is shown in 
+    Fig. \ref{fig:fsc_diagram}.
+  }
+
+\end{figure}
+
+
+
+
+\section{Feedback Sequence Classifier}
+\label{sec:feedback_sequence_classifier}
+
+
+\subsection{Neural Network Structure}
+Fig. \ref{fig:fsc_diagram} shows the entire structure of the FSC. 
+As shown in this figure, LSTM layers and max-pool layers
+are interleaved from the bottom layer up to the third max-pool layer.
+
+In Fig. \ref{fig:fsc_diagram}, speech features $\vec{x}[m]$ are sampled 
+at every 10 {\it ms}, which is the usual speech feature frame rate  
+in speech recognition
+\cite{x_huang_prentice_hall_2001_00, c_kim_taslp_2016_00},
+Using three two-to-one max-pool layers, $\vec{z}[p]$ has a frame period 
+of 80 {\it ms}.  
+The relationship between the temporal index $p$ in $\vec{z}[p]$ and 
+$m$ in $\vec{x}[m]$ is given by: 
+\begin{align}
+  p = \lceil m / 8 \rceil \label{eq:def_p}
+\end{align}
+
+
+The reason for using the one dimensional max-pool layer
+is to make the neural network output have a similar rate to the 
+that of each {\it phone} in utterances. Note that a {\it phone} 
+is any distinct speech sound serving as a phonetic unit. 
+
+It has been observed that the average phone duration is between 50 {\it ms}
+\textasciitilde 100 {\it ms} \cite{x_wang_icslp_1996_00, z_bartosz_ltc_2009_00}.
+
+
+
+
+
+
+
+
+
+\subsection{Training of the Feedback Sequence Classifier}
+In this section, we describe how to train FSC. The first step is making an
+alignment using the N-best alignment. The second step is updating the
+neural network parameters using the Cross Entropy (CE) criterion. 
+
+\subsection{Training procedure}
+
+The first step is finding the optimal frame-synchronous sequence
+$\mathcal{Z}$
+
+\begin{algorithmic}
+  \State {$\mathcal{Z} = A(\mathcal{X} | \Theta)$}
+  \State {Updates the model.}
+\end{algorithmic}
+
+
+
+\subsection{Viterbi alignment and N-best alignment}
+
+In conventional frame-wise CE-training, Viterbi alignment 
+(a.k.a forced alignment) has been performed to obtain the frame-level 
+acoustic unit  boundaries TODO(chanwcom). Even though the Viterbi algorithm
+has advantages in simplicity and efficiency, it is based on
+the conditional independence assumption.
+
+In TFSC, we propose the following N-best alignment approach rather than
+the Viterbi alignment algorithm to find the alignment information.
+
+\begin{algorithmic}
+
+\For {$m = 0, . . . , M-1$}
+	\For {$l = 0, . . . , N_b-1$}
+		\State {$\pi^{(l)}[m]$}
+	\EndFor
+\EndFor
+
+\If {$i\geq maxval$}
+    \State $i\gets 0$
+\Else
+    \If {$i+k\leq maxval$}
+        \State $i\gets i+k$
+    \EndIf
+\EndIf
+\label{algorithm:n_best_alignment}
+\end{algorithmic}
+
+
+
+
+
+\section{Experimental Results}
+\label{sec:experimental_results}
+
+
+\subsubsection*{Acknowledgments}
+
+
+\section*{References}
+
+References follow the acknowledgments. Use unnumbered first-level
+heading for the references. Any choice of citation style is acceptable
+as long as you are consistent. It is permissible to reduce the font
+size to \verb+small+ (9 point) when listing the references. {\bf
+  Remember that you can go over 8 pages as long as the subsequent ones contain
+  \emph{only} cited references.}
+\medskip
+
+\small
+
+\clearpage
+\newpage
+\bibliographystyle{plain}
+\bibliography{../../common_bib_file/common_bib_file}
+
+
+
+\end{document}
