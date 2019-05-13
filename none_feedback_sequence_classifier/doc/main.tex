@@ -239,6 +239,20 @@ in the training database is not a problem, since the {\it decoder} portion
 of the attention-model directly generates the output label sequences.
 The loss function is also defined for each labels. 
 
+ In Fig. 
+\ref{fig:ctc_diagram} $\sim$ \ref{fig:attention_diagram}, we show
+block diagrams of CTC \cite{a_graves_icml_2006_00}, 
+RNN-T \cite{a_graves_corr_2012_00, a_graves_icassp_2013_00}, and 
+the attention-based model 
+\cite{
+j_chorowski_nips_2015_00,
+w_chan_icassp_2016_00} respectively. CTC in Fig. \ref{fig:ctc_diagram} 
+and RNN-T in Fig. \ref{fig:rnn_t_diagram} are {\it frame-synchronous}, 
+which means that the ASR system generates the output target for each 
+input frame.
+
+
+
 
 
 \subsection{Connectionist Temporal Classification}
@@ -348,6 +362,8 @@ are interleaved from the bottom layer up to the third max-pool layer.
 In Fig. \ref{fig:fsc_diagram}, speech features $\vec{x}[m]$ are sampled 
 at every 10 {\it ms}, which is the usual frame period in speech 
 recognition
+at every 10 {\it ms}, which is the usual speech feature frame rate  
+in speech recognition
 \cite{x_huang_prentice_hall_2001_00, c_kim_taslp_2016_00},
 Using three two-to-one max-pool layers, $\vec{z}[p]$ has a frame period 
 of 80 {\it ms}.  
@@ -386,6 +402,8 @@ In this section, we describe how to train FSC. As mentioned in Sec.
 
 
 The first step is making an
+In this section, we describe how to train FSC. The first step is making an
+>>>>>>> cf67f8b3ff96936469f82b1916daebe02799ed40
 alignment using the N-best alignment. The second step is updating the
 neural network parameters using the Cross Entropy (CE) criterion. 
 
@@ -393,6 +411,7 @@ neural network parameters using the Cross Entropy (CE) criterion.
 
 The first step is finding the optimal frame-synchronous sequence
 $\mathcal{Z}_0^{M-1}$.   
+$\mathcal{Z}$
 
 \begin{algorithmic}
   \State {$\mathcal{Z} = A(\mathcal{X} | \Theta)$}
