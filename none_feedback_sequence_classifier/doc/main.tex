@@ -22,6 +22,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{tikz,placeins}
 \usepackage{subcaption}
+\usepackage{algorithm}
 \usepackage{algpseudocode}
 %\usepackage[caption = false]{subfig}
 \usepackage{amssymb,amsmath,bm}
@@ -89,7 +90,7 @@ a homogenous structure.}
 \begin{abstract}
 TODO(chanw.com) Revise the abstract.
 This paper proposes a new end-to-end speech recognition system referred to
-as Recurrent neural network Sequence Classification (RSC). Recently, end-to-end speech
+as Feedback Sequence Classifier (FSC). Recently, end-to-end speech
 recognition systems have been gaining more attention from researchers and
 several different structures have been proposed. Typical examples  
 include Connectionist Temporal Classification (CTC), Recurrent Neural Network
@@ -121,26 +122,35 @@ systems fueled by advances in deep neural networks
   t_sainath_taslp_2017_00,
   t_sainath_book_chapter_2017_00,
   v_vanhoucke_nips_workshop_2011_00}.
-
-TODO(chanw.com) Talk about the AI speakers.
-
-
-TODO(chanw.com) Talk about the advancements of the end-to-end systems.
+TODO(chanw.com) Describes history about starting using DNN, LSTM.
 
 
-Recently, it has been frequently observed that if 
-sequence-to-sequence end-to-end ASR systems are trained on sufficiently 
+
+With widespread adoption of voice assistant speakers
+such as Google Home, Amazon Alexa
+\cite{B_Li_INTERSPEECH_2017_1, C_Kim_INTERSPEECH_2017_1},
+far-field speech recognition has become very important.
+Recently, approaches using data augmentation
+has been gaining popularity for far-field speech recognition
+\cite{R_Lippmann_icassp_1987_1,
+c_kim_interspeech_2018_00, w_hartmann_interspeech_2016_00}.
+
+TODO(chanw.com) Briefly describes CTC, RNN-T, and attention-based model.
+
+Recently, it has been observed that if 
+{\it sequence-to-sequence end-to-end} ASR systems are trained on sufficiently 
 large amounts of acoustic training data, they can outperform
 conventional HMM-DNN/RNN hybrid systems \cite{c_chiu_icassp_2018_00, 
 c_kim_interspeech_2019_00}.
+These complete end-to-end systems have started surpassing the performance of
+the conventional WFST-based decoders with a improved training strategy
+such as label smoothing, Minimum Word Error Rate(MWER) training, 
+learning rate warming-up,
+and a better choice of target unit such as Byte Pair Encoded (BPE) 
+\cite {r_sennrich_acl_2016_00} subword units.
 
+TODO(chanw.com) Briefly describes the motivation of FSC.
 
-Recently, we observed that training with large-scale noisy data generated
-by a \textit{Room Simulator} \cite{C_Kim_INTERSPEECH_2017_1}
-improves speech recognition accuracy dramatically.
-This system has been successfully employed
-for training acoustic models for Google Home or Google voice
-search \cite{C_Kim_INTERSPEECH_2017_1}.
 
 
 \section{Review on sequence-to-sequence speech recognition algorithms}
@@ -154,11 +164,27 @@ y_he_icassp_2019_00,
 r_prabhavalkar_interspeech_2017_00}. 
 A {\it sequence-to-sequence}
 speech recognizers maps a sequence of input acoustic features into a sequence 
-of graphemes  \cite{j_chorowski_nips_2015_00, w_chan_icassp_2016_00} or words 
-\cite{r_prabhavalkar_interspeech_2017_00}. 
-We denote a sequence of input acoustic feature vectors by 
+of text labels  \cite{r_prabhavalkar_interspeech_2017_00}. 
+Mathematically, this model is 
+represented by the following transformation $\mathcal{T}$ 
+\cite{a_graves_icml_2006_00}:
+\begin{align}
+  \mathcal{T} : \left(\mathbb{R}^d\right)^{*} \rightarrow \mathbb{V}^{*}
+	\label{eq:transformation}
+\end{align}
+where the symbol ${*}$ denotes a sequence, $d$ is the dimension of the input 
+feature. $\mathbb{V}$ in \eqref{eq:target_label} is the set of output
+labels, which may be graphemes 
+\cite{j_chorowski_nips_2015_00,
+w_chan_icassp_2016_00},
+subword units \cite{
+a_zeyer_interspeech_2018_00,
+c_chiu_icassp_2018_00},
+ and words \cite{h_soltau_interspeech_2017_00}.
+Let us denote a sequence of input acoustic feature vectors by 
 $\mathcal{X}_{0}^{M-1}$ and a sequence of target labels in 
-{\it one-hot vector} representation by 
+{\it one-hot vector} representation or its label-smoothed 
+representation \cite{} by 
 $\mathcal{Y}_{0}^{L-1}$ as shown below:
 \begin{subequations}
   \begin{align}
@@ -172,72 +198,66 @@ $\mathcal{Y}_{0}^{L-1}$ as shown below:
   \end{align}
 \end{subequations}
 where $M$ is the number of frames in the input feature sequence,
-$d$ in \eqref{eq:input_seq} is the dimension of the input feature.
 $L$ is the number of labels in the output target sequence,
  and $\mathbb{V}$ in \eqref{eq:target_label} is the set of output
-labels, which may be graphemes 
-\cite{j_chorowski_nips_2015_00,
-w_chan_icassp_2016_00},
-subword units \cite{
-a_zeyer_interspeech_2018_00,
-c_chiu_icassp_2018_00},
- and words \cite{h_soltau_interspeech_2017_00}.
 Note that the sequence index in \eqref{eq:input_seq} is a frame
 index, whereas the sequence index in \eqref{eq:target_label} is 
 label index. Depending on whether the neural network generates
 the inference output for every frame or not, there are following
 categories:
 
-\begin{itemize}
-  \item {\bf Label-synchronous inference} In this category, the 
-neural network generates the inference output $\widehat{\vec{y_l}}$ 
+
+\subsection{Label-synchronous inference}
+In this class of models, the neural network generates the inference output 
+$\widehat{\vec{y_l}}$ 
 only when a new label is expected. The loss function 
-$\mathbb{L}\left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1}\right)$ is 
+$\mathbb{L}_{\text{ls}}\left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1}\right)$ is 
 defined as follows:
    \begin{align}
-     \mathbb{L}\left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1}\right) 
-        = \sum_{l=0}^{L-1}  y_l \odot \log\left( \circ \, \widehat{\vec{y_l}} \right)  
+     \mathbb{L}_{\text{ls}}\left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1}\right) 
+        = \sum_{l=0}^{L-1}  {\vec{y}_l}^{\;t}  \log\left( 
+            \circ \, \widehat{\vec{y_l}} \right)  
           \label{eq:label_synchronous_ce_loss} 
    \end{align}
-where $\odot$ and $\log \left(\circ \right)$ denote element-wise product 
-(a.k.a {\it Hadamard product}) and element-wise log, respectively. 
+where $\log \left(\circ \right)$ and $^{t}$ denote element-wise log and 
+transpose operation, respectively.
 
 
-  \item {\bf Frame-synchronous inference} In this category, from the original 
-target label in \eqref{eq:target_label}, we either explicitly or 
-implicitly obtain the label boundaries.
-In the framewise Cross Entropy (CE) training 
+
+\subsection{Frame-synchronous inference}
+\label{sec:frame_synchronous_inference}
+In this class of inference,  we obtain
+the temporal boundaries of each label in \eqref{eq:target_label}.
+In the frame-wise Cross Entropy (CE) training 
 \cite{g_hinton_ieee_signal_processing_mag_2012_00, 
 C_Kim_INTERSPEECH_2017_1, 
 B_Li_INTERSPEECH_2017_1}, {\it Viterbi alignment}  
 \cite{
 x_huang_prentice_hall_2001_00,
 l_r_rabiner_proceedings_of_ieee_1989_00} is usually employed. 
+The FSC algorithm presented in this paper also obtains
+label boundaries using the {\it N-best alignment} which will
+be explained in Sec. \ref{sec:n_best_alignment}.
+
 Using these alignment algorithms, 
-we obtain corresponding {\it frame-synchronous }label sequences 
+we obtain corresponding {\it frame-synchronous} label sequences 
 $\vec{z}[m] \in \mathbb{V}$ for each frame index $m$. This
 latent label sequences are often called a {\it path}.
   \begin{align}
     \mathcal{Z}_{0}^{M-1}  =  
       \left\{\vec{z}[m]  \Big| 0 \le m \le M-1, \; \vec{z}[m] \in \mathbb{V} \right\}, 
-    \label{eq:frame_target_label}
+    \label{eq:latent_label_seq}
   \end{align}
 Fig. \ref{fig:path_alignment} shows one such example. 
 Such an alignment is usually called a {\it path}.
 
-  \begin{align}
-     l = \sum_{l=0}^{l=L-1}  y_l \log \left( \hat{y_l} \right)  
-          \label{eq:label_synchronous_ce_loss} 
-  \end{align}
-\end{itemize}
+\begin{align}
+   \mathbb{L}_{\text{fs}}\left(\mathcal{X}_{0}^{M-1}, \mathcal{Z}_{0}^{M-1}\right) 
+      = \sum_{l=0}^{M-1}  {\vec{z}[m]}^{\,t}  \log\left( 
+          \circ \, \widehat{\vec{z}}[m] \right)  
+        \label{eq:frame_synchronous_ce_loss} 
+\end{align}
 
-Moreover, in almost all the large speech training database, the temporal boundray
-of each label is not marked. In the attention-based model described in 
-Sec. \ref{sec:attention_based_model} and shown in Fig. 
-\ref{fig:attention_diagram}, lack of the temporal alignment information
-in the training database is not a problem, since the {\it decoder} portion 
-of the attention-model directly generates the output label sequences.
-The loss function is also defined for each labels. 
 
  In Fig. 
 \ref{fig:ctc_diagram} $\sim$ \ref{fig:attention_diagram}, we show
@@ -252,10 +272,7 @@ which means that the ASR system generates the output target for each
 input frame.
 
 
-
-
-
-\subsection{Connectionist Temporal Classification}
+\subsubsection{Connectionist Temporal Classification}
 \label{sec:ctc}
 
 Fig. \ref{fig:ctc_diagram} shows the entire structure of the 
@@ -275,8 +292,12 @@ where $\mathcal{A}_{CTC} \left(\mathcal{X}_{0}^{M-1},
 of length $M$ such that removing blanks and repeated symbols from 
 $\mathcal{Z}_{0}^{M-1}$ yields $\mathcal{Y}_{0}^{L-1}$.
 
+To obtain derivatives required for back-propagation, CTC employs 
+the forward-backward algorithm.
 
-\subsection{RNN-Transducer}
+
+
+\subsubsection{RNN-Transducer}
 \label{sec:rnn_t}
 
 Fig. \ref{fig:rnn_t_diagram} shows the entire structure of the  
@@ -289,9 +310,6 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
           \Pi_{m=0}^{M-1}
             P\left(\vec{z}[m] | \mathcal{X}_{0}^{M-1} \right),
 \end{align}
-
-\subsection{Attention-based model}
-\label{sec:attention_based_model}
 
 
 \begin{figure}
@@ -356,36 +374,90 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
 \subsection{Neural Network Structure}
 \label{sec:neural_network_structure}
 Fig. \ref{fig:fsc_diagram} shows the entire structure of the FSC. 
+Speech features $\vec{x}[m]$ are sampled 
+at every 10 {\it ms}, which is the usual frame period in speech 
+\cite{x_huang_prentice_hall_2001_00, c_kim_taslp_2016_00}.
 As shown in this figure, LSTM layers and max-pool layers
 are interleaved from the bottom layer up to the third max-pool layer.
+Using three 2:1 max-pool layers, the softmax output $\vec{z}[u]$ has 
+a frame period of 80 {\it ms}.  Thus, the relationship between the original frame 
+index $m$ and the temporal sub-sampled index $u$ is given by \eqref{eq:def_u_U}.
+The relationship between the length of the softmax output sequence $U$
+and the length of the feature sequence $M$ is also given in the same way:
+	\begin{align}
+		u = \lceil m / 8 \rceil,  \; U = \lceil M / 8 \rceil \label{eq:def_u_U}.
+	\end{align}
 
-In Fig. \ref{fig:fsc_diagram}, speech features $\vec{x}[m]$ are sampled 
-at every 10 {\it ms}, which is the usual frame period in speech 
-recognition
-at every 10 {\it ms}, which is the usual speech feature frame rate  
-in speech recognition
-\cite{x_huang_prentice_hall_2001_00, c_kim_taslp_2016_00},
-Using three two-to-one max-pool layers, $\vec{z}[p]$ has a frame period 
-of 80 {\it ms}.  
-The relationship between the temporal index $p$ in $\vec{z}[p]$ and 
-$m$ in $\vec{x}[m]$ is given by: 
+FSC performs inference in a frame-synchronous way as described in 
+Sec. \ref{sec:frame_synchronous_inference}. 
+However, due to this temporal sub-sampling, the latent label sequence 
+in \eqref{eq:latent_label_seq} is slightly modified as shown below:
 \begin{align}
-  p = \lceil m / 8 \rceil \label{eq:def_p}
+  \mathcal{Z}_{0}^{U-1}  =  
+    \left\{\vec{z}[u]  \Big| 0 \le m \le U-1, \; \vec{z}[u] \in \mathbb{V} \right\}.
+  \label{eq:subsampled_latent_label_seq}
 \end{align}
+
+
+The loss function 
+$\mathbb{L}_{\text{fsc}}\left(\mathcal{X}_{0}^{M-1}, \mathcal{Z}_{0}^{M-1}\right)$ 
+is also modified from the original one in 
+\eqref{eq:frame_synchronous_ce_loss}:
 \begin{align}
-  \mathcal{Z}_{0}^{M-1}  =  
-    \left\{\vec{z}[m]  \Big| 0 \le m \le M-1, \; \vec{z}[m] \in \mathbb{V} \right\}, 
-  \label{eq:frame_target_label}
+	\mathbb{L}_{\text{fsc}}
+		\left(\mathcal{X}_{0}^{M-1}, \mathcal{Z}_{0}^{U-1}\right)
+      = \sum_{u=0}^{U-1}  {\vec{z}[u]}^{\,t}  \log\left( 
+          \circ \, \widehat{\vec{z}}[u] \right)  
+        \label{eq:fsc_ce_loss} 
 \end{align}
-
-
-The reason for using the one dimensional max-pool layer
-is to make the neural network output have a similar rate to the 
-that of each {\it phone} in utterances. Note that a {\it phone} 
-is any distinct speech sound serving as a phonetic unit. 
-
+The reason for performing the 8:1 temporal sub-sampling in \eqref{eq:def_u_U} is to 
+to make the period of the softmax output $\widehat{\vec{z}}[u]$ in \label{eq:fsc_ce_loss} 
+be similar to the shortest BPE duration. We assume that the {\it sequence-to-sequence}
+neural network models will be trained most efficiently when the period of neural 
+network output roughly matches the period of the target. In addition, this
+output periods must be equal to larger than the shortest target period to prevent
+missing some targets.
+The shortest duration of each BPE is similar to the average length of {\it phones}, 
+which is any distinct speech sound serving as a phonetic unit.
 It has been observed that the average phone duration is between 50 {\it ms}
 \textasciitilde 100 {\it ms} \cite{x_wang_icslp_1996_00, z_bartosz_ltc_2009_00}.
+Under this rationale, we chose the temporal sub-sampling factor of 8:1. 
+We also observe this sub-sampling factor is optimal in our experiments as well.
+
+\subsection{Target units of Feedback Sequence Classifier}
+\label{sec:target_units}
+
+In FSC, we use subword units created by BPE \cite{r_sennrich_acl_2016_00} for
+the output vocabulary $\mathbb{V}$ in 
+\eqref{eq:transformation} and \eqref{eq:subsampled_latent_label_seq}. 
+
+When creating the latent frame-wise label sequence $\mathcal{Z}_{0}^{U-1}$ 
+in \eqref{eq:subsampled_latent_label_seq}, we distinguish the onset frame
+from other frames.  For example, if we have a BPE unit
+("{\it an}") in the vocabulary $\mathbb{V}$, then we define another
+target ("{\it an$_o$}") which marks the on-set frame of this BPE
+interval. Thus, when the number of BPE units is $B$, the total
+number of vocabularies in $\mathbb{V}$ becomes $2B$.
+We refer this approach to as {\it BPE with onset marking}.
+
+The reason for using this approach is two-folds. First, since FSC
+generates an inference output for each frame, if the same
+BPE symbol repeatedly appears, it is difficult to tell whether 
+this BPE is really expected to appear multiple times or whether 
+the a single BPE is continuing. For example, when we have 
+a sequence \{"{\it an}", "{\it an} "\}
+as the inference output, it is difficult to tell whether it should be a single
+"{\it an}" or two "{\it an}"s. With the onset marking,
+a decoder needs to print out the inference outputs with onset marking. 
+The blank symbol in CTC also plays a similar role. However this blank symbol
+is a common symbol following any labels. In the FSC algorithm, the information
+given by the feedback paths is crucial in performance. In this aspect,
+blank symbol is not very useful for this feedback structure. 
+Second, we have frequently observed that the on-set portion of sound
+has a very important role in human auditory perception 
+\cite{C_Kim_INTERSPEECH_2014_2}.
+
+
 
 
 
@@ -396,31 +468,57 @@ It has been observed that the average phone duration is between 50 {\it ms}
 
 
 \subsection{Training of the Feedback Sequence Classifier}
-In this section, we describe how to train FSC. As mentioned in Sec. 
-\label{ref:neural_network_structure}, the FSC operates in the frame
--synchronous way. Since we do not have the alignment information
-
-
-The first step is making an
-In this section, we describe how to train FSC. The first step is making an
->>>>>>> cf67f8b3ff96936469f82b1916daebe02799ed40
-alignment using the N-best alignment. The second step is updating the
+In this section, we describe how to train FSC.  Algorithm 
+\ref{algo:fsc_training} shows how FSC is trained using the 
+N-best alignment algorithm. N-best algorithm will be described 
+in Sec. \ref{sec:n_best_alignment} in detail.
+In Algorithm \ref{algo:fsc_training}  
+As mentioned in Sec. 
+\ref{sec:frame_synchronous_inference}, FSC performs inference
+in a frame-synchronous way.
+The first step is making an 
+In this section, we describe how to train FSC. The first step is 
+is to make an alignment using the N-best alignment. The second step is updating the
 neural network parameters using the Cross Entropy (CE) criterion. 
 
-\subsection{Training procedure}
 
 The first step is finding the optimal frame-synchronous sequence
 $\mathcal{Z}_0^{M-1}$.   
 $\mathcal{Z}$
 
-\begin{algorithmic}
-  \State {$\mathcal{Z} = A(\mathcal{X} | \Theta)$}
-  \State {Updates the model.}
-\end{algorithmic}
+
+\begin{algorithm}
+  \caption{Training procedure for the FSC algorithm}
+  \label{algo:fsc_training}
+  \begin{algorithmic}
+    \State $\Theta^{(0)} \leftarrow$ initialize\_parameters()
+    \For {epoch index $i = 0, . . . , I-1$}
+      \For {each batch $\left\{\mathcal{X}_{0}^{M-1}  \right\}, 
+                        \left\{\mathcal{Y}_{0}^{L-1}  \right\}$}, 
+        \State $\left\{ {{\mathcal{Z}^{(i)}}_0^{U-1}} \right\}
+          \leftarrow
+          \text{n\_best\_align}
+          \left(
+            \left\{X_{0}^{M-1} \right\} \Big| \Theta^{(i)}
+          \right)$
+
+        \State {$\Theta^{(i)} \leftarrow$ update\_parameter 
+          $\left(
+            \left\{\mathcal{X}_{0}^{M-1} \right\},			
+            \left\{{\mathcal{Z}^{(i)}}_{0}^{U-1}\right\}
+          \right)$}
+
+    \EndFor
+    \State $\Theta^{(i+1)} := \Theta^{(i)}$
+  \EndFor
+  \label{algorithm:fsc_training}
+  \end{algorithmic}
+\end{algorithm}
 
 
 
-\subsection{Viterbi alignment and N-best alignment}
+\subsection{N-best alignment}
+\label{sec:n_best_alignment}
 
 
 \begin{figure}
@@ -430,45 +528,51 @@ $\mathcal{Z}$
     } 
     \caption {
       An example of a path $\mathcal{Z}_{0}^{M-1}$ and the path movement 
-      constraint shown by TODO(chanw.com)[Check the latex arrow symbol] $P -> Q$ and $P -> R$. 
+      constraint shown by dashed arrows $P \rightarrow Q$ and $P \rightarrow R$. 
       \label{fig:path_alignment}
     }
 \end{figure}
 
 In CTC in Sec. \ref{sec:ctc} and in RNN-T in Sec. \ref{sec:rnn_t}, the 
 forward-backward algorithm is employed to update parameters. 
-TODO(chanw.com) cite HMM tutorial paper.
-
-For example in CTC, the forward algorithm is given by the following equation:
-
-
+For example in CTC, the forward-backward algorithm is based on the
+following assumption:
+\begin{align}
+  P \left(  \Big| \right) = \Pi
+\end{align}
 
 In conventional frame-wise CE-training, Viterbi alignment 
 (a.k.a forced alignment) has been performed to obtain the frame-level 
 acoustic unit  boundaries TODO(chanwcom). Even though the Viterbi algorithm
 has advantages in simplicity and efficiency, it is based on
-the conditional independence assumption.
+the following conditional independence assumption.
 
 In TFSC, we propose the following N-best alignment approach rather than
 the Viterbi alignment algorithm to find the alignment information.
 
-\begin{algorithmic}
+\begin{algorithm}
+  \caption{N-best alignment algorithm}
+  \begin{algorithmic}
 
-\For {$m = 0, . . . , M-1$}
-	\For {$l = 0, . . . , N_b-1$}
-		\State {$\pi^{(l)}[m]$}
-	\EndFor
-\EndFor
+  \Require {$\mathcal{X}_0^{M}$}
+  \Require {$\mathcal{Y}_0^{L}$}
 
-\If {$i\geq maxval$}
-    \State $i\gets 0$
-\Else
-    \If {$i+k\leq maxval$}
-        \State $i\gets i+k$
-    \EndIf
-\EndIf
-\label{algorithm:n_best_alignment}
-\end{algorithmic}
+  \For {$m = 0, . . . , M-1$}
+    \For {$l = 0, . . . , N_b-1$}
+      \State {$\pi^{(l)}[m]$}
+    \EndFor
+  \EndFor
+
+  \If {$i\geq maxval$}
+      \State $i\gets 0$
+  \Else
+      \If {$i+k\leq maxval$}
+          \State $i\gets i+k$
+      \EndIf
+  \EndIf
+  \label{algorithm:n_best_alignment}
+  \end{algorithmic}
+\end{algorithm}
 
 
 
@@ -481,15 +585,6 @@ the Viterbi alignment algorithm to find the alignment information.
 \subsubsection*{Acknowledgments}
 
 
-\section*{References}
-
-References follow the acknowledgments. Use unnumbered first-level
-heading for the references. Any choice of citation style is acceptable
-as long as you are consistent. It is permissible to reduce the font
-size to \verb+small+ (9 point) when listing the references. {\bf
-  Remember that you can go over 8 pages as long as the subsequent ones contain
-  \emph{only} cited references.}
-\medskip
 
 \small
 
