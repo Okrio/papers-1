@@ -18,11 +18,13 @@
 \usepackage{url}            % simple URL typesetting
 \usepackage{booktabs}       % professional-quality tables
 \usepackage{amsfonts}       % blackboard math symbols
+\usepackage{amsmath}
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{tikz,placeins}
 \usepackage{subcaption}
 \usepackage{algorithm}
+\usepackage{mathrsfs}
 \usepackage{algpseudocode}
 %\usepackage[caption = false]{subfig}
 \usepackage{amssymb,amsmath,bm}
@@ -83,6 +85,7 @@ a homogenous structure.}
 }
 
 \begin{document}
+
 % \nipsfinalcopy is no longer used
 
 \maketitle
@@ -531,6 +534,7 @@ $\mathcal{Z}$
       constraint shown by dashed arrows $P \rightarrow Q$ and $P \rightarrow R$. 
       \label{fig:path_alignment}
     }
+  \label{fig:path_alignment}
 \end{figure}
 
 In CTC in Sec. \ref{sec:ctc} and in RNN-T in Sec. \ref{sec:rnn_t}, the 
@@ -547,35 +551,64 @@ acoustic unit  boundaries TODO(chanwcom). Even though the Viterbi algorithm
 has advantages in simplicity and efficiency, it is based on
 the following conditional independence assumption.
 
-In TFSC, we propose the following N-best alignment approach rather than
+In FSC, we propose the following N-best alignment approach rather than
 the Viterbi alignment algorithm to find the alignment information.
+
+TODO(chanw.com) Define $f$.
 
 \begin{algorithm}
   \caption{N-best alignment algorithm}
   \begin{algorithmic}
 
-  \Require {$\mathcal{X}_0^{M}$}
-  \Require {$\mathcal{Y}_0^{L}$}
+  \Require {$\vec{\mathcal{X}}[0:M]$}
+  \Require {$\mathcal{\vec{Y}}_{0:L}$}
+  \Require {The neural network parameter $\Theta^{\left(i\right)}$ for calculating 
+      $p\left(\vec{z}[m] \big|
+      \mathcal{\vec{Z}}[0:m], \mathcal{\vec{X}}[0:m+1]\right)$}
 
-  \For {$m = 0, . . . , M-1$}
-    \For {$l = 0, . . . , N_b-1$}
-      \State {$\pi^{(l)}[m]$}
-    \EndFor
-  \EndFor
+  \State {\textbf{Initialization:}}
+  \State {Let $\vec{Z}_0[0:1] := \left\{ \vec{y}_0 \right\}  $}
+  \State {$\vec{Z}_b[0:1], 1 \le b < N_b$ are undefined.}
+  \State {Let $\mathcal{L}_{0} := \ln \left[ 
+        p \left(\vec{y}_{0} \big| 
+            \vec{\mathcal{X}}[0:1]\right)  \right]$}
+  \For {$m = 1, . . . , M-1$}
+    \For {$b = 0, . . . , N_b-1$}
+      \If {$\vec{\mathcal{Z}}_{b}[0:m]$ is defined}
+        \State {Let $\vec{y}_u := \mathcal{\vec{Z}}_{b}[m-1] $}
+        \State {Let $\vec{\mathcal{Z}}_{b, 0}[0:m+1] := \vec{\mathcal{Z}}_{b}[0:m] 
+                \cup \left\{ \vec{y}_u  \right\}  $} 
+            \Comment {A horizontal move $P \rightarrow Q$ in Fig. \ref{fig:path_alignment}}.
+        \State {
+              $\mathcal{L}_{b,0} := \ln \left[ 
+                  p \left(\vec{y}_{u} \big| 
+                      \vec{\mathcal{Z}}_b[0:m], 
+                      \vec{\mathcal{X}}[0:m+1], \Theta^{(i)}\right)  \right]
+                  + \mathcal{L}_b$}
 
-  \If {$i\geq maxval$}
-      \State $i\gets 0$
-  \Else
-      \If {$i+k\leq maxval$}
-          \State $i\gets i+k$
+        \If {$u+1 \le  L - 1$}
+          \State {Let $\vec{\mathcal{Z}}_{b, 1}[0:m+1] := \vec{\mathcal{Z}}_{b}[0:m] \cup \left\{ \vec{y}_{u+1}  \right\}  $} 
+              \Comment {A diagonal move $P \rightarrow R$ in Fig. \ref{fig:path_alignment}}.
+          \State  {
+              $\mathcal{L}_{b,1} := \ln \left[ 
+                  p \left(\vec{y}_{u+1} \big| 
+                      \vec{\mathcal{Z}}_b[0:m], \vec{\mathcal{X}}[0:m+1], \Theta^{(i)}\right)  \right] 
+                          + \mathcal{L}_b$}
       \EndIf
-  \EndIf
+      \EndIf
+    \EndFor
+    \State {Sort a list of items
+    $\left\{\mathcal{L}_{b, i}, \vec{\mathcal{Z}}_{b, i}[0:m+1] \right\}, \; 0 \le b < B, i = 0, 1$ 
+    with respect to the log likelihood $\left\{\mathcal{L}_{b, i}\right\}$ 
+    in the decreasing order. The top $N_b$ of this sorted list is chosen and re-indexed as 
+    follows: 
+    $\left\{\mathcal{L}_{b}, \vec{\mathcal{Z}}_{b}[0:m+1] \right\}$, $0 \le b < N_b$}
+    where the first item in the sorted list is re-indexed to $b=0$, 
+    the second item is re-indexed to $b=1$, and so on.
+  \EndFor
   \label{algorithm:n_best_alignment}
   \end{algorithmic}
 \end{algorithm}
-
-
-
 
 
 \section{Experimental Results}
