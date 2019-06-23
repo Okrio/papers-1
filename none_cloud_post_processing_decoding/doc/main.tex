@@ -149,8 +149,11 @@ c_chiu_icassp_2018_00},
 \section{The structure of the Server-side Post Processing System}
 
 Fig. \ref{fig:entire_system} shows the entire structure of the on-device ASR
-system and the server-side post processing system. 
-The symbols used in this figure is defined as follows:
+system and the server-side post processing system. In this figure,  
+the two top level blocks on the left and the right hand sides correspond
+to {\it speech recognition on the local device} and 
+{\it post processing on the server} respectively.  The symbols used in this 
+figure is defined as follows:
 %
 \begin{align}
   \vec{x}[m]:& \quad \text{Acoustic feature vector from speech.}  \nonumber \\
@@ -159,7 +162,7 @@ The symbols used in this figure is defined as follows:
        & \quad \hat{y}_o[l] \in \mathbb{V}.  \nonumber \\
   \hat{y}_o[0:l+1]  : & \quad \text{The sequence of $y[l']$ where } 0 \le l'
   \le l. \quad  \hat{y}_o[l'] \in \mathbb{V}.  \nonumber \\ 
-  \hat{y}_p[l]:& \quad \text{The frame-synchronous hypothesis for post-processing.}
+  y_p[l]:& \quad \text{The frame-synchronous hypothesis for post-processing.}
   \quad \hat{y}_p[l] \in \mathbb{V}.   \nonumber \\
   W_i: & \quad \text{The word sequence. } W_i \in  \mathbb{D}.  \nonumber 
 \end{align}
@@ -172,25 +175,57 @@ device and the server side post processing respectively.
 
 \subsection{Label Likelihood Calculation}
 To perform decoding described in Section \ref{sec:decoding}, 
-we need to calculate likelihood $P(y[0:l+1] |z[l])$
-where $\mathcal{Y}[0:l]$ is the 
-In this block, the objective is to calculate the likelihood
-of the on-device ASR output $\mathcal{Y}[0:l]$ depending on 
-the label $z[l]$, which may be mathematically given
-by
+we need to calculate likelihood $P(\hat{y}_o[0:l+1] | y_p[l])$
+where $\hat{y}_o[0:l+1]$ is the sequence of the frame-synchronous 
+label hypothesis.
+Using the Bayes rule, this likelihood is expressed in the following form:
 \begin{align}
-  P(\hat{y}_o[0:l+1] \big| \hat{y}_p[l]) 
-    = \frac{P(\hat{y}_p[l] \big| \hat{y}_o[0:l+1])
-        P\left(\hat{y}_o[0:l+1] \right)}{P(\hat{y}_p[l])}
-  \label{eq:post_prob}
+  P(\hat{y}_o[0:l+1] \big| y_p[l]) 
+    = \frac{P(y_p[l] \big| \hat{y}_o[0:l+1])
+        P\left(\hat{y}_o[0:l+1] \right)}{P(y_p[l])}.
+  \label{eq:likelihood_prob}
+\end{align}
+To calculate the above equation, the following three terms need to be
+calculated:
+\begin{align}
+  P(y_p[l] \big| \hat{y}_o[0:l+1]): & \text{ A posterior probability of } y_p[l]
+    \text{ given the frame-synchronous label sequence } \nonumber \\ 
+    & \hat{y}_o[0:l+1].
+    \nonumber \\
+  P\left(\hat{y}_o[0:l+1] \right): & 
+    \text{ A probability of the sequence of frame-synchronous labels } \hat{y}_o[0:l+1].
+      \nonumber \\
+  P(y_p[l]): & \text{ A prior probability of the label } y_p[l] \in \mathbb{V}.
+  \label{eq:prob_components_likelihood}
+\end{align}
+
+To calculate $P\left(\hat{y}_o[0:l+1] \right)$ in \eqref{eq:likelihood_prob}, 
+we use a either statistical n-gram or a RNN based Language Model (LM). 
+One notable difference of the LM used for this purpose compared 
+to a conventional LM is that this LM must be a frame-synchronous LM.
+and must be trained from frame-synchronous label corpus. 
+Thus, we first need to align transcribed speech corpus to obtain frame-synchronous 
+labels and train LM from this corpus. 
+Finally, we use this LM to calculate $P\left(\hat{y}_o[0:l+1] \right)$.
+
+Instead of calculating the likelihood of the whole sequence 
+$\hat{y}_o[0:l+1]$ described above, a simpler alternative is to ignore
+the past values of the original hypothesis $\hat{y}_o[0:l+1]$ and only to
+consider the current one $\hat{y}_o[l]$. Under this simplification,
+the likelihood in \eqref{eq:likelihood_prob} may be simplified as follows:
+\begin{align}
+  P(\hat{y}_o[l] \big| y_p[l]) 
+    = \frac{P (y_p[l] \big| \hat{y}_o[l]) P(\hat{y}_o[l])}{P(y_p[l])} 
 \end{align}
 
 \subsection{Decoding}
 \label{sec:decoding}
 The structure of the post-processing decoder is depicted in Fig.
-\ref{post_processing_decoder}. Using the dictionary and the
+\ref{fig:post_processing_decoder}. Using the dictionary and the
 language model, the hypothesis word sequence $W_i$ is obtained
 from the posterior probability in \eqref{eq:post_prob}.
+
+
 
 
 \begin{figure}
@@ -456,181 +491,6 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
 
 
 
-
-\section{Feedback Sequence Classifier}
-\label{sec:feedback_sequence_classifier}
-
-
-\subsection{Neural Network Structure}
-\label{sec:neural_network_structure}
-Fig. \ref{fig:fsc_diagram} shows the entire structure of the FSC. 
-Speech features $\vec{x}[m]$ are sampled 
-at every 10 {\it ms}, which is the usual frame period in speech 
-\cite{x_huang_prentice_hall_2001_00, c_kim_taslp_2016_00}.
-As shown in this figure, LSTM layers and max-pool layers
-are interleaved from the bottom layer up to the third max-pool layer.
-Using three 2:1 max-pool layers, the softmax output $\vec{z}[u]$ has 
-a frame period of 80 {\it ms}.  Thus, the relationship between the original frame 
-index $m$ and the temporal sub-sampled index $u$ is given by \eqref{eq:def_u_U}.
-The relationship between the length of the softmax output sequence $U$
-and the length of the feature sequence $M$ is also given in the same way:
-	\begin{align}
-		u = \lceil m / 8 \rceil,  \; U = \lceil M / 8 \rceil \label{eq:def_u_U}.
-	\end{align}
-
-FSC performs inference in a frame-synchronous way as described in 
-Sec. \ref{sec:frame_synchronous_inference}. 
-However, due to this temporal sub-sampling, the latent label sequence 
-in \eqref{eq:latent_label_seq} is slightly modified as shown below:
-\begin{align}
-  \mathcal{Z}[0:U]  =  
-    \left\{\vec{z}[u]  \Big| 0 \le m \le U-1, \; \vec{z}[u] \in \mathbb{V} \right\}.
-  \label{eq:subsampled_latent_label_seq}
-\end{align}
-
-
-The loss function 
-$\mathbb{L}_{\text{fsc}}\left(\mathcal{X}[0:M], \mathcal{Y}_{0:L}\right)$ 
-is also modified from the original one in 
-\eqref{eq:frame_synchronous_ce_loss}:
-\begin{align}
-	\mathbb{L}_{\text{fsc}}
-    \left(\mathcal{X}[0:M], \mathcal{Z}_{0:U}\right)
-      = \sum_{u=0}^{U-1}  
-          \sum_{v=0}^{V-1}
-          {(\vec{z}[u])_v}  \log ( 
-             \widehat{\vec{z}}[u] )_v  
-        \label{eq:fsc_ce_loss} 
-\end{align}
-The reason for performing the 8:1 temporal sub-sampling in \eqref{eq:def_u_U} is to 
-to make the period of the softmax output $\widehat{\vec{z}}[u]$ in \label{eq:fsc_ce_loss} 
-be similar to the shortest BPE duration. We assume that the {\it sequence-to-sequence}
-neural network models will be trained most efficiently when the period of neural 
-network output roughly matches the period of the target. In addition, this
-output periods must be equal to larger than the shortest target period to prevent
-missing some targets.
-The shortest duration of each BPE is similar to the average length of {\it phones}, 
-which is any distinct speech sound serving as a phonetic unit.
-It has been observed that the average phone duration is between 50 {\it ms}
-\textasciitilde 100 {\it ms} \cite{x_wang_icslp_1996_00, z_bartosz_ltc_2009_00}.
-Under this rationale, we chose the temporal sub-sampling factor of 8:1. 
-We also observe this sub-sampling factor is optimal in our experiments as well.
-
-\subsection{Target units of Feedback Sequence Classifier}
-\label{sec:target_units}
-
-In FSC, we use subword units created by BPE \cite{r_sennrich_acl_2016_00} for
-the output vocabulary $\mathbb{V}$ in 
-\eqref{eq:transformation} and \eqref{eq:subsampled_latent_label_seq}. 
-
-When creating the latent frame-wise label sequence $\mathcal{Z}[0:U]$ 
-in \eqref{eq:subsampled_latent_label_seq}, we distinguish the onset frame
-from other frames.  For example, if we have a BPE unit
-("{\it an}") in the vocabulary $\mathbb{V}$, then we define another
-target ("{\it an$_o$}") which marks the on-set frame of this BPE
-interval. Thus, when the number of BPE units is $B$, the total
-number of vocabularies in $\mathbb{V}$ becomes $2B$.
-We refer this approach to as {\it BPE with onset marking}.
-
-The reason for using this approach is two-folds. First, since FSC
-generates an inference output for each frame, if the same
-BPE symbol repeatedly appears, it is difficult to tell whether 
-this BPE is really expected to appear multiple times or whether 
-the a single BPE is continuing. For example, when we have 
-a sequence \{"{\it an}", "{\it an} "\}
-as the inference output, it is difficult to tell whether it should be a single
-"{\it an}" or two "{\it an}"s. With the onset marking,
-a decoder needs to print out the inference outputs with onset marking. 
-The blank symbol in CTC also plays a similar role. However this blank symbol
-is a common symbol following any labels. In the FSC algorithm, the information
-given by the feedback paths is crucial in performance. In this aspect,
-blank symbol is not very useful for this feedback structure. 
-Second, we have frequently observed that the on-set portion of sound
-has a very important role in human auditory perception 
-\cite{C_Kim_INTERSPEECH_2014_2}.
-
-
-
-
-
-
-
-
-
-
-
-\subsection{Training of the Feedback Sequence Classifier}
-In this section, we describe how to train FSC.  Algorithm 
-\ref{algo:fsc_training} shows how FSC is trained using the 
-$N$-best alignment algorithm and the cross entropy loss function. 
-$N$-best algorithm will be described 
-in Sec. \ref{sec:n_best_alignment} in detail.
-In Algorithm \ref{algo:fsc_training}  
-As mentioned in Sec. 
-\ref{sec:frame_synchronous_inference}, FSC performs inference
-in a frame-synchronous way.
-The first step is making an 
-In this section, we describe how to train FSC. The first step is 
-is to make an alignment using the $N$-best alignment. The second step is updating the
-neural network parameters using the Cross Entropy (CE) criterion. 
-
-
-The first step is finding the optimal frame-synchronous sequence
-$\mathcal{Z}[0:M]$.   
-
-
-\begin{algorithm}
-  \caption{Training procedure for the FSC algorithm}
-  \label{algo:fsc_training}
-  \begin{algorithmic}
-    \State $\Theta^{(0)} \leftarrow$ initialize\_parameters()
-    \For {epoch index $i = 0, . . . , I-1$}
-      \For {each batch $\left\{\mathcal{X}[0:M],
-                        \mathcal{Y}_{0:L}  \right\}$}, 
-        \State $ {{\mathcal{Z}^{(i)}}[0:U]}
-          \leftarrow
-          \text{n\_best\_align}
-          \left(
-            \mathcal{X}[0:M] \Big| \Theta^{(i)}
-          \right)$
-
-        \State {$\Theta^{(i)} \leftarrow$ update\_parameter 
-          $\left(
-            \mathcal{X}[0:M],
-            \mathcal{Z}^{(i)}[0:U]
-          \right)$}
-
-    \EndFor
-    \State $\Theta^{(i+1)} := \Theta^{(i)}$
-  \EndFor
-  \label{algorithm:fsc_training}
-  \end{algorithmic}
-\end{algorithm}
-
-
-
-\subsection{N-best alignment}
-\label{sec:n_best_alignment}
-
-
-In CTC in Sec. \ref{sec:ctc} and in RNN-T in Sec. \ref{sec:rnn_t}, the 
-forward-backward algorithm is employed to update parameters. 
-For example in CTC, the forward-backward algorithm is based on the
-following assumption:
-\begin{align}
-  P \left(  \Big| \right) = \Pi
-\end{align}
-
-In conventional frame-wise CE-training, Viterbi alignment 
-(a.k.a forced alignment) has been performed to obtain the frame-level 
-acoustic unit  boundaries TODO(chanwcom). Even though the Viterbi algorithm
-has advantages in simplicity and efficiency, it is based on
-the following conditional independence assumption.
-
-In FSC, we propose the following $N$-best alignment approach rather than
-the Viterbi alignment algorithm to find the alignment information.
-
-TODO(chanw.com) Define $f$.
 
 \section{Experimental Results}
 \label{sec:experimental_results}
