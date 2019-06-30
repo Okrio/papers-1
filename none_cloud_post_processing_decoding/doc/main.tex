@@ -7,7 +7,7 @@
 % to avoid loading the natbib package, add option nonatbib:
 %\usepackage[nonatbib]{nips_2017}
 
-\usepackage{neurips_2019}
+\usepackage[preprint]{neurips_2019}
 
 % to compile a camera-ready version, add the [final] option, e.g.:
 % \usepackage[final]{nips_2017}
@@ -54,13 +54,30 @@ Post-processing}
 % author name.
 
 \author{
-  David S.~Hippocampus\thanks{Use footnote for providing further
-    information about author (webpage, alternative
-    address)---\emph{not} for acknowledging funding agencies.} \\
-  Department of Computer Science\\
-  Cranberry-Lemon University\\
-  Pittsburgh, PA 15213 \\
-  \texttt{hippo@cs.cranberry-lemon.edu} \\
+  Chanwoo Kim  \\
+  Samsung Research \\
+  Seoul, Korea, 06765 \\
+  \texttt{chanw.com@samsung.com}  \\
+  \And
+  Kyungmin Lee  \\
+  Samsung Research \\
+  Seoul, Korea, 06765 \\
+  \texttt{k-m-lee@samsung.com} \\
+  \And
+  Eunhyang Kim  \\
+  Samsung Research \\
+  Seoul, Korea, 06765 \\
+  \texttt{sc.ehkim.jin@samsung.com} \\
+  \And
+  Kwangyoun Kim \\
+  Samsung Research \\
+  Seoul, Korea, 06765 \\
+  \texttt{sc.ehkim.jin@samsung.com} \\
+  \And
+  Dhananjaya Gowda \\
+  Samsung Research \\
+  Seoul, Korea, 06765 \\
+  \texttt{d.gowda@samsung.com} \\
   %% examples of more authors
   %% \And
   %% Coauthor \\
@@ -117,44 +134,109 @@ faster.
 
 \section{Introduction}
 
+Recently, there has been tremendous improvements in speech recognition
+systems fueled by advances in deep neural networks
+\cite{
+  Yu2013FeatureLearningDNN, 
+  g_hinton_ieee_signal_processing_mag_2012,
+  Seltzer2013DNNAurora4, 
+  t_sainath_taslp_2017_00,
+  t_sainath_book_chapter_2017_00,
+  v_vanhoucke_nips_workshop_2011_00}.
+These improvements have come about from the shift from Gaussian Mixture Model
+(GMM) to the Feed-Forward Deep Neural Networks (FF-DNNs), FF-DNNs
+to Recurrent Neural Network (RNN) and in particular the Long Short-Term Memory
+(LSTM) networks.
+Thanks to these advances, voice assistant devices such as Google Home
+\cite{C_Kim_INTERSPEECH_2017_1, B_Li_INTERSPEECH_2017_1}
+or Amazon Alexa or Samsung Bixby are being used at many homes and on personal devices.
 
-\section{Review on frame-synchronous speech recognition}
+Recently there has been increasing interest in switching
+from the conventional Weighted Finite State Transducer (WFST)
+based decoder using an Acoustic Model (AM) and a Language Model (LM)
+to a complete end-to-end all-neural speech recognition systems
+\cite{w_chan_icassp_2016_00, r_prabhavalkar_interspeech_2017_00,
+j_chorowski_nips_2015_00}.
+These complete end-to-end systems have started surpassing the performance of
+the conventional WFST-based decoders with a very large training
+database, a better choice of target unit such as Byte Pair Encoded (BPE)
+subword units, and an improved training methodology such as Minimum
+Word Error Rate (MWER) training.
 
-Let us suppose that the sequence of the text stream is $T$  
-\begin{align}
-  X
-\end{align}
+Another important aspect of these recent improvements in speech
+recognition performance is data.
+To build high performance speech recognition systems for
+conversational speech, we need to use
+a large amount of speech data covering various domains. In
+\cite{h_soltau_interspeech_2017_00}, it has been shown
+that we need a very large training set ($\sim$125,000 hours of
+semi-supervised speech data) to achieve
+high speech recognition accuracy for difficult tasks like
+video captioning. To train neural networks using such large
+amounts of speech data, we usually need
+multiple Central Processing Units (CPUs) or Graphics
+Processing Units (GPUs) or GPU clusters
+\cite{E_Variani_INTERSPEECH_2017_01, p_goyal_arxiv_2018_00}.
 
-A speech recognizers maps a sequence of input acoustic features into a sequence 
-of text labels  \cite{r_prabhavalkar_interspeech_2017_00}. 
-Mathematically, this model is 
-represented by the following transformation $\mathcal{T}$ 
-\cite{a_graves_icml_2006_00}:
-\begin{align}
-  \mathcal{T} : \left(\mathbb{R}^d\right)^{*} \rightarrow \mathbb{V}^{*}
-	\label{eq:transformation}
-\end{align}
-where the symbol ${*}$ denotes a sequence, $d$ is the dimension of the input 
-feature. $\mathbb{V}$ in \eqref{eq:target_label} is the set of output
-labels, which may be graphemes 
-\cite{j_chorowski_nips_2015_00,
-w_chan_icassp_2016_00},
-subword units \cite{
-a_zeyer_interspeech_2018_00,
-c_chiu_icassp_2018_00},
- and words \cite{h_soltau_interspeech_2017_00}.
 
- 
 
-\section{The structure of the Server-side Post Processing System}
+
+\section{Overview of the Enhancement by Post-Processing}
+
 
 Fig. \ref{fig:entire_system} shows the entire structure of the on-device ASR
 system and the server-side post processing system. In this figure,  
 the two top level blocks on the left and the right hand sides correspond
 to {\it speech recognition on the local device} and 
-{\it post processing on the server} respectively.  The symbols used in this 
-figure is defined as follows:
-%
+{\it post processing on the server} respectively.  
+
+TODO(chanw.com) Describe the advantage of the server side post-processing.
+
+
+\begin{subequations}
+  \begin{align}
+    \text{On-Device Speech Recognition}   : 
+        & \quad \{ \, \cdots ,\, \vec{x}[m],     \cdots \, \} \rightarrow  
+                \{ \, \cdots ,\, \hat{z}_o[l],   \cdots \, \} \\
+    \text{Server-Side Post-Processing} : 
+        & \quad \{ \, \cdots ,\, \hat{z}_o[l],   \cdots \, \}  \rightarrow
+                \{ \, \cdots ,\, W_i,   \cdots \, \}
+  \end{align}
+\end{subequations}
+where $\vec{x}[m]$ is the speech feature vector with $m$ being the 
+frame index and $\hat{z}_o[l]$ is the frame-synchronous hypothesis 
+from the speech recognizer with $l$ being the frame index. More details
+about the frame-synchronous hypothesis will be covered in Sec. 
+\ref{sec:frame_synchronous_hypothesis}. The reason for using a different
+frame index $l$ for $\hat{z}_o[l]$ is that the frame period in hypothesis
+generation may be different from the frame period in feature extraction.
+As will be discussed in Sec \ref{sec:frame_synchronous_hypothesis}, 
+the sequence of $\hat{z}_o[l]$ is a stream of graphemes. 
+
+When the server-side post processing is needed, the sequence of  
+
+
+
+
+Before describing structures in detail in Sec.
+\ref{sec:frame_synchronous_hypothesis} and in Sec.
+\ref{sec:server_side_post_processing}, we will first define notational 
+conventions in this section. When representing a sequence consisting of 
+periodic elements we will use a bracket symbol to represent elements of
+such a sequence. For example, speech features are usually calculated 
+periodically at every frame interval (e.g. 10 ms). Thus, we use  
+the symbol $\vec{x}[m]$ in
+To represent sequences, we will use the bracket symbol
+to represent periodic data such as feature vector $\vec{x}[m]$. Usually
+speech features are usually sampled at around 10 ms intervals. TODO(chanw.com)
+Adds citation. To represent a sequence $\alpha$ starting from the index 
+$i$ and ending at $f-1$, we use the notation inspired by the python slice 
+notation 
+\begin{align}
+  \alpha[i:f] = \{ \alpha[m]| i \le m < f \} 
+\end{align}
+Using this notational convention, we summarize the symbols used in Fig
+\ref{fig:entire_system} as follows:
 \begin{align}
   \vec{x}[m]:& \quad \text{Acoustic feature vector from speech.}  \nonumber \\
   \hat{y}_o[l]:& \quad \text{The frame-synchronous hypothesis from the
@@ -168,133 +250,13 @@ figure is defined as follows:
 \end{align}
 where $\mathbb{V}$ is the set of grapheme symbols, and $\mathbb{D}$ is the
 set of words. In Fig. \ref{fig:entire_system}, there are two top level
-blocks. The left and right blocks correspond to processing on the local
-device and the server side post processing respectively.
 
 
+\section{Obtaining frame-synchronous hypothesis}
+\label{sec:frame_synchronous_hypothesis}
 
-\subsection{Label Likelihood Calculation}
-To perform decoding described in Section \ref{sec:decoding}, 
-we need to calculate likelihood $P(\hat{y}_o[0:l+1] | y_p[l])$
-where $\hat{y}_o[0:l+1]$ is the sequence of the frame-synchronous 
-label hypothesis.
-Using the Bayes rule, this likelihood is expressed in the following form:
-\begin{align}
-  P(\hat{y}_o[0:l+1] \big| y_p[l]) 
-    = \frac{P(y_p[l] \big| \hat{y}_o[0:l+1])
-        P\left(\hat{y}_o[0:l+1] \right)}{P(y_p[l])}.
-  \label{eq:likelihood_prob}
-\end{align}
-To calculate the above equation, the following three terms need to be
-calculated:
-\begin{align}
-  P(y_p[l] \big| \hat{y}_o[0:l+1]): & \text{ A posterior probability of } y_p[l]
-    \text{ given the frame-synchronous label sequence } \nonumber \\ 
-    & \hat{y}_o[0:l+1].
-    \nonumber \\
-  P\left(\hat{y}_o[0:l+1] \right): & 
-    \text{ A probability of the sequence of frame-synchronous labels } \hat{y}_o[0:l+1].
-      \nonumber \\
-  P(y_p[l]): & \text{ A prior probability of the label } y_p[l] \in \mathbb{V}.
-  \label{eq:prob_components_likelihood}
-\end{align}
-
-To calculate $P\left(\hat{y}_o[0:l+1] \right)$ in \eqref{eq:likelihood_prob}, 
-we use a either statistical n-gram or a RNN based Language Model (LM). 
-One notable difference of the LM used for this purpose compared 
-to a conventional LM is that this LM must be a frame-synchronous LM.
-and must be trained from frame-synchronous label corpus. 
-Thus, we first need to align transcribed speech corpus to obtain frame-synchronous 
-labels and train LM from this corpus. 
-Finally, we use this LM to calculate $P\left(\hat{y}_o[0:l+1] \right)$.
-
-Instead of calculating the likelihood of the whole sequence 
-$\hat{y}_o[0:l+1]$ described above, a simpler alternative is to ignore
-the past values of the original hypothesis $\hat{y}_o[0:l+1]$ and only to
-consider the current one $\hat{y}_o[l]$. Under this simplification,
-the likelihood in \eqref{eq:likelihood_prob} may be simplified as follows:
-\begin{align}
-  P(\hat{y}_o[l] \big| y_p[l]) 
-    = \frac{P (y_p[l] \big| \hat{y}_o[l]) P(\hat{y}_o[l])}{P(y_p[l])} 
-\end{align}
-
-\subsection{Decoding}
-\label{sec:decoding}
-The structure of the post-processing decoder is depicted in Fig.
-\ref{fig:post_processing_decoder}. Using the dictionary and the
-language model, the hypothesis word sequence $W_i$ is obtained
-from the posterior probability in \eqref{eq:post_prob}.
-
-
-
-
-\begin{figure}
-  \centering
-    \centering
-    \resizebox{130mm}{!}{
-      \input{../figures/hybrid_on_device_cloud_asr.tex}
-    }
-    \caption {
-      The structure of an entire system consisting of the on-device speech 
-      recognition and the server-side post processing. 
-      \label{fig:entire_system}
-    }
-\end{figure}
-
-
-\begin{figure}
-  \centering
-    \centering
-    \resizebox{55mm}{!}{
-      \input{../figures/asr_system.tex}
-    }
-    \caption {
-      The on-device Automatic Speech Recognition (ASR) system.
-      \label{fig:asr_system}
-    }
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \resizebox{30mm}{!}{
-      \input{../figures/label_posteior_prob_estimation.tex}
-    } 
-    \caption {
-      Estimation of the label posterior probability
-      \label{fig:label_posterior_prob_estimation}
-    }
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \resizebox{70mm}{!}{
-      \input{../figures/post_processing_decoder.tex}
-    } 
-    \caption {
-      The post-processing decoder for generating the word sequence $W_i$
-      from the label likelihood $P(\hat{y}_o[0:l+1] | \hat{y}_p[l])$ in \eqref{eq:post_prob}, 
-      using the dictionary and the language model.
-      \label{fig:post_processing_decoder}
-    }
-\end{figure}
-
-
-\section{Introduction}
-Recently, there has been tremendous improvements in speech recognition
-systems fueled by advances in deep neural networks
-\cite{
-  Yu2013FeatureLearningDNN, 
-  g_hinton_ieee_signal_processing_mag_2012,
-  Seltzer2013DNNAurora4, 
-  t_sainath_taslp_2017_00,
-  t_sainath_book_chapter_2017_00,
-  v_vanhoucke_nips_workshop_2011_00}.
-TODO(chanw.com) Describes history about starting using DNN, LSTM.
-
-
-\section{Review on sequence-to-sequence speech recognition algorithms}
+In this section, we describe how to obtain frame-synchronous  
+hypothesis from a speech recognition decoder. 
 
 In this section, we review well-known {\it sequence-to-sequence} algorithms
 used in speech recognition.
@@ -459,9 +421,9 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
 
 \begin{figure}
   \centering
-  \begin{subfigure}[b]{0.60\textwidth}
+  \begin{subfigure}[b]{0.50\textwidth}
     \centering
-    \resizebox{78mm}{!}{
+    \resizebox{70mm}{!}{
       \input{../figures/rnn_t_diagram.tex}
     }
     \caption {
@@ -469,10 +431,9 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
       \label{fig:rnn_t_diagram}
     }
   \end{subfigure}
-
-  \begin{subfigure}[b]{0.55\textwidth}
+  \begin{subfigure}[b]{0.45\textwidth}
     \centering
-    \resizebox{53mm}{!}{
+    \resizebox{55mm}{!}{
       \input{../figures/attention_diagram.tex}
     }
     \caption {
@@ -481,12 +442,167 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
     }
   \end{subfigure}
   \caption{
-    Comparison of block diagrams of different sequence-to-sequence speech
-    recognition approaches.
-    The proposed Feedback Sequence Classifier (FSC) is shown in 
-    Fig. \ref{fig:fsc_diagram}.
+    Examples of a frame-synchronous decoding in \ref{fig:rnn_t_diagram}
+    and a label-synchronous decoding in \ref{fig:attention_diagram}.
   }
 
+\end{figure}
+
+
+
+Let us suppose that the sequence of the text stream is $T$  
+\begin{align}
+  X
+\end{align}
+
+A speech recognizers maps a sequence of input acoustic features into a sequence 
+of text labels  \cite{r_prabhavalkar_interspeech_2017_00}. 
+Mathematically, this model is 
+represented by the following transformation $\mathcal{T}$ 
+\cite{a_graves_icml_2006_00}:
+\begin{align}
+  \mathcal{T} : \left(\mathbb{R}^d\right)^{*} \rightarrow \mathbb{V}^{*}
+	\label{eq:transformation}
+\end{align}
+where the symbol ${*}$ denotes a sequence, $d$ is the dimension of the input 
+feature. $\mathbb{V}$ in \eqref{eq:target_label} is the set of output
+labels, which may be graphemes 
+\cite{j_chorowski_nips_2015_00,
+w_chan_icassp_2016_00},
+subword units \cite{
+a_zeyer_interspeech_2018_00,
+c_chiu_icassp_2018_00},
+ and words \cite{h_soltau_interspeech_2017_00}.
+
+ 
+
+\section{The structure of the Server-side Post Processing System}
+\label{sec:server_side_post_processing}
+
+Fig. \ref{fig:entire_system} shows the entire structure of the on-device ASR
+system and the server-side post processing system. In this figure,  
+the two top level blocks on the left and the right hand sides correspond
+to {\it speech recognition on the local device} and 
+{\it post processing on the server} respectively.  
+
+
+
+
+\subsection{Label Likelihood Calculation}
+To perform decoding described in Section \ref{sec:decoding}, 
+we need to calculate likelihood $P(\hat{y}_o[0:l+1] | y_p[l])$
+where $\hat{y}_o[0:l+1]$ is the sequence of the frame-synchronous 
+label hypothesis.
+Using the Bayes rule, this likelihood is expressed in the following form:
+\begin{align}
+  P(\hat{y}_o[0:l+1] \big| y_p[l]) 
+    = \frac{P(y_p[l] \big| \hat{y}_o[0:l+1])
+        P\left(\hat{y}_o[0:l+1] \right)}{P(y_p[l])}.
+  \label{eq:likelihood_prob}
+\end{align}
+To calculate the above equation, the following three terms need to be
+calculated:
+\begin{align}
+  P(y_p[l] \big| \hat{y}_o[0:l+1]): & \text{ A posterior probability of } y_p[l]
+    \text{ given the original frame-synchronous hypothesis } \nonumber \\ 
+    & \hat{y}_o[0:l+1].
+    \nonumber \\
+  P\left(\hat{y}_o[0:l+1] \right): & 
+    \text{ A probability of the original frame-synchronous hypothesis } \hat{y}_o[0:l+1].
+      \nonumber \\
+  P(y_p[l]): & \text{ A prior probability of the label } y_p[l] \in \mathbb{V}.
+  \label{eq:prob_components_likelihood}
+\end{align}
+%
+\begin{figure}
+    \centering
+    \resizebox{40mm}{!}{
+      \input{../figures/label_posteior_prob_estimation.tex}
+    } 
+    \caption {
+      Estimation of the label posterior probability
+      \label{fig:label_posterior_prob_estimation}
+    }
+\end{figure}
+%
+To calculate $P(y_p[l] \big| \hat{y}_o[0:l+1])$ in
+\eqref{eq:prob_components_likelihood}, we first train a neural network
+to predicting the distribution of $y_p[l]$ given the original 
+frame-synchronous hypothesis. Fig. \ref{fig:label_posterior_prob_estimation}
+shows the structure of such a neural network stack. To train this
+neural network stack, we need to have both the frame-level 
+original hypothesis $\hat{y}_o[l]$ and the corresponding the frame-level
+ground truth. Since the ground-truth labels are usually not given in the
+frame-level format, forced alignment needs to be applied to obtain
+the frame-synchronous ground truth.
+
+To calculate $P\left(\hat{y}_o[0:l+1] \right)$ in \eqref{eq:likelihood_prob}, 
+we use a either statistical n-gram or a RNN based Language Model (LM). 
+One notable difference of the LM used for this purpose compared 
+to a conventional LM is that this LM must be a frame-synchronous LM.
+and must be trained from frame-synchronous label corpus. 
+Thus, we first need to align transcribed speech corpus to obtain frame-synchronous 
+labels and train LM from this corpus. 
+Finally, we use this LM to calculate $P\left(\hat{y}_o[0:l+1] \right)$.
+
+Instead of calculating the likelihood of the whole sequence 
+$\hat{y}_o[0:l+1]$ described above, a simpler alternative is to ignore
+the past values of the original hypothesis $\hat{y}_o[0:l+1]$ and only to
+consider the current one $\hat{y}_o[l]$. Under this simplification,
+the likelihood in \eqref{eq:likelihood_prob} may be simplified as follows:
+\begin{align}
+  P(\hat{y}_o[l] \big| y_p[l]) 
+    = \frac{P (y_p[l] \big| \hat{y}_o[l]) P(\hat{y}_o[l])}{P(y_p[l])} 
+\end{align}
+
+\subsection{Decoding}
+\label{sec:decoding}
+The structure of the post-processing decoder is depicted in Fig.
+\ref{fig:post_processing_decoder}. Using the dictionary and the
+language model, the hypothesis word sequence $W_i$ is obtained
+from the posterior probability in \eqref{eq:post_prob}.
+
+
+
+
+\begin{figure}
+  \centering
+    \centering
+    \resizebox{130mm}{!}{
+      \input{../figures/hybrid_on_device_cloud_asr.tex}
+    }
+    \caption {
+      The structure of an entire system consisting of the on-device speech 
+      recognition and the server-side post processing. 
+      \label{fig:entire_system}
+    }
+\end{figure}
+
+
+\begin{figure}
+  \centering
+    \centering
+    \resizebox{55mm}{!}{
+      \input{../figures/asr_system.tex}
+    }
+    \caption {
+      The on-device Automatic Speech Recognition (ASR) system.
+      \label{fig:asr_system}
+    }
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \resizebox{70mm}{!}{
+      \input{../figures/post_processing_decoder.tex}
+    } 
+    \caption {
+      The post-processing decoder for generating the word sequence $W_i$
+      from the label likelihood $P(\hat{y}_o[0:l+1] | \hat{y}_p[l])$ in \eqref{eq:post_prob}, 
+      using the dictionary and the language model.
+      \label{fig:post_processing_decoder}
+    }
 \end{figure}
 
 
