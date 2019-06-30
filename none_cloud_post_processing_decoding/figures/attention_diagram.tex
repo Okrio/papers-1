@@ -315,7 +315,11 @@
 \pgfsetfillcolor{diafillcolor}
 \pgfsetfillopacity{1.000000}
 \node[anchor=base west,inner sep=0pt,outer sep=0pt,color=dialinecolor] at
-(19.000000\du,-6.000000\du){$P(\left(\vec{y}_{l}\right)_i | \vec{y}_{0:l}, \vec{x}[0:m+1])$};
+(19.000000\du,-5.700000\du)
+{$\hat{P}(y_l  | \hat{y}_{0:l}, \vec{x}[0:m+1] )    $};
+\node[anchor=base west,inner sep=0pt,outer sep=0pt,color=dialinecolor] at
+(19.000000\du,-10.700000\du)
+{$\hat{y_l}$};
 \pgfsetlinewidth{0.100000\du}
 \pgfsetdash{}{0pt}
 \pgfsetbuttcap
@@ -461,7 +465,7 @@
 \pgfsetfillcolor{diafillcolor}
 \pgfsetfillopacity{1.000000}
 \node[anchor=base west,inner sep=0pt,outer sep=0pt,color=dialinecolor] at
-(10.541499\du,-5.091700\du){$\hat{z}_{l-1}$};
+(10.541499\du,-5.091700\du){$\hat{y}_{l-1}$};
 % setfont left to latex
 \definecolor{dialinecolor}{rgb}{0.000000, 0.000000, 0.000000}
 \pgfsetstrokecolor{dialinecolor}
