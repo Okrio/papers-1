@@ -153,6 +153,27 @@ year = {2010}
   Title = {Binaural Sound Localization},
   Year = {2006}}
 
+@article{c_luscher_arxiv_2019_00,
+  author    = {Christoph L{\"{u}}scher and
+               Eugen Beck and
+               Kazuki Irie and
+               Markus Kitza and
+               Wilfried Michel and
+               Albert Zeyer and
+               Ralf Schl{\"{u}}ter and
+               Hermann Ney},
+  title     = {{RWTH} {ASR} Systems for LibriSpeech: Hybrid vs Attention - w/o Data
+               Augmentation},
+  journal   = {CoRR},
+  volume    = {abs/1905.03072},
+  year      = {2019},
+  url       = {http://arxiv.org/abs/1905.03072},
+  archivePrefix = {arXiv},
+  eprint    = {1905.03072},
+  timestamp = {Mon, 27 May 2019 13:15:00 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/abs-1905-03072},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
 
 @ARTICLE{l_r_rabiner_proceedings_of_ieee_1989_00,
   author={L. R. {Rabiner}}, 
@@ -457,6 +478,18 @@ url = {http://papers.nips.cc/paper/5847-attention-based-models-for-speech-recogn
 }
 
 
+@incollection{a_vaswani_nips_2017_00,
+title = {Attention is All you Need},
+author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, \L ukasz and Polosukhin, Illia},
+booktitle = {Advances in Neural Information Processing Systems 30},
+editor = {I. Guyon and U. V. Luxburg and S. Bengio and H. Wallach and R. Fergus and S. Vishwanathan and R. Garnett},
+pages = {5998--6008},
+year = {2017},
+publisher = {Curran Associates, Inc.},
+url = {http://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf}
+}
+
+
 @INPROCEEDINGS{a_graves_icassp_2013_00,
 author={Alex {Graves} and Abdel-rahman {Mohamed} and Geoffrey {Hinton}},
 booktitle={2013 IEEE International Conference on Acoustics, Speech and Signal Processing},
@@ -469,6 +502,35 @@ keywords={speech recognition;speech recognition;deep recurrent neural networks;s
 doi={10.1109/ICASSP.2013.6638947},
 ISSN={1520-6149},
 month={May},}
+
+@INPROCEEDINGS{s_toshniwal_slt_2018_00,
+author={S. {Toshniwal} and A. {Kannan} and C. {Chiu} and Y. {Wu} and T. N. {Sainath} and K. {Livescu}},
+booktitle={2018 IEEE Spoken Language Technology Workshop (SLT)},
+title={A Comparison of Techniques for Language Model Integration in Encoder-Decoder Speech Recognition},
+year={2018},
+volume={},
+number={},
+pages={369-375},
+keywords={natural language processing;recurrent neural nets;speech coding;speech recognition;switchboard data set;oracle error rate;second-pass rescoring;medium-sized switchboard data;Google voice search data;Google data sets;first-pass decoding;dictation data sets;unpaired text data;separate acoustic language models;pronunciation model;automatic speech recognition problem;recurrent neural encoder-decoder models;encoder-decoder speech recognition;language model integration;Decoding;Computational modeling;Training;Mathematical model;Data models;Speech recognition;Acoustics;speech recognition;encoder-decoder;language model;shallow fusion;cold fusion;deep fusion},
+doi={10.1109/SLT.2018.8639038},
+ISSN={},
+month={Dec},}
+
+
+
+@inproceedings{d_gowda_interspeech_2019_00,
+    title = "Multi-task multi-resolution char-to-BPE cross-attention decoder for
+      end-to-end speech recognition",
+    author = "Dhananjaya Gowda and Abhinav Garg and Kwangyoun Kim and Mehul
+      Kumar and Chanwoo Kim",
+    booktitle = "INTERSPEECH-2019",
+    month = "Sept.",
+    year = "2019",
+    address = "Graz, Austria",
+  %  publisher = "Association for Computational Linguistics",
+  %  url = "https://www.aclweb.org/anthology/P16-1162",
+  %  pages = "1715--1725",
+}
 
 
 @inproceedings{r_sennrich_acl_2016_00,
@@ -614,7 +676,7 @@ month={March},}
   author={Hagen Soltau and Hank Liao and Haşim Sak},
   title={Neural Speech Recognizer: Acoustic-to-Word LSTM Model for Large Vocabulary Speech Recognition},
   year=2017,
-  booktitle=interspeech,
+  booktitle="INTERSPEECH-2017",
   pages={3707--3711},
   doi={10.21437/Interspeech.2017-1566},
   url={http://dx.doi.org/10.21437/Interspeech.2017-1566}
@@ -624,7 +686,7 @@ month={March},}
 	author={William Hartmann and Tim Ng and Roger Hsiao and Stavros Tsakalidis and Richard Schwartz},
 	title={Two-Stage Data Augmentation for Low-Resourced Speech Recognition},
 	year=2016,
-	booktitle={Interspeech 2016},
+	booktitle="INTERSPEECH-2016",
 	doi={10.21437/Interspeech.2016-1386},
 	url={http://dx.doi.org/10.21437/Interspeech.2016-1386},
 	pages={2378--2382}
@@ -1651,7 +1713,7 @@ Year = {2006}}
 
 @inproceedings{n_jaitly_icml_workshop_2013_00, 
   Author = {Navdeep Jaitly and Geoffrey Everest Hinton},
-  Booktitle = {Int. Conf. Mach. Learn. (ICML) Workshop Deep Learn. Audio, Speech, Lang. Process.},
+  Booktitle = {Int. Conf. Mach. Learn. (ICML) Workshop on Deep Learn. Audio, Speech, Lang. Process.},
   Title = {Vocal tract length perturbation (VTLP) improves speech recognition},
   Year = 2013},
 
@@ -4441,7 +4503,8 @@ title = {{Learning the Speech Front-end With Raw Waveform CLDNNs}},
   author={Chanwoo Kim and Ehsan Variani and Arun Narayanan and Michiel Bacchiani},
   title={Efficient Implementation of the Room Simulator for Training Deep Neural Network Acoustic Models},
   year=2018,
-  booktitle=interspeech,
+  booktitle="INTERSPEECH-2018",
+  month="Sept",
   pages={3028--3032},
   doi={10.21437/Interspeech.2018-2566},
   url={http://dx.doi.org/10.21437/Interspeech.2018-2566}
