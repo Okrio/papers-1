@@ -28,6 +28,7 @@
 \usepackage{algpseudocode}
 %\usepackage[caption = false]{subfig}
 \usepackage{amssymb,amsmath,bm}
+\usepackage[cal=boondox,scr=boondoxo]{mathalfa}
 \usetikzlibrary{arrows,decorations.markings}
 \tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\large]
 
@@ -185,18 +186,18 @@ a_zeyer_interspeech_2018_00,
 c_chiu_icassp_2018_00},
  and words \cite{h_soltau_interspeech_2017_00}.
 Let us denote a sequence of input acoustic feature vectors by 
-$\mathcal{X}_{0}^{M-1}$ and a sequence of target labels in 
+$\vec{x}_{0}^{M-1}$ and a sequence of target labels in 
 {\it one-hot vector} representation or its label-smoothed 
 representation \cite{} by 
-$\mathcal{Y}_{0}^{L-1}$ as shown below:
+$\vec{y}_{0:L}$ as shown below:
 \begin{subequations}
   \begin{align}
-    \mathcal{X}[0:M]  =  
+    \vec{x}[0:M]  =  
       \left\{\vec{x}[m]
-          \Big| 0 \le m \le M - 1, \; \vec{x}[m] \in \mathbb{R}^d \right\},  
+          \, \big| \, 0 \le m \le M - 1, \; \vec{x}[m] \in \mathbb{R}^d \right\},  
     \label{eq:input_seq} \\
-    \mathcal{Y}_{0:L}  =  
-      \left\{\vec{y}_l  \Big| 0 \le l \le L-1, \; \vec{y}_l \in \mathbb{V} \right\}, 
+    \vec{y}_{0:L}  =  
+      \left\{\vec{y}_l \,  \big| \, 0 \le l \le L-1, \; \vec{y}_l \in \mathbb{V} \right\}, 
     \label{eq:target_label}
   \end{align}
 \end{subequations}
@@ -216,11 +217,11 @@ categories:
 In this class of models, the neural network generates the inference output 
 $\widehat{\vec{y_l}}$ 
 only when a new label is expected. The loss function 
-$\mathbb{L}_{\text{ls}}\left(\mathcal{X}[0:M], \mathcal{Y}_{0:L}\right)$ is 
+$\mathbb{L}_{\text{ls}}\left(\vec{x}[0:M], \vec{y}_{0:L}\right)$ is 
 defined as follows:
    \begin{align}
-     \mathbb{L}_{\text{ls}}\left(\mathcal{X}[0:M], 
-        \mathcal{Y}_{0:L}\right) 
+     \mathcal{l}_{\text{ls}}\left(\vec{x}[0:M], 
+        \vec{y}_{0:L}\right) 
         = \sum_{l=0}^{L-1} 
           \sum_{v=0}^{V-1}
           \left(\vec{y}_l\right)_v  \log ( 
@@ -254,21 +255,20 @@ we obtain corresponding {\it frame-synchronous} label sequences
 $\vec{z}[m] \in \mathbb{V}$ for each frame index $m$. This
 latent label sequences are often called a {\it path}.
   \begin{align}
-    \mathcal{Z}[0:M]  =  
+    \vec{z}[0:m+1]  =  
       \left\{\vec{z}[m]  \Big| 0 \le m \le M-1, \; \vec{z}[m] \in \mathbb{V} \right\}, 
     \label{eq:latent_label_seq}
   \end{align}
 Fig. \ref{fig:path_alignment} shows one such example. 
 
 The loss function in the frame-synchronous inference case
-$\mathbb{L}_{\text{fs}}\left(\mathcal{X}[0:M], \mathcal{Y}_{0:L}\right)$ is 
+$\mathbb{l}_{\text{fs}}\left(\vec{x}[0:M], \vec{y}_{0:L}\right)$ is 
 defined as follows:
 \begin{align}
-  \mathbb{L}_{\text{fs}}\left(\mathcal{X}[0:M], \mathcal{Z}[0:M]\right) 
-      = \sum_{l=0}^{M-1} 
+  \mathcal{l}_{\text{fs}}\left(x[0:M], z[0:M]\right) 
+      = - \sum_{l=0}^{M-1} 
           \sum_{v=0}^{V-1}  
-            (\vec{z}[m])_v  
-            \log (\widehat{\vec{z}}[m])_v  
+            (\vec{z}[m])_v  \log (\widehat{\vec{z}}[m])_v  
         \label{eq:frame_synchronous_ce_loss} 
 \end{align}
 
@@ -294,17 +294,17 @@ Connectionist Temporal Classification (CTC)
 \cite{a_graves_icml_2006_00}. In CTC, we use the following CTC loss
 \cite{a_graves_icml_2006_00, y_he_icassp_2019_00}:
 \begin{align}
-  P\left(\mathcal{Y}_{0:L} | \mathcal{X}[0:M]\right) = 
-    \sum_{\mathcal{Z}_{0}^{M-1} \in 
+  P\left(\vec{y}_{0:L+1} | \vec{x}[0:M]\right) = 
+    \sum_{\vec{z}_{0}^{M-1} \in 
       \mathcal{A}_{CTC} 
-        \left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1} \right)}
+        \left(\vec{x}_{0}^{M-1}, \vec{y}_{0}^{L-1} \right)}
           \Pi_{m=0}^{M-1}
-            P\left(\vec{z}[m] | \mathcal{X}_{0}^{M-1} \right),
+            P\left(\vec{z}[m] | \vec{x}_{0}^{M-1} \right),
 \end{align}
-where $\mathcal{A}_{CTC} \left(\mathcal{X}_{0}^{M-1}, 
-\mathcal{Y}_{0}^{L-1} \right)$ correspond to frame-level alignments
+where $\mathcal{A}_{CTC} \left(\vec{x}_{0}^{M-1}, 
+\vec{y}_{0}^{L-1} \right)$ correspond to frame-level alignments
 of length $M$ such that removing blanks and repeated symbols from 
-$\mathcal{Z}_{0}^{M-1}$ yields $\mathcal{Y}_{0}^{L-1}$.
+$\vec{z}_{0}^{M-1}$ yields $\vec{y}_{0}^{L-1}$.
 
 To obtain derivatives required for back-propagation, CTC employs 
 the forward-backward algorithm.
@@ -317,12 +317,12 @@ the forward-backward algorithm.
 Fig. \ref{fig:rnn_t_diagram} shows the entire structure of the  
 RNN-T structure. The loss function used in RNN-T is given as follows:
 \begin{align}
-  P\left(\mathcal{Y}_{0:L} | \mathcal{X}[0:M]\right) = 
-    \sum_{\mathcal{Z}_{0}^{M-1} \in 
+  P\left(\vec{y}_{0:L} | \vec{x}[0:M]\right) = 
+    \sum_{\vec{z}_{0}^{M-1} \in 
       \mathcal{A}_{CTC} 
-        \left(\mathcal{X}_{0}^{M-1}, \mathcal{Y}_{0}^{L-1} \right)}
+        \left(\vec{x}_{0}^{M-1}, \vec{y}_{0}^{L-1} \right)}
           \Pi_{m=0}^{M-1}
-            P\left(\vec{z}[m] | \mathcal{X}_{0}^{M-1} \right),
+            P\left(\vec{z}[m] | \vec{x}_{0}^{M-1} \right),
 \end{align}
 
 
@@ -379,11 +379,35 @@ RNN-T structure. The loss function used in RNN-T is given as follows:
 \end{figure}
 
 
-
-
 \section{Feedback Sequence Classifier}
 \label{sec:feedback_sequence_classifier}
 
+\begin{figure}
+  \centering
+  \begin{subfigure}[b]{0.35\textwidth}
+    \centering
+    \resizebox{50mm}{!}{
+      \input{../figures/structure_for_inference.tex}
+    } 
+  \caption {
+    \label{fig:structure_for_inference}
+  } 
+  \end{subfigure}
+  \begin{subfigure}[b]{0.35\textwidth}
+    \centering
+    \resizebox{43mm}{!}{
+      \input{../figures/structure_for_training.tex}
+    } 
+  \caption {
+    \label{fig:structure_for_training}
+  }
+  \end{subfigure}
+  \caption{
+    Structures of sequential hypothesis classifier for inference (a) 
+    and for training (b).
+  }
+
+\end{figure}
 
 \subsection{Neural Network Structure}
 \label{sec:neural_network_structure}
@@ -407,19 +431,19 @@ Sec. \ref{sec:frame_synchronous_inference}.
 However, due to this temporal sub-sampling, the latent label sequence 
 in \eqref{eq:latent_label_seq} is slightly modified as shown below:
 \begin{align}
-  \mathcal{Z}[0:U]  =  
+  \vec{z}[0:U]  =  
     \left\{\vec{z}[u]  \Big| 0 \le m \le U-1, \; \vec{z}[u] \in \mathbb{V} \right\}.
   \label{eq:subsampled_latent_label_seq}
 \end{align}
 
 
 The loss function 
-$\mathbb{L}_{\text{fsc}}\left(\mathcal{X}[0:M], \mathcal{Y}_{0:L}\right)$ 
+$\mathbb{L}_{\text{fsc}}\left(\vec{x}[0:M], \vec{y}_{0:L}\right)$ 
 is also modified from the original one in 
 \eqref{eq:frame_synchronous_ce_loss}:
 \begin{align}
 	\mathbb{L}_{\text{fsc}}
-    \left(\mathcal{X}[0:M], \mathcal{Z}_{0:U}\right)
+    \left(\vec{x}[0:M], \vec{z}_{0:U}\right)
       = \sum_{u=0}^{U-1}  
           \sum_{v=0}^{V-1}
           {(\vec{z}[u])_v}  \log ( 
@@ -447,7 +471,7 @@ In FSC, we use subword units created by BPE \cite{r_sennrich_acl_2016_00} for
 the output vocabulary $\mathbb{V}$ in 
 \eqref{eq:transformation} and \eqref{eq:subsampled_latent_label_seq}. 
 
-When creating the latent frame-wise label sequence $\mathcal{Z}[0:U]$ 
+When creating the latent frame-wise label sequence $\vec{z}[0:U]$ 
 in \eqref{eq:subsampled_latent_label_seq}, we distinguish the onset frame
 from other frames.  For example, if we have a BPE unit
 ("{\it an}") in the vocabulary $\mathbb{V}$, then we define another
@@ -500,28 +524,28 @@ neural network parameters using the Cross Entropy (CE) criterion.
 
 
 The first step is finding the optimal frame-synchronous sequence
-$\mathcal{Z}[0:M]$.   
+$\vec{z}[0:M]$.   
 
 
 \begin{algorithm}
   \caption{Training procedure for the FSC algorithm}
   \label{algo:fsc_training}
   \begin{algorithmic}
-    \State $\Theta^{(0)} \leftarrow$ initialize\_parameters()
+    \State $\Theta^{(0)} \leftarrow$ \texttt{initialize\_parameters}()
     \For {epoch index $i = 0, . . . , I-1$}
-      \For {each batch $\left\{\mathcal{X}[0:M],
-                        \mathcal{Y}_{0:L}  \right\}$}, 
-        \State $ {{\mathcal{Z}^{(i)}}[0:U]}
+      \For { \texttt{example} $ \left\{\vec{x}[0:M],  \,
+                        \vec{y}_{0:L}  \right\} $} 
+        \State $ {\vec{z}^{(i)}}[0:U] 
           \leftarrow
-          \text{n\_best\_align}
+          \texttt{n\_best\_align}
           \left(
-            \mathcal{X}[0:M] \Big| \Theta^{(i)}
+            \vec{x}[0:M] \, \big|\, \Theta^{(i)}
           \right)$
 
-        \State {$\Theta^{(i)} \leftarrow$ update\_parameter 
+        \State {$\Theta^{(i)} \leftarrow$  \texttt {update\_parameter}
           $\left(
-            \mathcal{X}[0:M],
-            \mathcal{Z}^{(i)}[0:U]
+            \vec{x}[0:M] \, ,  \,
+            \vec{z}^{(i)}[0:U]
           \right)$}
 
     \EndFor
@@ -543,9 +567,9 @@ $\mathcal{Z}[0:M]$.
       \input{../figures/path_alignment.tex}
     } 
     \caption {
-      An example of a path $\mathcal{Z}[0:M]$ and the path movement 
-      constraint shown by dashed arrows $P \rightarrow Q$ and $P \rightarrow R$. 
-      \label{fig:path_alignment}
+      An example of the path function $\vec{z}[0:M]$ and the path movement 
+      constraint represented by two dashed arrows 
+      $P \rightarrow Q$ and $P \rightarrow R$.  \label{fig:path_alignment}
     }
   \label{fig:path_alignment}
 \end{figure}
@@ -570,57 +594,56 @@ the Viterbi alignment algorithm to find the alignment information.
 TODO(chanw.com) Define $f$.
 
 \begin{algorithm}
-  \caption{$N$-best alignment algorithm}
+  \caption{Teacher forced alignment}
   \begin{algorithmic}
 
-  \Require {$\mathcal{X}[0:M]$}
-  \Require {$\mathcal{Y}_{0:L}$}
+  \Require {$\vec{x}[0:M]$}
+  \Require {$\vec{y}_{0:L}$}
+  \Require {The beam size $N_b$}
   \Require {The neural network parameter $\Theta^{\left(i\right)}$ 
-    for calculating 
-      $p\left(\vec{z}[m] \big|
-      \mathcal{Z}[0:m], \mathcal{X}[0:m+1]\right)$}
+    for calculating $\vec{z}[u] = f(\vec{x}[0:m+1],\,z[0:u])$} 
 
   \State {\textbf{Initialization:}}
-  \State {Let $\mathcal{Z}_0[0:1] := \left\{ \vec{y}_0 \right\}  $}
-  \State {Let $\mathcal{L}_{0} := \ln \left[ 
-        p \left(\vec{y}_{0} \big| 
-            {\mathcal{X}}[0:1]\right)  \right]$}
-  \State {$\mathcal{Z}_b[0:1], 1 \le b < N_b$ are undefined.}
+  \State {Let $z_0[0:1] := \left( \vec{y}_0 \right)  $}
+  \State {$z_b[0:1], 1 \le b < N_b$ are undefined.}
+  \State {Let $\mathcal{l}_{0} := \ln \left[ 
+        p \left(\vec{y}_{0} \, \big|  \,
+            {\vec{x}}[0:1]\right)  \right]$}
   \For {$m = 1, . . . , M-1$}
     \For {$b = 0, . . . , N_b-1$}
-      \If {$\mathcal{Z}_{b}[0:m]$ is defined}
-        \State {Let $\vec{y}_u := \vec{z}_{b}[m-1] $}
-        \State {Let $\mathcal{Z}_{b, 0}[0:m+1] := \mathcal{Z}_{b}[0:m] 
-                \cup \left\{ \vec{y}_u  \right\}  $} 
+      \If {$z_{b}[0:m]$ is defined}
+        \State {Let $\vec{y}_u := z_{b}[m-1] $}
+        \State {Let $z_{b, 0}[0:m+1] := z_{b}[0:m] 
+                \frown \left\{ \vec{y}_u  \right\}  $} 
             \Comment {A horizontal move $P \rightarrow Q$ in 
             Fig. \ref{fig:path_alignment}}.
         \State {
-              $\mathcal{L}_{b,0} := \ln \left[ 
+              $\mathcal{l}_{b,0} := \ln \left[ 
                   p \left(\vec{y}_{u} \big| 
-                      \mathcal{Z}_b[0:m], 
-                      \mathcal{X}[0:m+1], \Theta^{(i)}\right)  \right]
-                  + \mathcal{L}_b$}
+                      z_b[0:m], 
+                      \vec{x}[0:m+1], \Theta^{(i)}\right)  \right]
+                  + \mathcal{l}_b$}
 
         \If {$u+1 \le  L - 1$}
-          \State {Let $\mathcal{Z}_{b, 1}[0:m+1] 
-          := {\mathcal{Z}}_{b}[0:m] \cup \left\{ \vec{y}_{u+1}  \right\}  $} 
+          \State {Let $z_{b, 1}[0:m+1] 
+          := z_{b}[0:m] \frown \left\{ \vec{y}_{u+1}  \right\}  $} 
               \Comment {A diagonal move $P \rightarrow R$ in Fig. \ref{fig:path_alignment}}.
           \State  {
-              $\mathcal{L}_{b,1} := \ln \left[ 
+              $\mathcal{l}_{b,1} := \ln \left[ 
                   p \left(\vec{y}_{u+1} \big| 
-                      \mathcal{Z}_b[0:m], 
-                      \mathcal{X}[0:m+1], \Theta^{(i)}\right)  \right] 
-                          + \mathcal{L}_b$}
+                      z_b[0:m], 
+                      \vec{x}[0:m+1], \Theta^{(i)}\right)  \right] 
+                          + \mathcal{l}_b$}
       \EndIf
       \EndIf
     \EndFor
     \State {Sort a list of items
-    $\left\{\mathcal{L}_{b, i}, {\mathcal{Z}}_{b, i}[0:m+1] \right\}, \; 0 \le
+    $\left\{\mathcal{l}_{b, i}, z_{b, i}[0:m+1] \right\}, \; 0 \le
     b < N_b, i = 0, 1$ 
-    with respect to the log likelihood $\mathcal{L}_{b, i}$ 
+    with respect to the log likelihood $\mathcal{l}_{b, i}$ 
     in the decreasing order. The top $N_b$ of this sorted list is chosen and re-indexed as 
     follows: 
-    $\left\{\mathcal{L}_{b}, \mathcal{Z}_{b}[0:m+1] \right\}$, $0 \le b < N_b$}
+    $\left\{\mathcal{l}_{b}, z_{b}[0:M] \right\}$, $0 \le b < N_b$}
     where the first item in the sorted list is re-indexed to $b=0$, 
     the second item is re-indexed to $b=1$, and so on.
   \EndFor
