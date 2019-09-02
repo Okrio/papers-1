@@ -1,0 +1,671 @@
+% generated with the docstrip utility.
+%
+% The original source files were:
+%
+% currvita.dtx  (with options: `testfile')
+%
+% LaTeX sample file for the currvita package
+%
+% Copyright (C) 1999 Axel Reichert
+% See the files README and COPYING.
+%
+% \CharacterTable
+%   {Upper-case    \A\B\C\D\E\F\G\H\I\J\K\L\M\N\O\P\Q\R\S\T\U\V\W\X\Y\Z
+%   Lower-case    \a\b\c\d\e\f\g\h\i\j\k\l\m\n\o\p\q\r\s\t\u\v\w\x\y\z
+%   Digits        \0\1\2\3\4\5\6\7\8\9
+%   Exclamation   \!     Double quote  \"     Hash (number) \#
+%   Dollar        \$     Percent       \%     Ampersand     \&
+%   Acute accent  \'     Left paren    \(     Right paren   \)
+%   Asterisk      \*     Plus          \+     Comma         \,
+%   Minus         \-     Point         \.     Solidus       \/
+%   Colon         \:     Semicolon     \;     Less than     \<
+%   Equals        \=     Greater than  \>     Question mark \?
+%   Commercial at \@     Left bracket  \[     Backslash     \\
+%   Right bracket \]     Circumflex    \^     Underscore    \_
+%   Grave accent  \`     Left brace    \{     Vertical bar  \|
+%   Right brace   \}     Tilde         \~}
+\documentclass[10pt]{article}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% packages
+\usepackage{color}
+\usepackage{currvita}
+\usepackage{helvet} % Default font is the helvetica postscript font
+\usepackage{hyperref}
+\usepackage{mdwlist}
+\usepackage[resetlabels]{multibib}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage[margin=1.2in]{geometry}
+
+\definecolor{red}{RGB}{128,0,0}
+\definecolor{dark_blue}{RGB}{0,0,128}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=dark_blue,
+  filecolor=dark_blue,
+  urlcolor=dark_blue,
+}
+\newcommand{\chanwcom}{\color{dark_blue} \underline{\textbf{C. Kim}}}
+\newcommand{\lineunder}{
+    \vspace*{-15pt}\par\hspace*{-6pt}\color{dark_blue}\hrulefill\\\color{black}}
+%\newcites{pubs,intjourn,bookchap,intconf,domconf,thesis,uspatents,uspatentsapp,koreapatents}
+\newcites{intjourn,bookchap,intconf,domconf,thesis,uspatents,uspatentsapp,koreapatents}
+    {
+     %{Peer-reviewed International Journal/Conference Papers \\
+     %     \lineunder \vspace{-5mm}},
+     {International Jounral Papers \\
+       \lineunder \vspace{-5mm}},
+     {Book Chapter \\
+       \lineunder \vspace{-5mm}},
+     {Peer-reviewed International Conference Papers \\
+       \lineunder \vspace{-5mm}},
+     {Domestic Conference Papers \\ \lineunder \vspace{-5mm}},
+     {Theses \\ \lineunder \vspace{-5mm}},
+     {US Patents Issued \\ \lineunder \vspace{-5mm}},
+     {US Patents Application \\ \lineunder \vspace{-5mm}},
+     {Korea Patents Issued \\ \lineunder \vspace{-5mm}}}
+\titleformat{\section}[block]{\color{dark_blue}\Large\bfseries\filcenter}{}{1em}{}
+\titleformat{\subsection}[hang]{\bfseries}{}{1em}{}
+
+\newenvironment{packed_itemize}{
+  \begin{itemize}
+    \setlength{\itemsep}{1pt}
+    \setlength{\parskip}{0pt}
+    \setlength{\parsep}{0pt}
+  }{\end{itemize}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcommand*{\ac}[1]{\mbox{#1}}
+\tolerance=600
+\begin{document}
+\begin{flushright}
+  {\footnotesize \it    Curriculum Vitae-Chanwoo Kim}
+\end{flushright}
+%
+\section*{\filleft \LARGE \it  \href{https://scholar.google.com/citations?user=pJoZXxYAAAAJ&hl=en}{Chanwoo Kim} \filleft}
+\lineunder
+{  \it
+56 Seongchon-Gil, Seoul R \& D campus, Seocho-gu, Seoul, 06765, South Korea \\
+Cell: +82-10-4043-3996, E-mail:
+\href{mailto:chanw.com@samsung.com}{chanw.com@samsung.com} \\ \\
+Profile Page at Google Research : \href{https://research.google.com/pubs/105202.html}
+  {\url{https://research.google.com/pubs/105202.html}} \\ \\
+Google Scholar page : \href{https://scholar.google.com/citations?user=pJoZXxYAAAAJ&hl=en}
+  {Link to the page} {\color{red} (h-index :22, citations: 1616)} \\ \\
+Personal homepage: \href{
+  http://www.cs.cmu.edu/~chanwook}{\url{http://www.cs.cmu.edu/~chanwook}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Education
+\section*{Education}
+\lineunder
+{\sl  Ph. D.} \\
+{\color{dark_blue} \href{http://lti.cs.cmu.edu}{Language Technologies Institute},
+\href{http://cs.cmu.edu}{School of Computer Science}\\
+Carnegie Mellon University}, Pittsburgh, PA \hfill Sept. 2005 - Dec. 2010 \\
+Advisor: Prof. Richard Stern \\
+THESIS - \href{http://www.lti.cs.cmu.edu/research/thesis/2011/chanwoo_kim.pdf}{Signal Processing for Robust Speech Recognition Motivated by
+Auditory Processing} \\ \\
+%
+{\sl  M. S.} \\
+{\color{dark_blue} School of Electrical Engineering and Computer Science} \\
+\href{http://www.snu.ac.kr}{Seoul National University}, Seoul, Korea \hfill March 1998 - Feb. 2001 \\
+Advisor: Prof. Wonyong Sung \\
+THESIS - \href{http://library.snu.ac.kr/search/DetailView.ax?sid=6&cid=925773}{Implementation of an Intonation and Pronunciation Checking System for Embedded Systems} \\ \\
+%
+{\sl  B. S.} \\
+{\color{dark_blue} School of Electrical Engineering} \\
+\href{http://www.snu.ac.kr}{Seoul National University}, 
+Seoul, Korea \hfill March 1994 - Feb. 1998 \\
+Thesis advisor: Prof. Min-Koo Han \\ \\
+%
+{\sl  High School} \\
+\href{http://www.sshs.hs.kr/}{Seoul Science High School}, Seoul, Korea \hfill March 1991 - Feb. 1994 \\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Research Interests
+\section*{Research Interests}
+\lineunder
+\begin{packed_itemize}
+\item Automatic speech recognition
+\item Machine Learning and deep learning for signal processing
+\item Training deep-learning system using simulated data
+\item Speech enhancement (using a single microphone, dual microphones, and multiple microphones)
+\item Human auditory processing
+\end{packed_itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Award
+\section*{Award}
+\lineunder
+\begin{packed_itemize}
+\item {\color {dark_blue} Google spot bonus},
+    Acoustic modeling for Google Home. Dec. 2016.
+\item {\color {dark_blue} Google peer bonus},
+    Member of the summit squad for the Google Pittsburgh Ph. D. summit 2014, Google, Jan. 2014.
+\item {\color{dark_blue} Google peer bonus},
+    Design and implementation of the room simulator and robustness training and evaluation using it, Google, Dec, 2013
+\item {\color {dark_blue} 17-th Samsung Humantech Thesis Bronze prize},
+    {\color{dark_blue} C. Kim} and R. M. Stern,
+    "Power-Normalized cepstral coefficients for robust speech recognition",
+     Feb. 2011
+\item {\color {dark_blue} 16-th Samsung Hamantech Thesis Honour prize},
+    {\color{dark_blue} C. Kim} and R. M. Stern,
+    "Small power boosting and spectral subtraction for robust speech
+     recognition",  Feb. 2010
+\item {\color{dark_blue} Research fellowship for Ph. D. study} 2005 - 2010, Carnegie Mellon University, Jan. 2005.
+\item {\color{dark_blue} Scholarship for studying abroad 2005 - 2006},
+    Korea Institute of Energy Evaluation and Planning, July, 2005.
+\item {\color{dark_blue} Graduate cum laude} with a bachelor’s degree, Seoul National University, Feb. 1998
+\end{packed_itemize}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Employment
+\section*{Employment}
+\lineunder
+%
+{\color{dark_blue} Samsung Research} Speech Processing Lab. \hfill Feb. 2018
+- Current \\
+56 Seongchon-Gil Seoul R \& D Campus, Seoul, 06765, Korea \\
+Corporate Vice President \\
+\vspace{-5mm}
+\begin{itemize*}
+  \item
+    {\color{dark_blue} On-device and server neural end-to-end speech recognition} \\
+  \item
+    {\color{dark_blue} Wake-up engine} \\
+  \item
+    {\color{dark_blue} Far-field processing} \\
+  \item
+    {\color{dark_blue} Neural Text-to-speech engine development} \\
+\end{itemize*}
+%
+{\color{dark_blue} Google} Google Speech \hfill Feb. 2013 - Feb. 2018 \\
+1600 Amphitheatre Pkwy Mountain View, CA, 94043  \\
+Senior Software Engineer \\
+\vspace{-5mm}
+\begin{itemize*}
+  \item
+    {\color{dark_blue} Room simulation system for acoustic model simulation} \\
+      Designed and implemented the room acoustics simulation system using
+      the image method for various kinds of real room environments. Using
+      deep learning techniques, acoustic models were trained using data generated by this
+      room acoustics simulator. This system has reduced Word Error Rate to half [C. Kim. et. al., Interspeech 2017]. This system is used for commercialized Google
+      speech recognition systems. \\
+
+  \item
+    {\color{dark_blue} Developing next-generation voice-assistant devices for Google}
+     Have participated and lead efforts for the future voice assistant
+     devices at Google. Currently under development. \\
+
+  \item
+    {\color{dark_blue} Robust speech recognition for Google Home} \\
+      Have participated in the Google Home project by generating
+      simulated training sets and performing training and evaluation.
+      This system was launched and commercialized. \\
+
+
+  \item
+    {\color{dark_blue} Noise robustness for speech recognition using deep learning} \\
+      Developed a system which learns the mapping from noisy feature to clean feature using
+      deep learning techniques for feature enhancement and noise robustness
+      of speech recognition systems.  \\
+
+  \item
+    {\color{dark_blue} Multi-style training for speech recognition systems} \\
+      Trained acoustic models for speech recognition systems using various
+      machine learning techniques and the aforementioned room simulator.
+      Using this Multi-style TRaining (MTR) approach, we obtained remarkable
+      improvement under noisy environments. \\
+
+  \item
+    {\color{dark_blue} Development of the PAINT algorithm for robust speech recognition} \\
+      Developed a sound source separation algorithm using
+      multi-microphones named the Power Angle Information Near
+      Target (PAINT) algorithm for future Internet Of Things
+      (IOT) products \\
+  \item
+    {\color{dark_blue} Development of the TMT algorithm for robust speech recognition} \\
+      Developed the Temporal Masking and Threshold (TMT)algorithm motivated by the on-set enhancement
+      techniques for robust speech recognition under reverberant environment. \\
+
+  \item
+    {\color{dark_blue} Development of a Signal-to-Noise Ratio (SNR) estimation algorithm} \\
+      Developed a modified Waveform Amplitude Distribution Analysis (WADA)
+      algorithm as a Mapper in MapReduce at Google. It has been a valuable
+      tool at Google speech.
+
+\end{itemize*}
+\vspace{5mm}
+%
+{\color{dark_blue} Microsoft} Microsoft Speech  \hfill Jan. 2011 - Jan. 2013\\
+One Microsoft Way, Redmond, WA, 98052  \\
+Speech Scientist \\
+\vspace{-5mm}
+\begin{itemize*}
+  \item
+    {\color{dark_blue} Development of the SMAD algorithm} \\
+      Developed a sound source separation algorithm named Statistical
+      Modeling of Angle Distribution (SMAD) for multi-microphone
+      sound source separation \\
+  \item
+  {\color{dark_blue} Distributed processing for speech recognition} \\
+      Participating in developing the infrastructure for processing big data
+      for speech recognition using Cosmos. \\
+  \item
+    {\color{dark_blue} Post-processing of Gaussian Mixture Model (GMM)} \\
+      Introducing an approach to balance deletion/insertion errors
+      by modifying the mixture components of GMM. \\
+  \item
+    {\color{dark_blue} {Audio-Video (AV) capture pipeline for Microsoft Windows Phone}} \\
+      Audio/Video capturing using Microsoft media foundation for Windows Phone 8. \\
+
+  \item
+    {\color{dark_blue} Media Foundation Transforms (MFTs)}
+        Design and implementation of several Media Foundation Transforms
+      (SW Jpeg Encoder MFT, Demux MFT, etc). \\
+  \item
+    {\color{dark_blue} Camera pipeline} \\
+      Working for EXIF processing, meta data handling etc.
+\end{itemize*}
+\vspace{5mm}
+%
+{\color{dark_blue} LG Electronics } \hfill June 2003 - Aug. 2005 \\
+128, Yeoui-daero Yeongdeungpo-gu, Seoul, Korea, 150-721  \\
+Senior Research Engineer, VoIP Phone Conference Call Development Team Leader \\
+\vspace{-5mm}
+\begin{itemize*}
+  \item {\color{dark_blue} VoIP handset project}
+      Manging the conference-call part using the Session Initiation Protocol (SIP). \\
+
+  \item {\color{dark_blue} Video On Demand (VOD) system project}
+      Participating in the VOD project working on streaming protocols such as
+      Real-Time Protocol (RTP), Real-Time Control Protocol (RTCP), and
+      Real-Time Streaming Protocol (RTSP). \\
+
+  \item {\color{dark_blue} Development of an audio/video synchronization algorithm}
+      Developing an audio/video synchronization algorithm for
+      Video Telephony (VT) using Network Time Protocol (NTP). \\
+
+  \item {\color{dark_blue} Testing and evaluation of multimedia codes}
+      H.263, H.264, AAC, AAC+, and H.323 \\
+
+  \item {\color{dark_blue} Multimedia platform survey}
+      Texas Instruments (TI) Open Multimedia Application Platform (OMAP), Neomagic MiMagic6, Renesas SH-Mobile V. etc
+\end{itemize*}
+\vspace{5mm}
+%
+{\color{dark_blue} SK Teletech } \hfill June 2003 - Aug. 2005 \\
+Research Engineer \\
+\\
+{\color{dark_blue} Edumediatek } \hfill June 2000 - July 2002 \\
+Research Engineer \\
+A research venture company established by Prof. Wonyong Sung at Seoul National University
+\begin{itemize*}
+  \item {\color{dark_blue} Computer Aided Language Learning (CALL) System} Intonation and vowel checking
+system for embedded systems \\
+  \item {\color{dark_blue} Development of a robust formant extraction algorithm} Combination of the spectral \\
+ peak picking and root solving \\
+  \item {\color{dark_blue} Development of a robust pitch extraction algorithm}
+\end{itemize*}
+\vspace{5mm}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Graduate research
+\section*{Graduate research}
+\lineunder
+
+\begin{itemize*}
+  \item {\color{dark_blue} Power Normalized Central Coefficients (PNCC)}
+      Motivated by human auditory processing, this new feature set
+      incorporates modulation frequency, temporal masking, and
+      rate-nonlinearity concepts. The features require low computation
+      and on-line implementation is possible. \\
+
+  \item {\color{dark_blue} Small Power Boostin (SPB) Algorithm}
+      Developed the SPB algorithm motivated by the human rate-intensity
+      as well as temporal and spectral smoothing. This algorithm works
+      especially well for non-stationary noise such as music noise. \\
+
+  \item {\color{dark_blue} Dual-microphone speech enhancement systems}
+      Developed the Phase Difference Channel Weighting (PDCW) algorithm
+      which performs sound source separation without a priori knowledge
+      of source locations. \\
+
+  \item {\color{dark_blue} Single-microphone speech enhancement system}:
+      Developed the Power-function-based Power Distribution Normalization
+      (PPDN) algorithm which enhances speech. \\
+
+  \item {\color{dark_blue} Automatic speech recognition with
+      low computational cost}
+      Focused on developing online algorithms, which are robust against
+      noise with low computational complexity. \\
+
+  \item {\color{dark_blue} SNR Estimation algorithm for speech}:
+      Developed a new algorithm which estimates Signal-to-
+      Noise Ratio (SNR) more accurately than the standard NIST STNR algorithm. \\
+
+  \item {\color{dark_blue} Automatic ITD threshold detection algorithm}:
+      Developed a new algorithm which can obtain the optimal ITD threshold
+      for spatial separation of signals. \\
+
+  \item {\color{dark_blue} Dereverberation algorithm}
+      Developed Suppression of Slowly-varying and Falling edges (SSF): a
+      simple algorithm for robust speech recognition that is highly effective
+      in reverberant environments. \\
+
+  \item {\color{dark_blue} HLab C++ automatic speech recognition system}
+      Developed a C++ HMM (Hidden Markov Model) speech recognition system from
+      scratch. \\
+
+  \item {\color{dark_blue} Power Normalized Voice Activity Detection (PN-VAD)}
+      Developed a new voice activity detection algorithm that is very accurate
+      and computationally efficient. \\
+
+  \item {\color{dark_blue} DARPA GALE project}
+      Robust front end for the DARPA GALE project. Applied a new feature set
+      that we developed for the 180-hr training set and the large vocabulary
+      Broadcast News test set. \\
+
+  \item {\color{dark_blue} NSF auditory signal processing project}
+      Developed features motivated by auditory processing, binaural processing,
+      and poly-aural processing. \\
+
+  \item {\color{dark_blue}Samsung speech-to-speech translator project}
+      Developed low-complexity online algorithms for embedded processors.
+      Developed an on-line noise-robustness feature extraction algorithm,
+      a binaural source-separation algorithm, an online VAD, an online MVN,
+      and supporting technologies.
+      Applied the algorithm to a 64,000-word database with a 500-hour training set. \\
+
+  \item {\color{dark_blue} Voice activity detector project}
+      Designed a robust VAD which requires very low computation.
+
+\end{itemize*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Invited talk
+\section*{Invited Talks}
+\lineunder
+\begin{itemize*}
+  \item ``Introduction to contemporary speech recognition systems and recent advances from deep-learning and human auditory processing techniques," Korea Aerospace University, Goyang, Korea, May. 2015.
+  \item ``Research direction for robust speech recognition," Samsung Advanced Institute of Technology, Suwon, Korea, Dec. 2014.
+  \item ``Speech recognition research using neural networks," Seoul National University, Seoul Korea, Sept. 2014.
+  \item ``Speech Noise Robustness for Intelligent Cars and Home Appliances," Yonsei University, Wonju, Korea, Sept. 2014.
+  \item ``TMT, SSF, and PAINT algorithms for far-field speech recognition," Sogang University, July, 2014.
+  \item ``Speech Recognition Infrastructure and Noise Robustness Efforts," Seoul National University. July, 2014.
+  \item ``Signal Processing for Robust Speech Recognition Motivated by Auditory Processing," Sogang University, Sept. 2012.
+\end{itemize*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Invited talk
+\section*{Teaching Experience}
+\lineunder
+\begin{itemize*}
+  \item Teaching Assistant, 18-792 Advanced Digital Signal Processing,
+    Electrical and Computer Engineering Department, Carnegie Mellon University, Spring, 2010.
+  \item Teaching Assistant, including weekly recitations,
+    15-211 fundamental data structures and algorithms,
+    School of Computer Science, Carnegie Mellon University, Fall, 2009.
+\end{itemize*}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Publications
+% 2019
+\nociteintconf{d_gowda_interspeech_2019_00}
+\nociteintconf{c_kim_interspeech_2019_00}
+\nociteintconf{a_menon_icassp_2019_00}
+
+
+% 2018 
+\nociteintconf{c_kim_interspeech_2018_00}
+\nociteintconf{x_zhou_isnn_2018_00},
+\nociteintconf{c_kim_icassp_2018_00}
+\nociteintconf{c_kim_icassp_2018_01}
+%\nociteintconf{r_nongpiur_icassp_2018_00}
+%\nociteintconf{a_menon_icassp_2018_00}
+% 2017
+\nociteintconf{a_menon_asru_2017_00}
+\nociteintconf{C_Kim_INTERSPEECH_2017_1}
+\nociteintconf{B_Li_INTERSPEECH_2017_1}
+\nociteintconf{A_Menon_INTERSPEECH_2017_1}
+\nociteintjourn{T_Sainath_IEEETran_2017_1}
+\nocitebookchap{T_Sainath_Book_Chapter_2017_1}
+% 2016
+\nociteintjourn{C_Kim_IEEETran_2016_1}
+\nociteintjourn{B_Cho_SigProcLetters_2016_1}
+
+% 2015
+\nociteintconf{C_Kim_INTERSPEECH_2015}
+
+% 2014
+\nociteintconf{C_Kim_INTERSPEECH_2014_2}
+\nociteintconf{C_Kim_INTERSPEECH_2014_1}
+
+% 2013
+
+% 2012
+\nociteintconf{C_Kim_ICASSP_2012_2}
+\nociteintconf{C_Kim_ICASSP_2012_1}
+
+% 2011
+\nociteintconf{C_Kim_ICASSP_2011_3}
+\nociteintconf{C_Kim_ICASSP_2011_2}
+
+% 2010
+\nociteintconf{C_Kim_ICASSP_2010_1}
+\nociteintconf{C_Kim_INTERSPEECH_2010_2}
+\nociteintconf{C_Kim_INTERSPEECH_2010_1}
+
+% 2009
+\nociteintconf{C_Kim_ASRU_2009_2}
+\nociteintconf{C_Kim_ASRU_2009_1}
+\nociteintconf{C_Kim_INTERSPEECH_2009_2}
+\nociteintconf{C_Kim_INTERSPEECH_2009_1}
+
+% 2008
+\nociteintconf{C_Kim_INTERSPEECH_2008}
+\nociteintconf{R_M_Stern_HSCMA_2008}
+
+% 2007
+
+% 2006
+\nociteintjourn{C_Kim_EurasipJourn_2006}
+\nociteintjourn{C_Kim_IEICE_2006}
+\nociteintconf{C_Kim_INTERSPEECH_2006}
+\nociteintconf{C_Kim_ICCE_2006}
+
+% 2005
+\nociteintjourn{C_Kim_TransCE_2005}
+\nociteintconf{C_Kim_ICCE_2005}
+
+% 2004
+
+% 2003
+
+% 2002
+\nociteintconf{C_Kim_INTERSPEECH_2002}
+
+% 2001
+\nociteintconf{C_Kim_ICSP_2001}
+
+\bibliographystyleintjourn{ieee_tran}
+\bibliographyintjourn{../common_bib_file/common_bib_file}
+
+\bibliographystylebookchap{ieee_tran}
+\bibliographybookchap{../common_bib_file/common_bib_file}
+
+\bibliographystyleintconf{ieee_tran}
+\bibliographyintconf{../common_bib_file/common_bib_file}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Domestic conference
+\nocitedomconf{C_Kim_KCC_2005}
+
+\bibliographystyledomconf{ieee_tran}
+\bibliographydomconf{../common_bib_file/common_bib_file}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theses
+\nocitethesis{C_Kim_PhDThesis_2010}
+\nocitethesis{C_Kim_MSThesis_2001}
+
+\bibliographystylethesis{ieee_tran}
+\bibliographythesis{../common_bib_file/common_bib_file}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% US Patents Issued
+% 2016
+\nociteuspatents{C_Khwand_USPatent_Issued_2016_1}
+
+% 2015
+\nociteuspatents{C_Kim_USPatent_Issued_2015_1}
+
+% 2014
+\nociteuspatents{C_Kim_USPatent_Issued_2014_1}
+
+% 2011
+\nociteuspatents{C_Kim_USPatent_Issued_2011_1}
+
+% 2010
+\nociteuspatents{C_Kim_USPatent_Issued_2010_2}
+\nociteuspatents{C_Kim_USPatent_Issued_2010_1}
+
+% 2009
+\nociteuspatents{C_Kim_USPatent_Issued_2009_4}
+\nociteuspatents{C_Kim_USPatent_Issued_2009_3}
+\nociteuspatents{C_Kim_USPatent_Issued_2009_2}
+\nociteuspatents{C_Kim_USPatent_Issued_2009_1}
+
+% 2008
+\nociteuspatents{C_Kim_USPatent_Issued_2008_1}
+
+\bibliographystyleuspatents{ieee_tran}
+\bibliographyuspatents{../common_bib_file/common_bib_file}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% US Patents Application
+
+% 2016
+\nociteuspatentsapp{A_Narayanan_USPatent_Application_2016_1}
+\nociteuspatentsapp{A_Misra_USPatent_Application_2016_1}
+
+% 2014
+%\nociteuspatentsapp{C_Kim_USPatent_Application_2014_1}
+%\nociteuspatentsapp{C_Khawand_USPatent_Application_2014_1}
+
+% 2012
+\nociteuspatentsapp{C_Kim_USPatent_Application_2012_1}
+
+% 2006
+\nociteuspatentsapp{C_Kim_USPatent_Application_2006_5}
+\nociteuspatentsapp{C_Kim_USPatent_Application_2006_4}
+\nociteuspatentsapp{C_Kim_USPatent_Application_2006_3}
+\nociteuspatentsapp{C_Kim_USPatent_Application_2006_1}
+
+% 2005
+\nociteuspatentsapp{C_Kim_USPatent_Application_2005_3}
+\nociteuspatentsapp{C_Kim_USPatent_Application_2005_1}
+
+\bibliographystyleuspatentsapp{ieee_tran}
+\bibliographyuspatentsapp{../common_bib_file/common_bib_file}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Korea Patents Issued
+
+% 2007
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2007_1}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2007_2}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2007_3}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2007_4}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2007_5}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2007_6}
+
+% 2006
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_1}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_2}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_3}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_4}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_5}
+% The following has become void.
+%\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_6}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_7}
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2006_8}
+
+% 2005
+\nocitekoreapatents{C_Kim_KoreaPatent_Issued_2005_1}
+
+\bibliographystylekoreapatents{ieee_tran}
+\bibliographykoreapatents{../common_bib_file/common_bib_file}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Technical skills
+\section*{Technical skills}
+\lineunder
+\begin{itemize*}
+  \item Programming Language :
+      C, C++, Pyhon, Perl, Java, Matlab, various shell scripts, etc.
+  \item Programming Environments :
+      Win32 API, Microsoft Foundation Class (MFC), NumPy/SciPy, MapReduce, and various Linux environments.
+  \item Speech Recognition Engine :
+      Sphinx, Hidden markov model Tool Kit (HTK), Janus, etc.
+  \item Development Tool : Various Linux tools including gcc. Microsoft visual studio,
+      Arm Developer Suite (ADS), Code Composer Studio (CCS), etc.
+  \item Real-time OS : Rex, Nucleus
+\end{itemize*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% References
+\section*{References}
+\lineunder
+
+\begin{itemize*}
+  \item
+    {\color{dark_blue} Prof. Richard M. Stern} (Ph. D. study advisor 2005-2010)\\
+    Department of Electrical and Computer Engineering,
+    Carnegie Mellon University, \\
+    B24 Porter Hall \\
+    5000 Forbes Ave, Pittsburgh, PA 15213, USA (Tel: +1-412-268-2535) \\
+    E-mail: \href{mailto:rms@cs.cmu.edu}{rms@cs.cmu.edu} \\
+
+  \item
+    {\color{dark_blue} Prof. Wonyong Sung} (M. S. study advisor 1999-2001) \\
+    Department of Electrical and Computer Engineering, Seoul National Univ. \\
+    1 Gwanangno, Gwanak-gu, Seoul, Korea, 151-744 (Tel: +82-2-880-1816)  \\
+    E-mail: \href{mailto:wysung@dsp.snu.ac.kr}{wysung@dsp.snu.ac.kr} \\
+
+  \item
+    {\color{dark_blue} Prof. Bhiksha Raj} (Collaborating professor) \\
+    Language Technologies Institute, School of Computer Science,
+    Carnegie Mellon University, \\
+    6705 Gates-Hillman Center,
+    5000 Forbes Ave, Pittsburgh, PA 15213  (Tel: +1-412-268-9826) \\
+    E-mail: \href{mailto:bhiksha@cs.cmu.edu}{bhiksha@cs.cmu.edu} \\
+
+  \item {\color{dark_blue} Prof. Rita Singh} \\
+    Language Technologies Institute, School of Computer Science,
+    Carnegie Mellon University, \\
+    6723 Gates-Hillman Center,
+    5000 Forbes Ave, Pittsburgh, PA 15213  (Tel: +1-412-268-9859) \\
+    E-mail: \href{mailto:rsingh@cs.cmu.edu}{rsingh@cs.cmu.edu} \\
+
+  \item {\color{dark_blue} Prof. Kwang-deok Seo} (Manager at LG 2003-2005) \\
+    Computer\&Telecommunications Engineering Division,
+    Yonsei University, \\
+    1 Yonseidae-gil, Wonju, Gangwon-do, 220-710, Korea, (Tel: +1-33-760-2788) \\
+    E-mail: \href{mailto:kdseo@yonsei.ac.kr}{kdseo@yonsei.ac.kr}
+\end{itemize*}
+\vspace{10mm}
+\begin{flushright}
+    Updated Sept. 1st , 2017
+\end{flushright}
+\end{document}
+\endinput
+%%
+%% End of file `cvtest.tex'.
