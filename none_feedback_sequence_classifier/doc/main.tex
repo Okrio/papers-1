@@ -597,50 +597,48 @@ TODO(chanw.com) Define $f$.
   \caption{Teacher forced alignment}
   \begin{algorithmic}
 
-  \Require {$\vec{x}[0:M]$}
-  \Require {$\vec{y}_{0:L}$}
+  \Require {A sequence of feature vectors $\vec{x}[0:M]$}
+  \Require {A sequence of corresponding labels $\vec{y}_{0:L}$}
   \Require {The beam size $N_b$}
   \Require {The neural network parameter $\Theta^{\left(i\right)}$ 
-    for calculating $\vec{z}[u] = f(\vec{x}[0:m+1],\,z[0:u])$} 
+    for calculating $\vec{z}[u]
+    = f^{\left(\Theta^{(i)}\right)}(\vec{x}[0:m+1],\,z[0:u])$} 
+    where $m$ is the index of the feature and $u$ is the index of
+    time-synchronous label.
 
   \State {\textbf{Initialization:}}
   \State {Let $z_0[0:1] := \left( \vec{y}_0 \right)  $}
-  \State {$z_b[0:1], 1 \le b < N_b$ are undefined.}
+  \State {$z_b[0:1],\, 1 \le b < N_b$ are undefined.}
   \State {Let $\mathcal{l}_{0} := \ln \left[ 
-        p \left(\vec{y}_{0} \, \big|  \,
-            {\vec{x}}[0:1]\right)  \right]$}
+        f^{\left(\Theta^{(i)}\right)}(\vec{x}[0:1],\,z_{<sos>})  \right] $}
   \For {$m = 1, . . . , M-1$}
     \For {$b = 0, . . . , N_b-1$}
-      \If {$z_{b}[0:m]$ is defined}
-        \State {Let $\vec{y}_u := z_{b}[m-1] $}
-        \State {Let $z_{b, 0}[0:m+1] := z_{b}[0:m] 
-                \frown \left\{ \vec{y}_u  \right\}  $} 
+      \If {$z_{b}[0:u]$ is defined}
+        \State {Let $y_u := z_{b}[u-1] $}
+        \State {Let $z_{b, 0}[0:u+1] := z_{b}[0:u] \oplus (y_u)   $} 
             \Comment {A horizontal move $P \rightarrow Q$ in 
             Fig. \ref{fig:path_alignment}}.
         \State {
               $\mathcal{l}_{b,0} := \ln \left[ 
-                  p \left(\vec{y}_{u} \big| 
-                      z_b[0:m], 
-                      \vec{x}[0:m+1], \Theta^{(i)}\right)  \right]
+                  f^{\left(\Theta^{(i)}\right)}_{y_u} 
+                  \left(\vec{x}[0:m+1],\, z_b[0:u] \right)  \right]
                   + \mathcal{l}_b$}
-
         \If {$u+1 \le  L - 1$}
-          \State {Let $z_{b, 1}[0:m+1] 
-          := z_{b}[0:m] \frown \left\{ \vec{y}_{u+1}  \right\}  $} 
+          \State {Let $z_{b, 1}[0:u+1] 
+          := z_{b}[0:u] \oplus (y_{u+1})  $} 
               \Comment {A diagonal move $P \rightarrow R$ in Fig. \ref{fig:path_alignment}}.
           \State  {
               $\mathcal{l}_{b,1} := \ln \left[ 
-                  p \left(\vec{y}_{u+1} \big| 
-                      z_b[0:m], 
-                      \vec{x}[0:m+1], \Theta^{(i)}\right)  \right] 
-                          + \mathcal{l}_b$}
+                  f^{\left(\Theta^{(i)}\right)}_{y_{u+1}}
+                  \left(\vec{x}[0:m+1],\, z_b[0:u]\right)  \right]
+                  + \mathcal{l}_b$}
       \EndIf
       \EndIf
     \EndFor
     \State {Sort a list of items
-    $\left\{\mathcal{l}_{b, i}, z_{b, i}[0:m+1] \right\}, \; 0 \le
-    b < N_b, i = 0, 1$ 
-    with respect to the log likelihood $\mathcal{l}_{b, i}$ 
+    $\left\{\mathcal{l}_{b, k}, z_{b, k}[0:m+1] \right\}, \; 0 \le
+    b < N_b,\, k = 0, 1$ 
+    with respect to the log likelihood $\mathcal{l}_{b, k}$ 
     in the decreasing order. The top $N_b$ of this sorted list is chosen and re-indexed as 
     follows: 
     $\left\{\mathcal{l}_{b}, z_{b}[0:M] \right\}$, $0 \le b < N_b$}

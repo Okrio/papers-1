@@ -1,0 +1,487 @@
+\documentclass{article}
+
+% if you need to pass options to natbib, use, e.g.:
+% \PassOptionsToPackage{numbers, compress}{natbib}
+% before loading nips_2017
+%
+% to avoid loading the natbib package, add option nonatbib:
+%\usepackage[nonatbib]{nips_2017}
+
+\usepackage{nips_2017}
+
+% to compile a camera-ready version, add the [final] option, e.g.:
+% \usepackage[final]{nips_2017}
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+\usepackage[T1]{fontenc}    % use 8-bit T1 fonts
+\usepackage{hyperref}       % hyperlinks
+\usepackage{url}            % simple URL typesetting
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{tikz,placeins}
+\usepackage{subcaption}
+%\usepackage[caption = false]{subfig}
+\usepackage{amssymb,amsmath,bm}
+\usetikzlibrary{arrows,decorations.markings}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\large]
+
+\graphicspath{{../figures/}}
+
+\title{WEVE: Weighted Enhancement Using Variance Estimation}
+
+%\renewcommand{\vec}[1]{\mathbf{#1}}
+
+\newcommand{\chanwcom}{{C. Kim}}
+\renewcommand{\topfraction}{0.85}
+\renewcommand{\textfraction}{0.1}
+\renewcommand{\floatpagefraction}{0.85}
+
+% The \author macro works with any number of authors. There are two
+% commands used to separate the names and addresses of multiple
+% authors: \And and \AND.
+%
+% Using \And between authors leaves it to LaTeX to determine where to
+% break the lines. Using \AND forces a line break at that point. So,
+% if LaTeX puts 3 of 4 authors names on the first line, and the last
+% on the second line, try using \AND instead of \And before the third
+% author name.
+
+\author{
+  David S.~Hippocampus\thanks{Use footnote for providing further
+    information about author (webpage, alternative
+    address)---\emph{not} for acknowledging funding agencies.} \\
+  Department of Computer Science\\
+  Cranberry-Lemon University\\
+  Pittsburgh, PA 15213 \\
+  \texttt{hippo@cs.cranberry-lemon.edu} \\
+  %% examples of more authors
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \AND
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+  %% \And
+  %% Coauthor \\
+  %% Affiliation \\
+  %% Address \\
+  %% \texttt{email} \\
+}
+
+\begin{document}
+% \nipsfinalcopy is no longer used
+
+\maketitle
+
+\begin{abstract}
+TODO(chanw.com) Revise the abstract.
+This paper presents a new enhacement algorithm using neural networks 
+refered to as WEVE (Weighted Enhancement Using Variance Estimation).
+The conventional way of feature enhacement is to directly estimate the clean
+feature from the corrupt feature. This mapping from the corrupt feature
+to the corresponding clean feature is learned using a training database
+consisting of a large number of such pairs of corrupt and clean features
+usually with the Mean Squared Error (MSE) loss. The problem of such 
+conventional techniques is that they do consider the reliablity of enhancement.
+We have frequently observed that this enhancement mapping actually degrades
+performance rather than enhacing the classification or recognition
+performance under certain conditions.  In WEVE, we estimate both the enhanced 
+feature and the variance of this estimation. The final output of the enhancement 
+block is a linear combination of the original feature and the 
+enhanced feature. The weighting is given by the Minimum Mean
+Sqaured Error (MMSE) criterion. This process is very simple nontheless
+shows significant improvements in our experiments.
+\end{abstract}
+
+\section{Introduction}
+
+\section{Feature enhancement}
+
+
+In the feature enhancement process, we estimate a clean feature 
+$\vec{y}$ given a corrupt feature $\vec{x}$. Suppose that
+we have 
+
+In this case, the following $L_2$ norm is widely used:
+\begin{align}
+  l(\vec{y}, \vec{x}) = 
+\end{align}
+
+
+
+
+Feature mapping is a process of mapping noisy feature vectors
+to clean feature vectors to enhance robustness
+\cite{C_Kim_ASRU_2009_1, k_han_taslp_2015_00, k_han_icassp_2014_00}.
+This procedure may be formulated by the following equation:
+\begin{align}
+  Y() = X()
+\end{align}
+
+From noisy features, we may infer 
+Another 
+
+Masking and feature mapping are closely related techniques.
+In feature mapping, enhanced features are predicted from
+noisy features using machine learning models
+The masking-based approaches with
+Joint Adaptive Training (JAT) have been shown
+to be effective to a large training set
+\cite{a_narayanan_interspeech_2015_1}.
+
+
+
+
+NIPS requires electronic submissions.  The electronic submission site
+is
+\begin{center}
+  \url{https://cmt.research.microsoft.com/NIPS2017/}
+\end{center}
+
+Please read carefully the instructions below and follow them
+faithfully.
+
+\section{The structure of the SPL algorithm}
+
+Fig. \label{fig:entire_diagram} shows the block diagram for
+enhancing the noisy feature.
+
+\begin{figure}
+    \centering
+    \resizebox{80mm}{!}{%
+         \input{../figures/entire_diagram.tex}} %
+    \caption {
+      The structure of feature enhancement using peak
+      value normalization and LSTMs.
+      \label{fig:entire_diagam}
+    }
+    %\end{center}
+\end{figure}
+
+Fig. \ref{fig:entire_diagram} shows the structure for enhancing
+noisy feature.
+
+\subsection{Simulated utterance generation}
+We use the room simulation system introduced in
+\cite{C_Kim_INTERSPEECH_2017_1} to generate noisy speech
+from clean speech.
+\begin{align}
+  y[n]
+\end{align}
+For 
+\subsection{Review of the Room Simulator for Data Augmentation}
+%
+%
+\begin{figure}
+  \centering
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=70mm]{room_diagram.eps}
+      \caption{}
+      \label{fig:room_diagram}
+    \end{subfigure}
+   \\
+    \begin{subfigure}{\linewidth}
+      \centering
+      \includegraphics[width=70mm]{image_method.eps}
+      \caption{}
+      \label{fig:image_method}
+    \end{subfigure}
+    \caption{
+    (a) A simulated room: There may be multiple microphones, a single target
+    sound source, multiple noise sources in a cuboid-shape room with
+    acoustically reflective walls. (b) A diagram showing the location
+    of the real and the virtual sound sources assuming that the walls
+    reflects acoustic wave like a mirror \cite{C_Kim_INTERSPEECH_2017_1}.}
+  \vspace{-10mm}
+\end{figure}
+%
+%
+In this section, we briefly review the structure of the Google
+Room Simulator for generating simulated utterances
+to train acoustic models for speech recognition systems
+\cite{C_Kim_INTERSPEECH_2017_1}. We assume a room of a
+rectangular cuboid-shape as shown in Fig. \ref{fig:room_diagram}.
+Assuming that all the walls of a room reflect acoustically uniformly,
+we use the image method to model the Room Impulse Responses (RIRs)
+\cite{J_Allen_JASA_1979, E_A_Lehmann_ASPAA_2007, S_G_McGovern_RIR}.
+
+Fig. \ref{fig:image_method} shows how virtual sources
+appearing as empty circles are constructed in the image method.
+Even though the virtual rooms appear to be created in two-dimensions
+in Fig. \ref{fig:image_method}, in the ``\emph{Room Simulator}",
+they are constructed in three-dimensions. For example, in our
+work for training the acoustic model for Google Home, we consider
+$17 \times 17 \times 17 = 4913$ virtual rooms for RIR calculation
+\cite{C_Kim_INTERSPEECH_2017_1}.
+Following the image method, the impulse response is calculated
+using the following equation
+\cite{ J_Allen_JASA_1979, E_A_Lehmann_ASPAA_2007}:
+\begin{align}
+    h[n] = \sum_{i = 0}^{I-1} \frac{r^{g_i}}{d_i}
+    \delta \left[n -\left \lceil{\frac{d_i f_s}{c_0}}\right \rceil \right],
+      \label{eq:h_n_calculation}
+\end{align}
+where $i$ is the index of each virtual sound source, and $d_i$ is the distance
+from that sound source to the microphone, $r$ is
+the reflection coefficient of the wall, $g_i$ is
+the number of the reflections
+to that sound source, $f_s$ is the sampling rate of the RIR, and $c_0$ is the
+speed of sound in the air. We use the value of $f_s = 16,000$ \textit{Hz} and
+$c_0 = 343$ \textit{m/s} for the room simulator \cite{B_Li_INTERSPEECH_2017_1}.
+For $d_i$, $r$, we use numbers created by a random number generator
+following specified distributions for each impulse response \cite{C_Kim_INTERSPEECH_2017_1}.
+
+Assuming that there are $I$ sound sources including one target
+source and $J$ microphones, the received signal at microphone
+$j$ is given by:
+\begin{align}
+  y_j[n] =  \sum_{i=0}^{I-1} \alpha_{ij} \left(h_{ij}[n] * x_i[n]\right).
+  \label{eq:y_j_def}
+\end{align}
+Since we used a two-microphones system in
+\cite{B_Li_INTERSPEECH_2017_1, C_Kim_INTERSPEECH_2017_1},
+$J$ is two, and for the number noise sources, we used a value from zero
+up to three \cite{C_Kim_INTERSPEECH_2017_1}.
+%
+
+
+\subsection{Feature extraction}
+
+Even though the log-mel coefficients have been widely used
+as features for speech recognition \cite{sbdavisandpm1980},
+the log non-linearity has a disadvantage in that the value
+diverges to negative infinity as the mel filterbank coefficient
+approaches zero \cite{C_Kim_IEEETran_2016_1}.
+Thus, we use the power-law nonlinearity
+rather than the log-nonlinearity:
+\begin{align}
+  q[m, l] =  (p[m, l])^{\frac{1}{15}}
+  \label{eq:power_law_nonlineartiy}
+\end{align}
+We use the power coefficient of $\frac{1}{15}$ as in
+\cite{C_Kim_IEEETran_2016_1, C_Kim_ICASSP_2012_1}.
+
+\subsection{Feature normalization using the peak-value}
+
+
+The power-mel coefficients $q_x[m, l]$ and $q_y[m, l]$
+are obtained from the clean and the simulated noisy
+speech $x[n]$ and $y[n]$ respectively. $q_{x, \text{peak}}$
+and $q_{y, \text{peak}}$
+
+
+
+
+
+
+
+\section{Estimation of the expected value and the variance
+  of the enhanced feature from the noisy feature}
+\label{sec:estimation}
+
+\begin{figure}
+    \centering
+    \resizebox{80mm}{!}{%
+         \input{../figures/training.tex}} %
+    \caption {
+      Training of neural networks to estimate the clean feature and error ratio from corrupt feature
+      \label{MFCCPNCCComparison}
+    }
+    %\end{center}
+\end{figure}
+
+
+
+
+
+
+
+In this section, we discuss how to predict the clean feature and the
+error ratio from the corrupt feature. Let us denote the clean target feature,
+the corrupt feature by $\boldsymbol{x}, \boldsymbol{y}$ respectively.
+
+Using the room simulation system described in \cite{C_Kim_INTERSPEECH_2017_1},
+we create a pair of clean and
+corrupt utterances. Log-mel [XX] features are calculated from these original clean
+and corrupt utterances. Let us denote the clean feature by $\boldsymbol{t}_i$ and
+the simulated corrupt feature by $\boldsymbol{x}_i$, respectively where $i$ is the
+utterance index. The training set is represented by the following set:
+\begin{align}
+  \mathcal{T} = \{<\boldsymbol{x}_i, \boldsymbol{t}_i>| 0 \le i \le N - 1\}
+\end{align}
+where $N$ is the number of training examples.
+
+In the ECE algorithm, we first estimate the true target $\boldsymbol{t}_i$. The
+estimation error is defined by the following equation:
+\begin{align}
+  \boldsymbol{e}_i =  \boldsymbol{t}_i - \boldsymbol{x}_i, \quad 0 \le i \le N - 1
+\end{align}
+
+The norm of the error vector $\boldsymbol{e}_i$ would be generally large when
+the norm of the estimated clean feature is large.
+
+Thus, instead of trying to estimate the error itself, the neural network tries to
+estimate the error ratio given as follows:
+
+\begin{align}
+  r_i = {}{}
+\end{align}
+
+\section{Generation of simulated clean and noisy data sets}
+\label{gen_inst}
+
+To train neural networks described in section \ref{sec:estimation}, we
+need a training set consisting of pairs of clean speech and noisy speech.
+Unfortunately, it is not easy to have such a training set from real speech
+utterances. Thus, we use the simulation system described in
+\cite{C_Kim_INTERSPEECH_2017_1} to synthetically generate noisy speech
+utterances from the clean speech utterances.
+
+In our application, for clean training set, we used Wall Street Journal (WSJ)
+si-284. For noise set, we used the Resource Management 1 (RM1)
+\cite{price_p_ldc_1993} 50 \% of time 
+and DEMAND noise [TODO(chanwcom) Adds reference] for the remaining 50 \% of time.
+
+TODO(chanwcom) Cite DEMAND noise set.
+
+
+
+
+
+%
+%
+%
+%\begin{figure*}
+%  \centering
+%    \begin{subfigure}[\label{fig:randomly_selected_grid_coordinates}]{0.5\textwidth} {
+%        \includegraphics[width=\textwidth]{target_estimation}}
+%    \caption{Grid from random-sampling}
+%    \end{subfigure}
+%   % \begin{subfigure}[\label{fig:intersection_point}]{0.5\textwidth} {
+%   %   \includegraphics[width=\textwidth]{intersection_point}}
+%   % \caption{Calculation of grid coordinates}
+%   % \end{subfigure}
+%  \caption {Random Grid Sampling}
+%\end{figure*}
+%
+%
+%
+\section{Estimation of the optimal weight in the EFW algorithm}
+In this section, we describe the procedure of feature weighting approach.
+Suppose that the feature before enhancement is represented by $\vec{x}$.
+Let us represent the inference neural network to estimate the target by
+$\mathcal{T}$.
+
+\begin{align}
+  \mathcal{X} = \{  \}
+\end{align}
+
+Instead of directly using the enhanced feature $\widehat{\vec{y}}$, we consider
+the following interpolated feature $\bm{z}$ from the original corrupt
+input $\bm{x}$ and .
+\begin{align}
+  \vec{z} = \vec{w} \odot \widehat{\vec{y}} \ + (1 - \vec{w}) \odot \vec{x} 
+    \label{eq:vec_z}
+\end{align}
+where $\odot$ denotes the Hadamard product (entry-wise product).
+
+Let us denote the estimated variance vector by $\hat{\vec{v}}$:
+\begin{align}
+  \hat{\vec{v}} & = \text{Var}[\widehat{\vec{y}}] \nonumber \\
+                & = E[(y - y)^2 | \vec{x}[0], \vec{x}[1], ... \vec{x}[T]]
+     \label{eq:vec_v}
+\end{align}
+
+In our discussion, let us assume that the expectation of $\hat{\vec{y}}$ is the
+same as the true target $\vec{y}$.
+\begin{align}
+  E[\widehat{\vec{y}}] = \vec{y}  \label{eq:expectation_of_y}
+\end{align}
+
+Now, let us obtain the expected value of $\vec{z}$ from
+\eqref{eq:vec_z} and \eqref{eq:expectation_of_y}
+\begin{align}
+  E[\vec{z}] = (1 - \vec{w}) \odot (\vec{x} - \vec{y})
+\end{align}
+Thus, the bias of $\vec{z}$ is given by:
+\begin{align}
+  Bias_{\vec{z}} & = E[\vec{z}] - t \nonumber \\
+                 & = \vec{w} \odot (\widehat{\vec{y}} - \vec{y})
+\end{align}
+
+From \eqref{eq:vec_z} and \eqref{eq:vec_v}, the variance of $\vec{z}$ is given by:
+\begin{align}
+  Var_{\vec{z}} = \vec{v} \odot w \odot w.
+\end{align}
+The mean squared error of the $i$-th element of the $\vec{z}$ is given by:
+\begin{align}
+  MSE_{\vec{z_i}} & = Bias_{\vec{z_i}}^2 + Var_{\vec{z_i}} \nonumber \\
+                 & =  \left[(\vec{x}_i - \vec{y}_i) ^ 2
+                    + \vec{v}_i^2 \right] \vec{w}_i^{2}
+                    - 2 (\vec{x}_i - \vec{y}_i)^{2}  \vec{w}_i
+                    + (\vec{x}_i - \vec{y}_i)^{2}
+ \label{eq:mse_z_i}
+\end{align}
+Since the above equation \eqref{eq:mse_z_i} is a quadratic equation with
+respect to $\vec{w}_i$, we may find that the minimum value of $MSE_{\vec{z_i}}$
+is obtained when $\vec{w}_i$ has the following value:
+\begin{align}
+  \vec{w}_i = \frac{(\vec{x}_i - \vec{y}_i)^2}{(\vec{x}_i - \vec{y}_i)^2 + \vec{v}_i}
+\end{align}
+
+Thus, the final form of the estimated vector $\widehat{\vec{z}}$ becomes:
+\begin{align}
+  \widehat{\vec{z}} = \widehat{\vec{w}} \odot \widehat{\vec{y}}
+    \ + (1 - \widehat{\vec{w}}) \odot \vec{x}
+\end{align}
+where
+\begin{align}
+  \widehat{\vec{w}} = {(\vec{x} - \vec{y})^{\odot 2}}
+    \left[(\vec{x} - \vec{y})^{\odot 2}+ \vec{v}\right]^{\odot -1}.
+\end{align}
+
+
+Sequence enhancement
+
+The feature enhancement is to map a sequence of corrupt features $\mathbf{X}$.
+\begin{subequations}
+  \begin{align}
+    \mathbf{X} = \left(\vec{x}[0], \vec{x}[1], \cdots, \vec{x}[M-1] \right)  \\
+    \mathbf{Y} = \left(\vec{y}[0], \vec{y}[1], \cdots, \vec{y}[M-1] \right) 
+  \end{align}
+\end{subequations}
+
+\subsubsection*{Acknowledgments}
+
+\section*{References}
+
+References follow the acknowledgments. Use unnumbered first-level
+heading for the references. Any choice of citation style is acceptable
+as long as you are consistent. It is permissible to reduce the font
+size to \verb+small+ (9 point) when listing the references. {\bf
+  Remember that you can go over 8 pages as long as the subsequent ones contain
+  \emph{only} cited references.}
+\medskip
+
+\small
+
+\clearpage
+\newpage
+\bibliographystyle{plain}
+\bibliography{../../common_bib_file/common_bib_file}
+
+
+
+\end{document}
