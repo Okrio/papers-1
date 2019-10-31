@@ -188,6 +188,27 @@ year = {2010}
   ISSN={0018-9219}, 
 month={Feb},}
 
+@article{c_gulcehre_corr_2015_00,
+  author    = {{\c{C}}aglar G{\"{u}}l{\c{c}}ehre and
+               Orhan Firat and
+               Kelvin Xu and
+               Kyunghyun Cho and
+               Lo{\"{\i}}c Barrault and
+               Huei{-}Chi Lin and
+               Fethi Bougares and
+               Holger Schwenk and
+               Yoshua Bengio},
+  title     = {On Using Monolingual Corpora in Neural Machine Translation},
+  journal   = {CoRR},
+  volume    = {abs/1503.03535},
+  year      = {2015},
+  url       = {http://arxiv.org/abs/1503.03535},
+  archivePrefix = {arXiv},
+  eprint    = {1503.03535},
+  timestamp = {Mon, 13 Aug 2018 16:46:37 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/GulcehreFXCBLBS15},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
 
 @article{a_graves_corr_2012_00,
   author    = {Alex Graves},
@@ -499,8 +520,99 @@ publisher = {Curran Associates, Inc.},
 url = {http://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf}
 }
 
+@inproceedings{s_toshniwal_slt_2018_00,
+author={S. {Toshniwal} and A. {Kannan} and C. {Chiu} and Y. {Wu} and T. N. {Sainath} and K. {Livescu}},
+booktitle={2018 IEEE Spoken Language Technology Workshop (SLT)},
+title={A Comparison of Techniques for Language Model Integration in Encoder-Decoder Speech Recognition},
+year={2018},
+volume={},
+number={},
+pages={369-375},
+keywords={natural language processing;recurrent neural nets;speech coding;speech recognition;switchboard data set;oracle error rate;second-pass rescoring;medium-sized switchboard data;Google voice search data;Google data sets;first-pass decoding;dictation data sets;unpaired text data;separate acoustic language models;pronunciation model;automatic speech recognition problem;recurrent neural encoder-decoder models;encoder-decoder speech recognition;language model integration;Decoding;Computational modeling;Training;Mathematical model;Data models;Speech recognition;Acoustics;speech recognition;encoder-decoder;language model;shallow fusion;cold fusion;deep fusion},
+doi={10.1109/SLT.2018.8639038},
+ISSN={},
+month={Dec},}
 
-@INPROCEEDINGS{a_graves_icassp_2013_00,
+
+% beamformer
+
+@inproceedings{j_heymann_icassp_2016_00,
+author={J. {Heymann} and L. {Drude} and R. {Haeb-Umbach}},
+booktitle={2016 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+title={Neural network based spectral mask estimation for acoustic beamforming},
+year={2016},
+volume={},
+number={},
+pages={196-200},
+keywords={acoustic signal processing;array signal processing;computational geometry;feedforward neural nets;matrix algebra;microphones;speech recognition;neural network based spectral mask estimation;acoustic beamforming;cross-power spectral density matrices;beamformer coefficient computation;microphones geometric configuration;feedforward network;hidden layer;bidirectional long short-term memory network;perceptual speech quality;speech recognition error rate;Speech;Estimation;Training;Array signal processing;Acoustics;Signal to noise ratio;Neural networks;Robust Speech Recognition;Acoustic Beam-forming;Feature Enhancement;Deep Neural Network},
+doi={10.1109/ICASSP.2016.7471664},
+ISSN={},
+month={March},}
+
+
+% RETURNN system
+@inproceedings{c_luscher_interspeech_2019_00,
+  author={Christoph L{\"{u}}scher and Eugen Beck and Kazuki Irie and Markus Kitza and Wilfried Michel and Albert Zeyer and Ralf Schlüter and Hermann Ney},
+  title={{RWTH ASR Systems for LibriSpeech: Hybrid vs Attention}},
+  year=2019,
+  booktitle={Proc. Interspeech 2019},
+  pages={231--235},
+  doi={10.21437/Interspeech.2019-1780},
+  url={http://dx.doi.org/10.21437/Interspeech.2019-1780}
+}
+
+% Data augmentation
+@inproceedings{s_park_interspeech_2019_00,
+  author={Daniel S. Park and William Chan and Yu Zhang and Chung-Cheng Chiu and Barret Zoph and Ekin D. Cubuk and Quoc V. Le},
+  title={{SpecAugment: A Simple Data Augmentation Method for Automatic Speech Recognition}},
+  year=2019,
+  booktitle={Proc. Interspeech 2019},
+  pages={2613--2617},
+  doi={10.21437/Interspeech.2019-2680},
+  url={http://dx.doi.org/10.21437/Interspeech.2019-2680}
+}
+
+@inproceedings{s_karita_interspeech_2019_00,
+  author={Shigeki Karita and Nelson Enrique Yalta Soplin and Shinji Watanabe and Marc Delcroix and Atsunori Ogawa and Tomohiro Nakatani},
+  title={{Improving Transformer-Based End-to-End Speech Recognition with Connectionist Temporal Classification and Language Model Integration}},
+  year=2019,
+  booktitle={Proc. Interspeech 2019},
+  pages={1408--1412},
+  doi={10.21437/Interspeech.2019-1938},
+  url={http://dx.doi.org/10.21437/Interspeech.2019-1938}
+}
+
+@inproceedings{a_narayanan_slt_2018_00,
+author={A. {Narayanan} and A. {Misra} and K. C. {Sim} and G. {Pundak} and A. {Tripathi} and M. {Elfeky} and P. {Haghani} and T. {Strohman} and M. {Bacchiani}},
+booktitle={2018 IEEE Spoken Language Technology Workshop (SLT)},
+title={Toward Domain-Invariant Speech Recognition via Large Scale Training},
+year={2018},
+volume={},
+number={},
+pages={441-447},
+keywords={speech codecs;speech recognition;single domain-invariant model;scale training data;multiple application domains;codec distortion;domain-specific model;training domain;automatic speech recognition systems;domain-invariant speech recognition;large scale training;background noise;domain-invariant model;Training;Codecs;Adaptation models;Data models;Noise measurement;Feature extraction;Acoustics;speech recognition;multidomain model;domain robustness;noise robustness;codecs},
+doi={10.1109/SLT.2018.8639610},
+ISSN={},
+month={Dec},}
+
+
+@inproceedings{d_bahdanau_iclr_2015_00,
+  author    = {Dzmitry Bahdanau and
+               Kyunghyun Cho and
+               Yoshua Bengio},
+  title     = {Neural Machine Translation by Jointly Learning to Align and Translate},
+  booktitle = {3rd International Conference on Learning Representations, {ICLR} 2015,
+               San Diego, CA, USA, May 7-9, 2015, Conference Track Proceedings},
+  year      = {2015},
+  crossref  = {DBLP:conf/iclr/2015},
+  url       = {http://arxiv.org/abs/1409.0473},
+  timestamp = {Wed, 17 Jul 2019 10:40:54 +0200},
+  biburl    = {https://dblp.org/rec/bib/journals/corr/BahdanauCB14},
+  bibsource = {dblp computer science bibliography, https://dblp.org}
+}
+
+
+@inproceedings{a_graves_icassp_2013_00,
 author={Alex {Graves} and Abdel-rahman {Mohamed} and Geoffrey {Hinton}},
 booktitle={2013 IEEE International Conference on Acoustics, Speech and Signal Processing},
 title={Speech recognition with deep recurrent neural networks},
@@ -513,7 +625,7 @@ doi={10.1109/ICASSP.2013.6638947},
 ISSN={1520-6149},
 month={May},}
 
-@INPROCEEDINGS{s_toshniwal_slt_2018_00,
+@inproceedings{s_toshniwal_slt_2018_00,
 author={S. {Toshniwal} and A. {Kannan} and C. {Chiu} and Y. {Wu} and T. N. {Sainath} and K. {Livescu}},
 booktitle={2018 IEEE Spoken Language Technology Workshop (SLT)},
 title={A Comparison of Techniques for Language Model Integration in Encoder-Decoder Speech Recognition},
@@ -564,7 +676,7 @@ month={Dec},}
         Kumar and {\chanwcom}",
     booktitle = "INTERSPEECH-2019",
     month = "Sept.",
-    year = "2019 (accepted)",
+    year = "2019",
     address = "Graz, Austria",
     pages={2783--2787},
     doi={10.21437/Interspeech.2019-3216},
@@ -586,7 +698,7 @@ month={Dec},}
 }
 
 
-@INPROCEEDINGS{c_chiu_icassp_2018_00,
+@inproceedings{c_chiu_icassp_2018_00,
 author={Chung-Cheng {Chiu} and Tara N. {Sainath} and Yonghui {Wu} and Rohit {Prabhavalkar} and Patrick {Nguyen} and Zhifeng {Chen} and Anjuli {Kannan} and Ron J. {Weiss} and Kanishka {Rao} and Ekaterina {Gonina} and Navdeep {Jaitly} and Bo {Li} and Jan {Chorowski} and Michiel {Bacchiani}},
 booktitle={2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
 title={State-of-the-Art Speech Recognition with Sequence-to-Sequence Models},
@@ -687,6 +799,19 @@ doi={10.1109/ICASSP.2018.8462461},
 ISSN={2379-190X},
 month={April},}
 
+@inproceedings{r_Prabhavalkar_icassp_2018_00,
+author={R. {Prabhavalkar} and T. N. {Sainath} and Y. {Wu} and P. {Nguyen} and Z. {Chen} and C. {Chiu} and A. {Kannan}},
+booktitle={2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+title={Minimum Word Error Rate Training for Attention-Based Sequence-to-Sequence Models},
+year={2018},
+volume={},
+number={},
+pages={4839-4843},
+keywords={Bayes methods;entropy;sampling methods;speech recognition;attention-based sequence-to-sequence models;automatic speech recognition;cross-entropy criterion;log-likelihood;WER;state-level minimum Bayes risk;sampling-based method;discriminative sequence-trained system;word error rate;ASR systems;grapheme-based models;unidirectional attention-based models;sMBR;N-best lists;decoded hypotheses;mobile voice-search task;Training;Decoding;Computational modeling;Error analysis;Task analysis;Speech recognition;Acoustics;sequence-to-sequence models;attention models;minimum word error rate training;minimum Bayes risk},
+doi={10.1109/ICASSP.2018.8461809},
+ISSN={},
+month={April},}
+
 @inproceedings{r_prabhavalkar_interspeech_2017_00,
   author={Rohit Prabhavalkar and Kanishka Rao and Tara N. Sainath and Bo Li and Leif Johnson and Navdeep Jaitly},
   title={A Comparison of Sequence-to-Sequence Models for Speech Recognition},
@@ -753,6 +878,11 @@ month={March},}
 @misc{zero_mq,
   title = {Zero MQ},
   howpublished = {\url{http:zeromq.org}},
+}
+
+@misc{samsung_bixby,
+  title = {Samsung Bixby},
+  howpublished = {\url{http://www.samsung.com/bixby/}},
 }
 
 @article{a_sergeev_arxiv_2018_00,
@@ -1074,6 +1204,19 @@ month={May},}
   Pages = {4757--4760},
   Title = {New approach to voiced onset detection in speech signal and its application for frame error concealment},
   Year = {2008}}
+
+@inproceedings{r_lippmann_icassp_1987_00,
+  author={{R. Lippmann, E. Martin, and D. Paul}},
+  booktitle={IEEE International Conference on Acoustics, Speech, and Signal Processing},
+  title={Multi-style training for robust isolated-word speech recognition},
+  year={1987},
+  volume={12},
+  number={},
+  pages={705-708},
+  keywords={Cepstral analysis;Degradation;Error analysis;Hidden Markov models;Noise shaping;Robustness;Speech enhancement;Speech recognition;Stress;Testing},
+  doi={10.1109/ICASSP.1987.1169544},
+  ISSN={},
+  month={Apr},}
 
 @inproceedings{R_Lippmann_icassp_1987_1,
   author={{R. Lippmann, E. Martin, and D. Paul}},
@@ -4498,7 +4641,7 @@ title = {{Learning the Speech Front-end With Raw Waveform CLDNNs}},
 
 
 
-@INPROCEEDINGS{a_menon_icassp_2019_00,
+@inproceedings{a_menon_icassp_2019_00,
 author={A. {Menon} and {\chanwcom} and R. M. {Stern}},
 booktitle={ICASSP 2019 - 2019 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
 title={Robust Recognition of Reverberant and Noisy Speech Using Coherence-based Processing},
@@ -4512,10 +4655,61 @@ ISSN={2379-190X},
 month={May},}
 
 
+@inproceedings{a_garg_asru_2019_00,
+author={Abhinav Garg and Dhananjaya Gowda and Ankur Kumar and Kwangyoun Kim and Mehul
+  Kumar and {\chanwcom}},
+booktitle={2019 IEEE Automatic Speech Recognition and Understanding Workshop (ASRU)},
+title={Improved multi-stage training of online attention-based encoder-decoder models},
+year={2019 (accepted)},
+volume={},
+number={},
+%pages={"(accepted)"},
+ISSN={},
+month={Dec.},}
+
+@inproceedings{k_kim_asru_2019_00,
+author={Kwangyoun Kim and Kyungmin Lee and Dhananjaya Gowda and Junmo Park and 
+Sungsoo Kim and Sichen Jin and Young-Yoon Lee and Jinsu Yeo and Daehyun Kim and 
+Seokyeong Jung and Jungin Lee and Myoungji Han and {\chanwcom}},
+booktitle={2019 IEEE Automatic Speech Recognition and Understanding Workshop (ASRU)},
+title={attention based on-device streaming speech recognition with large speech corpus},
+year={2019 (accepted)},
+volume={},
+number={},
+%pages={"(accepted)"},
+ISSN={},
+month={Dec.},}
+
+@inproceedings{c_kim_asru_2019_01,
+author={{\chanwcom} and Sungsoo Kim and Kwangyoun Kim and Mehul Kumar and  
+Jiyeon Kim and Kyungmin Lee and Changwoo Han and Abhinav Garg and 
+Eunhyang Kim and  Minkyoo Shin and Shatrughan Singh and Larry Heck and 
+Dhananjaya Gowda},
+booktitle={2019 IEEE Automatic Speech Recognition and Understanding Workshop (ASRU)},
+title={End-to-end Training of a large vocabulary end-to-end speech recognition system},
+year={2019 (accepted)},
+volume={},
+number={},
+%pages={"(accepted)"},
+ISSN={},
+month={Dec.},}
+
+
+@inproceedings{c_kim_asru_2019_00,
+author={{\chanwcom} and Mehul Kumar and Kwangyoun Kim and Dhananjaya Gowda}, 
+booktitle={2019 IEEE Automatic Speech Recognition and Understanding Workshop (ASRU)},
+title={Power-law nonlinearity with maximally uniform distribution criterion for
+  improved neural network training in automatic speech recognition},
+year={2019 (accepted)},
+volume={},
+number={},
+%pages={"(accepted)"},
+ISSN={},
+month={Dec.},}
+
 
 @inproceedings{c_kim_interspeech_2019_00,
-    author     = {{\chanwcom} and Minkyu Shin and Abhinav Garg and Dhananjaya
-        N. Gowda},
+    author     = {{\chanwcom} and Minkyu Shin and Abhinav Garg and Dhananjaya Gowda},
     title={{Improved Vocal Tract Length Perturbation for a State-of-the-Art 
         End-to-End Speech Recognition System}},
     booktitle = "INTERSPEECH-2019",
@@ -4538,7 +4732,7 @@ month={May},}
   url={http://dx.doi.org/10.21437/Interspeech.2018-2566}
 }
 
-@INPROCEEDINGS{x_zhou_isnn_2018_00,
+@inproceedings{x_zhou_isnn_2018_00,
 author={Xinhui Zhou and Chiman Kwan and Bulent Ayhan and {\chanwcom} and
   Kshitiz Kumar and Richard Stern},
 booktitle={International Symposium on Neural Networks},
@@ -4554,7 +4748,7 @@ month={June},}
 
 
 
-@INPROCEEDINGS{c_kim_icassp_2018_00,
+@inproceedings{c_kim_icassp_2018_00,
 author={{\chanwcom} and T. {Sainath} and A. {Narayanan} and A. {Misra} and R. {Nongpiur} and M. {Bacchiani}},
 booktitle={2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
 title={Spectral Distortion Model for Training Phase-Sensitive Deep-Neural Networks for Far-Field Speech Recognition},
@@ -4568,7 +4762,7 @@ ISSN={2379-190X},
 month={April},}
 
 
-@INPROCEEDINGS{c_kim_icassp_2018_01,
+@inproceedings{c_kim_icassp_2018_01,
 author={{\chanwcom} and A. {Menon} and M. {Bacchiani} and R. {Stern}},
 booktitle={2018 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
 title={Sound Source Separation Using Phase Difference and Reliable Mask Selection Selection},
@@ -4607,7 +4801,7 @@ month={April},}
 % End of TODO(submitted)
 
 
-@INPROCEEDINGS{a_menon_asru_2017_00,
+@inproceedings{a_menon_asru_2017_00,
 author={A. {Menon} and {\chanwcom} and U. {Kurokawa} and R. M. {Stern}},
 booktitle={2017 IEEE Automatic Speech Recognition and Understanding Workshop (ASRU)},
 title={Binaural processing for robust recognition of degraded speech},
@@ -4638,6 +4832,17 @@ month={Dec},}
     month     = "Aug.",
     pages     = {{3872-3876}},
 }
+
+@inproceedings{c_kim_interspeech_2017_00,
+  author={{\chanwcom} and Ananya Misra and Kean Chin and Thad Hughes and Arun Narayanan and Tara N. Sainath and Michiel Bacchiani},
+  title={Generation of Large-Scale Simulated Utterances in Virtual Rooms to Train Deep-Neural Networks for Far-Field Speech Recognition in Google Home},
+  year=2017,
+  booktitle={Proc. Interspeech 2017},
+  pages={379--383},
+  doi={10.21437/Interspeech.2017-1510},
+  url={http://dx.doi.org/10.21437/Interspeech.2017-1510}
+}
+
 
 
 @inproceedings{C_Kim_INTERSPEECH_2017_1,
@@ -4735,13 +4940,24 @@ month={May},}
     pages     = {751-755},
 }
 
-@inproceedings{C_Kim_INTERSPEECH_2014_1,
+@inproceedings{h_park_interspeech_2014_00,
     author    = "{H. Park, M. Maciejewski, {\chanwcom}, and R. M. Stern}",
     title     = " Robust Speech Recognition in Reverberant Environments Using Subband-Based Steady-State Monaural and Binaural Suppression",
     booktitle = "INTERSPEECH-2014",
     year      = "2014",
     month     = "Sept.",
     pages     = {2715-2718},
+}
+
+
+@inproceedings{c_kim_interspeech_2014_00,
+    author    = {{\chanwcom} and Kean {Chin} and Michiel {Bacchiani} and
+      Richard M. {Stern}},
+    title     = {Robust speech recognition using temporal masking and thresholding algorithma},
+    booktitle = "INTERSPEECH-2014",
+    year      = "2014",
+    month     = "Sept.",
+    pages     = {2734--2738},
 }
 
 @inproceedings{C_Kim_INTERSPEECH_2014_2,
@@ -5769,14 +5985,6 @@ month={May},}
     pages     = {},
 }
 
-@inproceedings{C_Kim_INTERSPEECH_2014_1,
-    author    = "{H. Park, M. Maciejewski, {\chanwcom}, and R. M. Stern}",
-    title     = "Robust speech recognition using temporal masking and thresholding algorithm",
-    booktitle = "INTERSPEECH-2014",
-    year      = "2014",
-    month     = "Sept.",
-    pages     = {2715-2718},
-}
 
 @inproceedings{C_Kim_INTERSPEECH_2014_2,
     author    = "{{\chanwcom}, K. K. Chin, M. Bacchiani, and R. M. Stern}",
@@ -5889,7 +6097,7 @@ month={May},}
   Year = {2009}}
 
 @inproceedings{C_Kim_INTERSPEECH_2008,
-  Author = {{{\chanwcom} and R. M. Stern}},
+  Author = {{\chanwcom} and Richard M. Stern},
   Booktitle = {INTERSPEECH-2008},
   Month = {{Sept.}},
   Pages = {2598-2601},
