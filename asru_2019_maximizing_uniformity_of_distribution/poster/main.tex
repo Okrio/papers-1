@@ -1,0 +1,339 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% a0poster Landscape Poster
+% LaTeX Template
+% Version 1.0 (22/06/13)
+%
+% The a0poster class was created by:
+% Gerlinde Kettl and Matthias Weiser (tex@kettl.de)
+% 
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a0,portrait]{a0poster}
+%\documentclass[a4]{article}
+
+\usepackage{multicol} % This is so we can have multiple columns of text side-by-side
+\columnsep=100pt % This is the amount of white space between the columns in the poster
+\columnseprule=3pt % This is the thickness of the black line between the columns in the poster
+
+\usepackage[svgnames]{xcolor} % Specify colors by their 'svgnames', for a full list of all colors available see here: http://www.latextemplates.com/svgnames-colors
+
+\usepackage{times} % Use the times font
+%\usepackage{palatino} % Uncomment to use the Palatino font
+
+\usepackage{float}
+\usepackage{graphicx} % Required for including images
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[export]{adjustbox}
+\usepackage[font=large,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+%\usepackage{tikzpagenodes}
+\usepackage{amsfonts, amsmath, amsthm, amssymb, bm} % For math fonts, symbols and environments
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{multirow}
+\usepackage[justification=centering]{caption}
+\usepackage[caption = false]{subfig}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\usepackage{tikz,placeins}
+\usetikzlibrary{arrows,decorations.markings}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\tiny]
+\usetikzlibrary{positioning, shapes}
+%\usepackage{xcolor} %already loaded by tikz
+%
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+
+\graphicspath{{../figures/}}
+
+\newcommand{\specialcell}[2][c]{%
+     \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\newcommand{\chanwcom}{{C. Kim}}
+
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	POSTER HEADER 
+%----------------------------------------------------------------------------------------
+
+% The header is divided into three boxes:
+% The first is 55% wide and houses the title, subtitle, names and university/organization
+% The second is 25% wide and houses contact information
+% The third is 19% wide and houses a logo for your university/organization or a photo of you
+% The widths of these boxes can be easily edited to accommodate your content as you see fit
+
+\begin{minipage}[t]{1.0\linewidth}
+\begin{center}
+  \begin{minipage}[t]{0.1\textwidth}
+    \centering
+    \vspace{0pt}
+    \includegraphics[width=10cm, valign=t]{samsung_research} % Logo or a photo of you, adjust its dimensions here
+  \end{minipage} \hfill
+  \begin{minipage}[t]{0.7\textwidth}
+    \begin{center}
+  \huge \color{NavyBlue} 
+      \textbf{Power-law nonlinearity with maximally uniform distribution criterion for
+      improved neural network training in automatic speech recognition} \\
+      \LARGE \textbf{Chanwoo Kim, Mehul Kumar, Kwangyoun Kim, and Dhananjaya Gowda}
+  \\
+\LARGE Samsung Research, Seoul, South Korea\\ % University/organization
+\large \{chanw.com, mk0211.shin, ky85.kim, d.gowda\}@samsung.com
+    \end{center}
+  \end{minipage}
+  \begin{minipage}[t]{0.1\textwidth}
+    \begin{center}
+    \includegraphics[width=10cm]{samsung_research} % Logo or a photo of you, adjust its dimensions here
+    \end{center}
+  \end{minipage} \hfill
+\end{center}
+\end{minipage}
+%
+%\begin{minipage}[b]{0.25\linewidth}
+%\color{DarkSlateGray}\Large \textbf{Contact Information:}\\
+%Department Name\\ % Address
+%University Name\\
+%123 Broadway, State, Country\\\\
+%Phone: +1 (000) 111 1111\\ % Phone number
+%Email: \texttt{john@LaTeXTemplates.com}\\ % Email address
+%\end{minipage}
+%
+
+\vspace{1cm} % A bit of extra whitespace between the header and poster content
+
+%----------------------------------------------------------------------------------------
+
+\begin{multicols}{2} % This is how many columns your poster will be broken into, a poster with many figures may benefit from less columns whereas a text-heavy poster benefits from more
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+
+
+\large
+
+\color{Navy} % Navy color for the abstract
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\color{SaddleBrown} % SaddleBrown color for the introduction
+
+\section{Motivation}
+
+\begin{enumerate}
+  \item Applies Vocal Tract Length Perturbation (VTLP) to diversify the
+    training database \cite{n_jaitly_icml_workshop_2013_00}.
+  \item Resynthesizes VTLP-processed waveforms before performing feature extraction.
+    \begin{itemize}
+        \item We can apply the acoustic simulator after performing the VTLP
+          processing.
+        \item We may use a different window length for the frequency warping from
+          the one used in feature processing for performance optimization.
+    \end{itemize}
+\end{enumerate}
+
+
+\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
+  \section{Maximization of Distribution Uniformity}
+
+\begin{Figure}
+  \begin{center}
+    {
+      \includegraphics[width=170mm]{mel_filterbank_energy_histogram}
+      \label{fig:mel_filterbank_energy_histogram}
+    }   
+    \\  
+    {
+      \includegraphics[width=170mm]{power_function_based_mud_output_histogram}
+      \label{fig:power_function_based_mud_output_histogram}
+    }   
+  \vspace{-2mm}
+    \\  
+    {
+      \includegraphics[width=170mm]{histogram_based_mud_output_histogram}
+      \label{fig:histogram_based_mud_output_histogram}
+    }   
+  \vspace{-2mm}
+    \captionof{figure} {
+      The Probability Density Functions for the third filterbank channel
+       of (a): the mel filterbank energy $p[m, l], l = 3$ in  
+       \eqref{eq:mel_filterbank_energy}, (b): the power-function based MUD 
+      output of this mel filterbank energy in \eqref{eq:power_mud}, (c) 
+      the histogram based-MUD in \eqref{eq:histogram_mud}. 
+      \label{fig:pdf_mud}
+    }   
+   \vspace{-7mm}
+  \end{center}
+\end{Figure}
+
+
+
+%\begin{center}
+%  \includegraphics[width=0.2\linewidth]{power_function_based_mud_output_histogram}
+
+%\captionof{figure}{
+%  \label{fig:bilinear_transform}
+%      The relation between the input frequency and the
+%      warped frequency using the bilinear transformation
+%      \eqref{eq:bilinear_transformation}.}
+%
+%\end{center}
+
+%\item \textbf{IFFT and OverLap Addition (OLA)} Re-synthesize the waveform.
+%\end{enumerate}
+
+%\begin{figure}%[!tbp]
+%\end{figure}
+
+
+\section{End-to-End Speech recognition}
+
+\begin{minipage}{1.0\linewidth}
+  {
+    \normalsize
+  \begin{center}
+  \resizebox{180mm}{!}{\input{../figures/e2e_asr_block_diagram_poster.tex}}
+  \end{center}
+\captionof{figure}{ 
+  The structure of the entire end-to-end speech recognition system.}
+  }
+\end{minipage}
+
+
+  We used the RETURNN speech recognition system
+  \cite{a_zeyer_interspeech_2018_00} with various modifications:
+    \begin{itemize}
+      \item{Gradient clipping and learning-late warm-up.}
+      \item{Power-mel feature} Motivated by the power-law nonlinearity of ($(\cdot)^{\frac{1}{15}}$) in PNCC \cite{C_Kim_IEEETran_2016_1}.
+      \item{Modified shallow fusion with a Transformer LM}
+
+
+        \begin{align}
+  y_{0:L}^{*} = & \argmax_{y_{0:L}} \sum_{l=0}^{L-1} \Big[ \log P \left(y_l
+  |\vec{x}[0:M], y_{0:l} \right)
+  \nonumber \\
+                           & \qquad - \lambda_p \log P(y_l)
+                           + \lambda_{\text{lm}} \log P \left(y_l   |y_{0:l} \right)  \Big],
+                           \label{eq:lm_fusion}
+\end{align}
+
+
+
+    \end{itemize}
+
+
+
+%----------------------------------------------------------------------------------------
+%	OBJECTIVES
+%----------------------------------------------------------------------------------------
+
+
+
+%----------------------------------------------------------------------------------------
+%	MATERIALS AND METHODS
+%----------------------------------------------------------------------------------------
+
+\section{Experimental Results}
+\begin{itemize}
+  \item For training, we used { \bf the Librispeech train-clean and
+    train-other}.
+  \item For evaluation, we used { \bf the test-clean and test-other of this Libri
+    Speech database. }
+\end{itemize}
+
+
+\begin{minipage}[b]{1.0\linewidth}
+  %\begin{table*}[!htbp]
+  \renewcommand{\arraystretch}{1.3}
+  \centering
+      \captionof{table}{\label{tbl:result}
+      Word Error Rates (WERs) obtained with MFCC, Power Mel filterbank
+      coefficients,  power function-based MUD processing, and
+      histogram-based MUD Processing on the LibriSpeech corpus
+      \cite{v_panayotov_icassp_2015_00}. 
+      }
+      %\vspace{-3mm}
+      \begin{tabular}{| c | c  || c | c | c | c |}
+        \hline
+        \multicolumn{2}{| l ||}{Neural Network Structure}
+                               & \specialcell{MFCC}
+                               & \specialcell{$ ( \cdot ) ^ {\frac{1}{15}}$}
+                               & \specialcell{Power Function- \\ Based MUD}
+                               & \specialcell{Histogram- \\ Based MUD}   \\
+        \hline \hline
+        \multirow{3}{*}{\specialcell{1024 cell \\ ULSTM \\ MoCha}}
+                & test-clean  &   7.09  \% & \textcolor{blue}{\textbf{ 7.04 }} \%   &   7.10 \%  &  7.13 \%  \\
+                & test-other  &  20.60  \% & 19.76 \%
+                &  \textcolor{blue}{\textbf{19.64}} \%  & 20.03 \%  \\
+                & average     &  13.85  \% & 13.40 \%
+                &  \textcolor{blue}{\textbf{13.37}} \%  & 13.58 \%  \\
+        \hline \hline
+
+
+            \multirow{3}{*}{\specialcell{1536 cell \\ BLSTM \\ Full-Attention}}
+                & test-clean  &   4.06  \% & \textcolor{blue}{\textbf{3.94}} \%   &   4.02 \%  &  4.11 \%  \\
+                & test-other  &  13.97  \% & 13.56 \%
+                & \textcolor{blue}{\textbf{13.34}} \%  & 14.10 \%  \\
+                & average     &   9.02  \% &  8.75 \%
+                & \textcolor{blue}{\textbf{8.68}} \%  &  9.11 \%  \\
+        \hline
+     \end{tabular}
+     \vspace{-4mm}
+\end{minipage}
+ %----------------------------------------------------------------------------------------
+%	REFERENCES
+%----------------------------------------------------------------------------------------
+
+%\nocite{*} % Print all references regardless of whether they were cited in the poster or not
+%\bibliographystyle{plain} % Plain referencing style
+%\bibliography{sample} % Use the example bibliography file sample.bib
+
+%
+\color{SaddleBrown} % SaddleBrown color for the introduction
+\section{Conclusions}
+%
+{ \color{red}
+We achieved 2.44 \% WER and 8.29 \% WER
+  on the Librispeech {\it test-clean} and {\it test-other} databases.
+To the best of our knowledge, the 2.44 \% WER on the {\it test-clean}
+is the best result ever reported on this database
+}
+%
+%
+\begin{enumerate}
+  \item Applies Vocal Tract Length Perturbation (VTLP) to diversify the
+    training database. \cite{n_jaitly_icml_workshop_2013_00}
+  \item Resynthesizes VTLP-processed waveforms before performing feature extraction.
+    \begin{itemize}
+        \item We can apply the acoustic simulator after performing the VTLP
+          processing.
+        \item We may use a different window length (50 {\it ms}) for the frequency warping from
+          the one used in feature processing (25 {\it ms}).
+    \end{itemize}
+  \item Applies the power-mel feature.
+  \item Applies a modified shallow-fusion with a Transformer LM.
+\end{enumerate}
+\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
+%----------------------------------------------------------------------------------------
+\bibliographystyle{IEEEtran}
+\bibliography{../../common_bib_file/common_bib_file}
+\end{multicols}
+\end{document}

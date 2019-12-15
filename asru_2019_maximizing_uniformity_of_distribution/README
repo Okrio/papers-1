@@ -1,0 +1,22 @@
+The following is my personal journal template. 
+It is using the IEEE template, which is avaialbe at
+http://www.ieee.org/publications_standards/publications/authors/author_templates.html
+
+1. Directory Structure
+The directory structue is as folllows:
+
+doc
+figures
+program
+
+2. Bibliograpy
+
+It does not include the bibliography directory, because it is assumed
+that different paper templates share one common bibliography file.
+
+3. History
+
+Created:
+            Dec. 27th, 2013 by Chanwoo Kim.
+Modified: 
+            Oct. 9th, 2018 by Chanwoo Kim.

@@ -1,0 +1,40 @@
+Summary:
+We would like to thank all the reviewers for sparing time out of their busy schedule to provide very useful comments on our paper. The major novelty of this paper is that we proposed a new way of deriving a suitable compressive nonlinearty from the data themselves. In case of the previous power-law nonlinearty of 1/15, it was obtained by curve-fitting from the rate-intensity curve of the human auditory system and additionally by performing speech recognition experiments with various power coefficients to find out the best value. These steps require a lot of time for obtaining the best power-coefficient. Because of this problem, we couldn’t fine tune the power coefficient for each filter bank channel when we first presented this work in our previous PNCC paper in 2012 and in 2016. In this new MUD approach, we  obtain suitable coefficients for each filterbank channel “without” actually running speech recognition experiments. This is a huge benefit compared to the previous hand-crafted fine tuning. In addition, we believe that this approach can be extended to other domains like vision. The  previous power coefficient of 1/15 was already hand-optimized by performing experiments with  different parameters. This it is quite natural that the additional improvement over this previous optimized system with a power coefficient of 1/15 is relatively small. However, the major importance of this work is that we proposed a new way of designing the compressive nonlinearity from data themselves, and this approach is much more flexible and may be extended to other domains as well. 
+
+To the reviewer #0D85
+
+
+First, thank you very for carefully reviewing the paper. We greatly thank your complimentary ratings and giving very helpful comments.
+We reply to your comments as follows:
+
+1. About using an external LM.
+We recently performed an experiment using a Transformer LM with a shallow-fusion technique. This approach showed around 30 % additional relative improvement in Word Error Rate (WER).  If this paper is accepted, we will include this result as well.
+
+2. About performance improvement over the power-law nonlinearty of 1/15.
+It is indeed true that the additional improvement over the previous power coefficient of 1/15 is not  large. However, as mentioned in the summary part of this rebuttal, the importance of this work is that we suggested a completely new way of obtaining the compressive non-linearity. Unlike our previous PNCC paper, we didn’t need to conduct speech recognition experiments with different power-law coefficients to obtain the optimal coefficient. This is a huge benefit compared to the previous hand-crafted fine tuning. In addition, we believe that this approach can be extended to other domains like vision. The  previous power coefficient of 1/15 was already hand-optimized by performing experiments with  different parameters. This it is quite natural that the additional improvement over this previous optimized system with a power coefficient of 1/15 is relatively small. When we come up with the power coefficient of 1/15, we couldn’t optimize the power coefficient for different filter bank channel, since it will take too much time for doing such an experiment. In the new MUD approach, we could easily optimize power coefficient for different filterbank channel very easily using a new criterion. In the future, we believe that this algorithm can be applied to other domains (such as vision) as well.
+
+3. The meaning of “easier”
+If the features are difficult to learn, parameter convergence usually becomes more difficult due to the erratic error function surface. In this case, we usually have hard time in fine-tuning learning rates and hyper parameters to obtain converged parameters. In this paper, “easier” means that the neural network may be trained well without too much fine-tuning because of the well-behaved feature distribution and the error surface.
+
+Again, thank you and we really appreciate your complimentary remarks!
+
+
+To the reviewer #0c9#
+
+First, thank you very much for carefully reviewing the paper. We greatly appreciate your review comments. If this paper is accepted, we will include experimental results obtained using 10,000-hr Bixby training set.
+Thank you very much for your complimentary review!
+
+To the reviewer #0DF3.
+
+First, thank you very much for carefully reviewing the paper. We greatly appreciate your review comments. Thank you for mentioning the Spec-Augment paper. We checked that spec-Augment shows better performance. Once this paper is accepted, we will modify the content mentioning that this is the best result without using data-augmentation. After submitting this work, we could reduce WER  relatively by 30% by using a transformer LM.
+
+To the reviewer #0D3A
+
+First, thank you very for carefully reviewing the paper. We greatly thank your complimentary ratings and giving very helpful comments.
+We reply to your comments as follows:
+
+1. About performance improvement over the power-law nonlinearty of 1/15.
+It is indeed true that the additional improvement over the previous power coefficient of 1/15 is not  large. However, as mentioned in the summary part of this rebuttal, the importance of this work is that we suggested a completely new way of obtaining the compressive non-linearity. Unlike our previous PNCC paper, we didn’t need to conduct speech recognition experiments with different power-law coefficients to obtain the optimal coefficient. This is a huge benefit compared to the previous hand-crafted fine tuning. In addition, we believe that this approach can be extended to other domains like vision. The  previous power coefficient of 1/15 was already hand-optimized by performing experiments with  different parameters. This it is quite natural that the additional improvement over this previous optimized system with a power coefficient of 1/15 is relatively small. When we come up with the power coefficient of 1/15, we couldn’t optimize the power coefficient for different filter bank channel, since it will take too much time for doing such an experiment. In the new MUD approach, we could easily optimize power coefficient for different filterbank channel very easily using a new criterion. In the future, we believe that this algorithm can be applied to other domains (such as vision) as well.
+
+2. About the statistical significance of the improvement over the previous power-law coefficient of 1/15.
+ For the Libri speech test-other, we checked that the WER difference is statistically significant.
