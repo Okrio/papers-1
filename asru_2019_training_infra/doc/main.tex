@@ -1,0 +1,858 @@
+% Template for ICASSP-2019 paper; to be used with:
+%          spconf.sty  - ICASSP/ICIP LaTeX style file, and
+%          IEEEbib.bst - IEEE bibliography style file.
+% --------------------------------------------------------------------------
+\documentclass{article}
+
+\usepackage{spconf}
+\usepackage{amsmath,graphicx}
+\usepackage{amssymb,amsmath,bm}
+\usepackage{textcomp}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{subcaption}
+\usepackage[justification=centering]{caption}
+%\usepackage[caption = false]{subfig}
+
+% Custom settings
+\usepackage{tikz,placeins}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\large]
+
+\graphicspath{{../figures/}}
+
+
+\newcommand{\specialcell}[2][c]{%
+     \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\newcommand{\chanwcom}{{C. Kim}}
+\renewcommand{\topfraction}{1.0}
+\renewcommand{\bottomfraction}{1.0}
+\renewcommand{\textfraction}{0.01}
+\renewcommand{\floatpagefraction}{1.0}
+\renewcommand{\dbltopfraction}{1.0}
+\renewcommand{\floatpagefraction}{1.0}  % require fuller float pages
+\renewcommand{\dblfloatpagefraction}{1.0} % require fuller float pages
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+% Example definitions.
+% --------------------
+\def\x{{\mathbf x}}
+\def\L{{\cal L}}
+
+% Title.
+% ------
+\title{End-to-end Training of a Large Vocabulary \\ End-to-end Speech Recognition System}
+%
+% Single address.
+% ---------------
+\name{Chanwoo Kim, Sungsoo Kim, Kwangyoun Kim, Mehul Kumar,  Jiyeon Kim,
+Kyungmin Lee, Changwoo Han, 
+\thanks{Thanks to Samsung
+Electronics for funding this research. The authors are thankful to  
+Executive Vice President Seunghwan Cho, Ravichander Vipperla, Nicholas Lane,
+and members of Speech Processing Lab
+ at Samsung Research.}
+}
+\secondlinename{Abhinav Garg, Eunhyang Kim,  Minkyoo Shin, Shatrughan Singh,
+Larry Heck, Dhananjaya Gowda}
+
+\address{Samsung Research \\
+{\small \tt \{chanw.com, ss216.kim, ky85.kim, mehul3.kumar, jstacey7.kim,
+k.m.lee, cw1105.han} \\ \small \tt {abhinav.garg, sc.ehkim.jin, mk0211.shin, shatrughan.s,
+larry.h, d.gowda\}@samsung.com }}
+
+%
+% For example:
+% ------------
+%\address{School\\
+%	Department\\
+%	Address}
+%
+% Two addresses (uncomment and modify for two-address case).
+% ----------------------------------------------------------
+%\twoauthors
+%  {A. Author-one, B. Author-two\sthanks{Thanks to XYZ agency for funding.}}
+%	{School A-B\\
+%	Department A-B\\
+%	Address A-B}
+%  {C. Author-three, D. Author-four\sthanks{The fourth author performed the work
+%	while at ...}}
+%	{School C-D\\
+%	Department C-D\\
+%	Address C-D}
+%
+\begin{document}
+\ninept
+%
+\maketitle
+%
+\begin{abstract}
+In this paper, we present an end-to-end training framework for 
+building state-of-the-art end-to-end speech recognition systems.
+Our training system utilizes a cluster of Central Processing Units 
+  (CPUs) and Graphics Processing Units (GPUs).
+The entire data reading, large scale data augmentation,
+neural network parameter updates are all performed ``on-the-fly". 
+  We use vocal tract length perturbation \cite{c_kim_interspeech_2019_00} 
+  and an acoustic simulator \cite{c_kim_interspeech_2017_00}
+for data augmentation. The processed features and labels are sent 
+to the GPU cluster. The Horovod {\tt allreduce} approach is employed to train
+neural network parameters.
+We evaluated the effectiveness of our system on the standard 
+Librispeech corpus \cite{v_panayotov_icassp_2015_00} and 
+  the 10,000-hr anonymized Bixby English dataset. 
+Our end-to-end speech
+recognition system built using this training infrastructure showed 
+  a 2.44 \% WER on {\tt test-clean} of the LibriSpeech test set 
+ after applying shallow fusion with a Transformer language model (LM).
+ For the proprietary English Bixby open domain test set,
+we obtained a WER of 7.92 \% using 
+a Bidirectional Full Attention (BFA) end-to-end model after applying shallow fusion with an RNN-LM.
+When the monotonic chunckwise attention (MoCha) based approach is employed for 
+streaming speech recognition, we obtained a WER of 9.95 \% 
+  on the same Bixby open domain test set.
+\end{abstract}
+%
+%\begin{keywords}
+  \noindent{\bf Index Terms}: end-to-end speech recognition,
+distributed training, example server, data augmentation, acoustic simulation
+%\end{keywords}
+%
+%
+\section{Introduction}
+In recent years, deep learning techniques have significantly 
+improved speech recognition accuracy \cite{Seltzer2013DNNAurora4, 
+Yu2013FeatureLearningDNN, V_Vanhoucke_Deep_Learning_NIPS_Workshop_2011,
+G_Hinton_IEEE_Signal_Process_Mag_2012,
+T_Sainath_IEEETran_2017_1}.
+This improvement has come about from the shift from Gaussian Mixture Model
+(GMM) to the Feed-Forward Deep Neural Networks (FF-DNNs), FF-DNNs
+to Recurrent Neural Network (RNN) and in particular the Long Short-Term Memory
+(LSTM) networks \cite{S_Hochreiter_neural_computation_1997_00}. 
+Thanks to these advances, voice assistant devices such as Google Home
+\cite{c_kim_interspeech_2017_00, B_Li_INTERSPEECH_2017_1}
+, Amazon Alexa or Samsung Bixby \cite{samsung_bixby} are being used at 
+many homes and on personal devices. 
+
+Recently there has been increasing interest in switching
+from the conventional Weighted Finite State Transducer (WFST)
+based decoder using an Acoustic Model (AM) and a Language Model (LM)
+to a complete end-to-end all-neural speech recognition systems 
+\cite{w_chan_icassp_2016_00, r_prabhavalkar_interspeech_2017_00, 
+j_chorowski_nips_2015_00}. 
+These complete end-to-end systems have started surpassing the performance of
+the conventional WFST-based decoders with a very large training 
+database \cite{c_chiu_icassp_2018_00}, a better choice of target unit 
+such as Byte Pair Encoded (BPE) subword units, and an improved 
+training methodology such as Minimum
+Word Error Rate (MWER) training \cite{r_Prabhavalkar_icassp_2018_00}.
+
+Another important aspect in building high-performance 
+speech recognition systems is the amount
+and the coverage of the training data.
+To build high performance speech recognition systems for
+conversational speech, we need to use
+a large amount of speech data covering various domains
+\cite{a_narayanan_slt_2018_00}. In \cite{h_soltau_interspeech_2017_00}, 
+it has been shown that we need a very large training set ($\sim$125,000 hours of 
+semi-supervised speech data) to achieve
+high speech recognition accuracy for difficult tasks like 
+video captioning. To train neural networks using such large 
+amounts of speech data, we usually need 
+multiple Central Processing Units (CPUs) or Graphics
+Processing Units (GPUs)
+\cite{E_Variani_INTERSPEECH_2017_01, p_goyal_arxiv_2018_00}.
+
+With widespread adoption of voice assistant speakers, far-field
+speech recognition has become very important.
+In far-field speech recognition, the impacts of reverberation and noise 
+are much larger than those in near-field cases. 
+Traditional approaches to far-field
+speech recognition include noise robust feature extraction algorithms
+\cite{C_Kim_IEEETran_2016_1, U_H_Yapanel_SpeechComm_2008, c_kim_interspeech_2014_00},
+or multi-microphone approaches
+\cite{T_Nekatani_ICASSP_2017_1, T_Higuchi_ICASSP_2016_1,
+H_Erdogan_INTERSPEECH_2016_1,
+C_Kim_INTERSPEECH_2010_1, C_Kim_ICASSP_2012_2, C_Kim_INTERSPEECH_2015_1, c_kim_icassp_2018_01}.
+More recently, approaches using data augmentation
+has been gaining popularity for far-field speech recognition
+\cite{R_Lippmann_icassp_1987_1,
+c_kim_icassp_2018_00, w_hartmann_interspeech_2016_00, 
+s_park_interspeech_2019_00, C_Kim_ASRU_2009_2}. 
+An ``acoustic simulator"  
+\cite{c_kim_interspeech_2017_00, c_kim_interspeech_2018_00}
+is used to generate simulated speech utterances for
+millions of different room dimensions, a wide distribution
+of reverberation time and signal-to-noise ratio. In a similar 
+spirit, Vocal Tract Length Perturbation (VTLP) has been proposed 
+\cite{n_jaitly_icml_workshop_2013_00} to tackle the speaker variability issue.
+As shown in our recent paper \cite{c_kim_interspeech_2019_00}, 
+VTLP is especially useful when
+the speaker variability in the training database is not sufficient. 
+For these kinds of data augmentation, processing on CPUs is more
+desirable than processing on GPUs. Due to this, we have proposed
+an end-to-end training approach using Example Servers (ES)
+ and workers. Example servers are typically run on the CPU
+cluster performing data reading, data augmentation, and feature extraction
+\cite{E_Variani_INTERSPEECH_2017_01, c_kim_interspeech_2018_00}.
+%
+%
+%
+\begin{figure*}[!tbp]
+  \begin{center}
+    \resizebox{\textwidth}{!}{\input{../figures/end_to_end_training_system.tex}}
+      \caption { The Samsung Research end-to-end training framework for building an end-to-end
+	speech recognition system with multi CPU-GPU clusters and on-the-fly data
+	processing and augmentation pipeline.
+     }   
+     \label{fig:end_to_end_training_system}
+  \end{center}
+\vspace{-5mm}
+\end{figure*}
+%
+%
+%
+In this paper, we describe the structure of our end-to-end training system
+to train an end-to-end speech recognition system. This training system
+has several advantages over previous systems described in
+\cite{c_kim_interspeech_2018_00}. First, instead of using the {\tt QueueRunner},
+we use a more efficient data queue using {\tt tf.data} in Tensorflow 
+\cite{m_abadi_usenix_2016}.  Second, instead
+of pre-calculating information about room configurations and 
+room impulse responses in the acoustic simulator, these are
+calculated {\it on-the-fly}. Thus, the entire training system runs 
+{\it on-the-fly}. Additionally, instead of using the parameter server-worker
+structure, we use an {\tt allreduce} approach implemented in the Horovod
+\cite{a_sergeev_arxiv_2018_00} distributed training framework, which
+has been shown to be more efficient. The system described in 
+\cite{E_Variani_INTERSPEECH_2017_01}, is designed
+to train the acoustic model part of the speech recognition system where
+as our training system trains the complete end-to-end speech recognition system.
+
+The rest of the paper is organized as follows: We describe the entire
+training system structure in detail in Sec. \ref{sec:training_cpu_gpu}.
+The structure of the end-to-end speech recognition system 
+is described in Sec. \ref{sec:end_to_end_speech_recognition}. 
+Experimental results that demonstrates the effectiveness of our speech
+recognition system is presented in Sec. \ref{sec:experimental_results}. 
+We conclude in Sec.  \ref{sec:conclusions}.
+%
+\section{Overall structure of the end-to-end speech recognition}
+\label{sec:training_cpu_gpu}
+\vspace{-1mm}
+
+In this section, we describe the overall structure of our 
+end-to-end training system.  Fig. \ref{fig:end_to_end_training_system}
+shows how the entire system is structured. Our system consists
+of a cluster of CPUs and a cluster of GPUs. Each GPU node of 
+the GPU cluster has eight Nvidia\texttrademark P-40, P-100 or V-100 GPUs and two 
+Intel E5-2690 v4 CPUs. Each of these CPUs has 14 cores.
+The large box on the left hand side of Fig. \ref{fig:end_to_end_training_system}
+denoted ``GPU cluster'' shows a typical GPU node with $N$ GPUs.
+The large box on the right shows a ``CPU cluster'' of $M$ CPUs,
+each running an independent data pipeline. 
+
+\vspace{-1mm}
+\subsection{Training job launch}
+The main process of the training system runs on one of CPU cores 
+of the GPU cluster. This CPU portion of the GPU node is represented
+as a box in the right hand side of the GPU node box.
+When the training job starts, this main training process launches
+multiple example server jobs on the CPU cluster using the 
+{\tt IBM Platform LSF} \cite{ibm_spectrum_lsf_2010}. In Fig. 
+\ref{fig:end_to_end_training_system}, this launching process is represented
+by a dashed arrow from the CPU portion of the GPU node to the 
+CPU cluster. 
+
+
+\subsection{Data reading using an example queue}
+In the CPU cluster, each CPU runs one example server
+which reads speech utterance and transcript data from sharded 
+{\tt TFRecords} defined in Tensorflow \cite{m_abadi_usenix_2016}.
+The TFRecord format is a simple format in Tensorflow for storing 
+a sequence of binary records. To support efficient reading using 
+multiple CPUs, we use sharded {\tt TFRecords}.
+
+To read large-scale data efficiently in parallel, we use an example queue
+shown in the left side of Fig. \ref{fig:end_to_end_training_system}.  
+The original speech waveform data, transcripts, and meta data are stored
+in sharded {\tt TFRecords}. The data pipeline is implemented using
+{\tt tf.data} in Tensorflow \cite{m_abadi_usenix_2016}, 
+and contains the data augmentation and feature extraction blocks.
+These {\tt tf.data} APIs are efficient in building complex pipelines
+by applying a series of elementary operations. We perform data interleaving
+and parallel reading using {\tt tf.contrib.data.parallel\_interleave}, 
+shuffling using {\tt tf.data.Datatset.shuffle}, and padding using 
+{\tt tf.data.Dataset.padded\_batch}.
+
+
+\subsection{Data augmentation and feature extraction}
+\label{sec:feature_extraction}
+To improve robustness against speaker variability, we apply an
+on-the-fly VTLP algorithm on the input waveform
+\cite{c_kim_interspeech_2019_00}. The warping
+factor is generated randomly for each input utterance. Unlike
+conventional VTLP approaches in \cite{n_jaitly_icml_workshop_2013_00,   
+x_cui_taslp_2015_00}, we resynthesize the processed
+speech. The purpose of doing this is to apply VTLP before applying
+the acoustic simulator to the input waveform.  This is quite 
+natural that data augmentation to model speaker variability 
+should be performed before the data augmentation to model
+acoustic variability.
+One more advantage is that this
+resynthesis approach enables us to use a window length 
+optimal for VTLP different from that used in feature processing.
+We apply a blinear transformation \cite{p_zhan_cmu_tech_report_1997_00} 
+to perform frequency warping
+to model speaker variability due to the difference in the vocal tract length.
+In the bilinear transformation, the relation between the input
+and output discrete-time frequencies is given by: 
+\begin{align}
+  \omega_k'  = \omega_k + 2 \tan^{-1} \left(
+                    \frac{ \left(1 - \alpha \right) \sin(\omega_k)} 
+              {1 - (1 - \alpha) \cos(\omega_k) } \right)
+                            \label{eq:bilinear_transformation}.
+\end{align}
+where $\omega_k = \frac{2 \pi k}{K}$ is the input discrete-time frequency
+, $\omega_k' = \frac{2 \pi k'}{K}$ is the output discrete-time frequency, and
+  $K$ is the DFT size. 
+More details about our VTLP algorithm is described 
+in detail in \cite{c_kim_interspeech_2019_00}.
+The acoustic simulator in Fig.~\ref{fig:end_to_end_training_system}
+is similar to what we described in 
+\cite{c_kim_interspeech_2017_00, c_kim_interspeech_2018_00}.
+One difference compared to our previous one in 
+\cite{c_kim_interspeech_2017_00} is that we do not pre-calculate
+room impulse responses, but instead they are calculated on-the-fly.
+For feature processing we use {\tt tf.data.Dataset.map} API. 
+Instead of using the more conventional log-mel or 
+MFCC features, we use the power mel filterbank energies,
+since it shows slightly better performance \cite{c_kim_interspeech_2019_00,
+c_kim_asru_2019_00}. Motivated by our previous research of
+using power-law nonlinearity with a power coefficient between 
+$\frac{1}{15}$ \cite{C_Kim_ICASSP_2010_1, C_Kim_ICASSP_2012_1, C_Kim_PhDThesis_2010} and 
+$\frac{1}{10}$ \cite{C_Kim_INTERSPEECH_2009_2}, we apply the 
+power-law nonlinearity of $(\cdot)^{\frac{1}{15}}$ to the mel filterbank 
+coefficients. We refer to this feature as {\it power-mel filterbank
+coefficients}.
+
+\begin{figure}[tbp]
+  \begin{center}
+    \resizebox{80mm}{!}{\input{../figures/e2e_asr_block_diagram}}
+      \caption {  The structure of the entire end-to-end
+      speech recognition system. 
+      %The LSTMs
+      %in the encoder layers may be either bidirectional-LSTMs or
+      %unidirectional-LSTMs. The attention may be either the full
+      %attention or the MOnotonic CHunkwise Attention (MoCha)
+      %\cite{c_chiu_iclr_2018_00}.
+     }
+     \label{fig:entire_diagram}
+  \end{center}
+\vspace{-5mm}
+\end{figure}
+
+\subsection{Parameter calculation and update}
+\label{sec:parameter_update}
+The features and the target labels are sent to the GPU cluster
+using the ZeroMQ \cite{zero_mq} asynchronous messaging queue.
+Each {\it example server } sends these data asynchronously to the CPU portion
+of the GPU node as shown in Fig \ref{fig:end_to_end_training_system}.
+Using these data, neural network parameters are calculated and updated 
+using an Adam optimizer and the
+Horovod \cite{a_sergeev_arxiv_2018_00} {\tt allreduce} approach.
+
+Fig. \ref{fig:plot_example_server_performance} shows how many CPUs
+in the {\it  example server } per GPU are required to provide sufficient 
+data to the GPU cluster. In this experiment, we used a 10,000-hr
+anonymized {\texttt Bixby} English training set. 
+We trained a streaming end-to-end model using the Monotonic CHunkwise
+Attention (MoCha) algorithm \cite{c_chiu_iclr_2018_00}. The details
+about our MoCha implemention are discussed in \cite{k_kim_asru_2019_00}.
+In the {\it  example server}, we ran the
+VTLP data augmentation \cite{c_kim_interspeech_2019_00}, 
+{\it acoustic simulator} \cite{c_kim_interspeech_2017_00} and 
+feature extraction modules shown in Fig. \ref{fig:entire_diagram}.
+In this experiment, we used four Nvidia\texttrademark V-100 GPUs with 32-GB
+memory in the 
+GPU cluster. Fig. \ref{fig:plot_example_server_time} shows how much
+time is required to finish one epoch of training. When data augmentation
+is not applied, 65.6-hours were required to finish one epoch of training.
+Fig. \ref{fig:plot_example_server_time} shows us that three CPUs per GPU 
+(total 12 CPUs for 4 GPUs) are required to obtain a comparable throughput. 
+If we use four or five CPUs per GPU, as shown in Fig.
+\ref{fig:plot_example_server_time}, the training is even slightly 
+faster than the case without the {\it  example-server}-based data-augmentation.
+We think that this happened because of more efficient data processing
+with the {\it example server}. When we do not perform data augmentation
+using {\it example servers}, feature extraction and data reading are performed
+on a limited numbers of CPUs inside the GPU cluster, which might add some
+latency during the training. 
+Thus, it is possible that the training with data augmentation
+using {\it example servers} may be even slightly faster than the 
+baseline case without data-augmentation using {\it example servers}.
+
+Fig. \ref{fig:plot_gpu_time_percentage} shows the portion of the time
+used for{\tt Tensorflow } computation. This portion of time is defined
+by:
+\begin{align}
+  t_{\text{session}} =  \frac{\text{Time Spent in {\tt Tensorflow}
+  Session}}{\text{Elapsed Time}}.
+  \label{eq:session_time_portion}
+\end{align}
+If GPUs in the GPU cluster are not given sufficient amount 
+of data, these GPUs will remain idle. Thus, $t_{\text{session}}$ in
+\eqref{eq:session_time_portion} is a good indicator to 
+see whether the {\it example server } 
+provides sufficient 
+amount of processed features. From this figure, we may conclude that
+three $\sim$ four CPUs per GPU (total 12 $\sim$ 16 CPUs for 4 GPUs) 
+are required to keep GPUs busy enough. In our experiments using
+the 10,000-hr Bixby training set in Sec. \ref{sec:experimental_results},
+we used 8 GPUs and 40 CPUs (5 CPUs per GPU) during the training.
+
+\begin{figure}
+  \captionsetup[subfigure]{justification=centering}
+    \centering
+    \begin{subfigure}[5]{0.5\textwidth}
+      {\includegraphics[width=80mm]{../figures/plot_example_server_time}}
+      \caption{
+          \label{fig:plot_example_server_time}
+      }
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.5\textwidth} 
+      {\includegraphics[width=80mm]{../figures/plot_gpu_time_percentage}}
+    \caption{
+      \label{fig:plot_gpu_time_percentage}
+    }
+    \end{subfigure}
+  \caption{\label{fig:plot_example_server_performance}
+  The efficiency of the {\it example server} with respect to
+  the number of CPUs per GPU: (a) The required time to 
+  process a single epoch during the training phase and (b) 
+  the percentage of {\tt Tensorflow } computation time defined by 
+  \eqref{eq:session_time_portion}. 
+  The blue horizontal dotted lines in each figure represent the case
+  when data augmentation with example servers is not employed.
+  }
+\end{figure}
+
+
+\section{Structure of the end-to-end speech recognition system}
+\label{sec:end_to_end_speech_recognition}
+
+
+
+
+We have adopted the RETURNN speech recognition system \cite{p_doetsch_icassp_2017_00,
+a_zeyer_interspeech_2018_00} for training our end-to-end system with various modifications.
+Some of the important modifications are: replacing the input data pipeline with our 
+proposed on-the-fly example server based pipeline with support for VTLP
+and acoustic simulation,
+implementing the Monotonic Chunkwise Attention (MoChA) \cite{c_chiu_iclr_2018_00}
+for online streaming end-to-end speech recognition, minimum Word Error Rate (mWER) 
+training, support for handling Korean language or script, our own scoring and Inverse Text 
+Normalization (ITN) modules, support for power mel filterbank features
+\cite{c_kim_interspeech_2019_00, c_kim_asru_2019_00}, etc. We have tried
+various types of training strategies for better performance
+\cite{d_gowda_interspeech_2019_00, a_garg_asru_2019_00}.
+Our MoCha implementation and optimization are described in very detail in our
+another paper \cite{k_kim_asru_2019_00}.
+
+The structure of our entire end-to-end speech recognition system
+ is shown in Fig.~\ref{fig:entire_diagram}.
+ $\vec{x}[m]$ and $\vec{y}_l$ are the input power mel 
+filterbank energy vector and the output label,
+respectively. $m$ is the input frame index and $l$ is the decoder output
+step index. $\vec{c}_l$ is the context vector calculated 
+as a weighted sum of the encoder hidden state vectors denoted as $\vec{h}^{enc}[m]$.
+The attention weights are computed as a softmax of energies computed as 
+a function of the encoder hidden state $\vec{h}^{enc}[m]$, the decoder hidden state
+$\vec{h}^{dec}_l$, and the attention weight
+feedback $\vec{\beta}_l[m]$  \cite{a_zeyer_interspeech_2018_00}.
+
+In \cite{a_zeyer_interspeech_2018_00}, the peak value of the speech 
+waveform is normalized to be one. However, since finding the peak sample value 
+is not possible for online feature extraction, we do not perform this
+normalization. We modified the input pipeline
+so that the online feature generation can be performed. We disabled the 
+clipping of feature range between -3 and 3, which is the default 
+setting for the Librispeech experiment using MFCC 
+features in \cite{a_zeyer_interspeech_2018_00}. 
+We conducted experiments using both the 
+uni-directional and bi-directional Long Short-Term Memories (LSTMs)
+\cite{S_Hochreiter_neural_computation_1997_00} in the encoder.
+However, only the uni-directional LSTMs are used in the decoder.
+For online speech recognition experiments, we used the
+MoChA models \cite{c_chiu_iclr_2018_00} with a chunk size of 2.
+In MoCha experiments, we used only the uni-directional LSTMs 
+both in the encoder and the decoder to enable streaming recognition.
+ For better stability in LSTM training, we use the gradient clipping by  
+global norm \cite{r_pascanu_icml_2013}, which is implemented as  
+{\tt tf.clip\_by\_global\_norm } API in Tensorflow  \cite{m_abadi_usenix_2016}.
+We use six layers of encoders and one layer of decoder followed by a softmax
+layer.
+
+In performing shallow-fusion with an external LM, our approach is slightly 
+different from the previously known approaches 
+\cite{c_gulcehre_corr_2015_00, s_toshniwal_slt_2018_00} to obtain better 
+performance.
+we used the following equation:
+\begin{align}
+  y_{0:L}^{*} = & \argmax_{y_{0:L}} \sum_{l=0}^{L-1} \Big[ \log P \left(y_l
+  |\vec{x}[0:M], y_{0:l} \right)
+  \nonumber \\
+                           & \qquad - \lambda_p \log P(y_l) 
+                           + \lambda_{\text{lm}} \log P \left(y_l   |y_{0:l} \right)  \Big],
+                           \label{eq:lm_fusion}
+\end{align}
+where we have an additional term $\lambda_p \log P(y_l) $ for subtracting 
+the {\it prior bias} that the model has learned from the training corpus. 
+In \eqref{eq:lm_fusion} $L$ is the 
+length of the output label hypothesis. $\lambda_p$ and $\lambda_{\text{lm}}$ are 
+weights for the prior probability and the LM prediction probability, 
+respectively.
+In \eqref{eq:lm_fusion}, we represented sequences following the Python slice
+notation. For example, $\vec{x}[0:M]$ denotes the sequence of the input acoustic
+features of length $M$, and $y_{0:L}$ is a sequence of output labels  of length $L$.
+%
+%
+%
+%
+\section{Experimental Results}
+\label{sec:experimental_results}
+%
+%
+%
+In this section, we present a summary of experimental results obtained
+with our end-to-end speech recognition systems built using the proposed
+Samsung Research end-to-end training framework.
+%
+For near-field speech recognition experiments, we use the open source 
+Librispeech database \cite{v_panayotov_icassp_2015_00}, as well as our in-house
+{\it Bixby} \cite{samsung_bixby} usage training and test sets for English. 
+The LibriSpeech dataset consists of around 960 hours of training data
+consisting of 281,241 utterances. The evaluation set consists of the 
+official 5.4 hours {\tt test-clean} and 5.1 hours {\tt test-other} data.
+The Bixby training set consists of approximately 10,000 hours of
+anonymized Bixby usage data. The evaluation set consists of around 1,000 
+open domain utterances. As mentioned in Sec. 
+%
+\ref{sec:parameter_update}, we used 8 GPUs in a GPU cluster and 
+40 CPUs in an example server when training the model using the 
+Bixby training set.
+\begin{table}[!tbhp]
+  \renewcommand{\arraystretch}{1.3}
+  \centering
+        \caption{\label{tbl:power_law_result}
+        Word Error Rates (WERs) obtained using MFCC implemented in
+        \cite{b_mcfee_proc_scipy_2015_00} and power mel filterbank coefficients
+        \\ on the Librispeech corpus \cite{v_panayotov_icassp_2015_00}. For
+        each WER number, \\the same experiment was conducted twice and averaged.
+        }
+        %\vspace{-3mm}
+        \begin{tabular}{| c | c  || c | c | c | c |}
+          \hline
+          \multicolumn{2}{| l ||}{Cell Size}
+                                 & \specialcell{MFCC}
+                                 & \specialcell{Power Mel \\ 
+                                 Filterbank \\
+                                 Coefficients} \\
+          \hline
+          \multirow{3}{*}{1536 cell}    
+                  & test-clean  &   4.06  \% &  \textcolor{blue}{\bf 3.94 } \%   \\
+                  & test-other  &  13.97  \% &  \textcolor{blue}{\bf 13.56} \%   \\
+                  & average     &   9.02  \% &  \textcolor{blue}{\bf 8.75 } \%   \\
+          \hline
+       \end{tabular}
+       \vspace{-2mm}
+\end{table}
+%
+%
+\begin{table}[!tbhp]
+  \renewcommand{\arraystretch}{1.3}
+  \centering
+        \caption{\label{tbl:vtlp_result}
+        Word Error Rates (WERs) obtained with VTLP processing
+        with different warping factor $\alpha$ distribution, 
+        and with and without an RNN LM. The warping factor $\alpha$
+			  is the constant controlling warping in \eqref{eq:bilinear_transformation}.
+        }
+        %\vspace{-3mm}
+        \begin{tabular}{| c | c  || c | c | c | c |}
+          \hline
+          \multicolumn{2}{| l ||}{Warping Factor}
+                                 & \specialcell{ 0.7 $\sim$ 1.3 }
+                                 & \specialcell{ 0.8 $\sim$ 1.2 }  
+                                 & \specialcell{ 0.9 $\sim$ 1.1 }   \\
+          \hline \hline
+          \multirow{3}{*}{\specialcell{Without \\ RNN-LM}}
+                  & test-clean  &   3.82  \% &  3.66  \%   &  3.86  \%  \\  
+                  & test-other  &  12.50  \% & 12.39  \%   & 12.35  \%  \\  
+                  & average     &   8.16  \% &  8.03  \%   &  8.11  \%  \\  
+          \hline
+          \multirow{3}{*}{\specialcell{With \\ RNN-LM}}
+                  & test-clean  &   2.93  \% &  \textcolor{blue}{\bf 2.85}  \%   &  2.96  \%  \\  
+                  & test-other  &  10.40  \% & 10.25  \% & \textcolor{blue}{\bf10.13}  \%  \\  
+                  & average     &   6.67  \% &  \textcolor{blue} {\bf 6.55}  \%
+                  &  \textcolor{blue}{\bf 6.55}  \%  \\  
+          \hline
+       \end{tabular}
+       \vspace{-2mm}
+\end{table}
+%
+%
+%
+
+In Table \ref{tbl:power_law_result}, we compare the performance between
+the baseline MFCC and the power-law of $(\cdot)^{\frac{1}{15}}$ features 
+for a Bidirectional Full Attention (BFA) end-to-end model with 
+an LSTM cell size of 1536 on the LibriSpeech database \cite{v_panayotov_icassp_2015_00}. 
+Especially for {\tt test-other}, which
+is a more difficult task, the power mel filterbank coefficients 
+shows better performance than the baseline MFCC. Thus, we use 
+the power-mel filterbank coefficients as the default feature in 
+our end-to-end system. All the following results in this section
+were obtained using the power-mel filterbank coefficients.
+
+In Table \ref{tbl:vtlp_result}, we show Word Error Rates (WERs) on the same
+LibriSpeech corpus for a BFA model using 
+different window sizes and warping coefficient distributions, with and without
+using an external Recurrent Neural Network (RNN) Language Model (LM) 
+\cite{a_zeyer_interspeech_2018_00} built using the standard LibriSpeech LM corpus.
+The best performance was achieved when the window length is 50 {\it ms} and 
+the warping coefficients are uniformly distributed between 0.8 and 1.2.
+We obtained 3.66 \% WER on the {\tt test-clean} database and 12.39 \%
+WER on the {\tt test-other} database without using an LM. 
+Using this shallow-fusion technique 
+  with an RNN-LM, we achieved WERs of 2.85 \% and 10.25 \% 
+  on the Librispeech {\tt test-clean} and {\tt test-other} databases, respectively.
+%
+%
+%
+
+\begin{table}[!htbp]
+  \renewcommand{\arraystretch}{1.3}
+  \centering
+        \caption{\label{tbl:vtlp_result_with_trans_lm}
+        Word Error Rates (WERs) obtained with VTLP processing
+        using shallow-fusion with a Transformer LM with different beam sizes.
+        The window length is 50 ms, and the warping factor distribution is
+        $0.8 \sim 1.2$.
+        }
+        %\vspace{-2mm}
+        \begin{tabular}{| c || c | c | c | c |}
+        %\begin{tabular}{| c || c | c | }
+          \hline
+                                 {Beam Size}
+                                 & \specialcell{ 12 }
+                                 & \specialcell{ 24 }   
+                                 & \specialcell{ 36 }   
+                                 & \specialcell{ 48 }   \\  
+          \hline \hline
+              \specialcell{ $\lambda_p$ \\ $ \lambda_{\text{lm}}$ } &   
+              \specialcell{ 0.005\\ 0.45}  &
+              \specialcell{ 0.004\\ 0.46}  &   
+              \specialcell{ 0.003\\ 0.48}  &   
+              \specialcell{ 0.002\\ 0.48} \\
+              \hline
+    
+              test-clean  &   2.49  \% & 2.45 \%  &  \textcolor{blue}{\bf 2.44 \%} & 2.45 \%  \\  
+              test-other  &   8.76  \% & 8.40 \%  &   8.29 \%
+              & \textcolor{blue}{\bf 8.22
+              \%} \\
+              average     &   5.63  \% & 5.43  \% &   5.37 \%
+              & \textcolor{blue}{\bf 5.34 \%} \\
+          %    test-clean  &   2.55  \% &  2.51 \%   &   2.51 \% & 2.52 \%  \\  
+          %    test-other  &   8.59  \% &  8.42 \%   &   8.33 \% & 8.33 \%  \\  
+          %    average     &   5.57  \% &  5.47  \%  &   5.42 \% & 5.42 \%  \\  
+          \hline
+       \end{tabular}
+       \vspace{-2mm}
+\end{table}
+%
+%
+%
+\begin{figure}
+  \captionsetup[subfigure]{justification=centering}
+    \centering
+    \begin{subfigure}[5]{0.5\textwidth}
+      {\includegraphics[width=75mm]{../figures/plot_farfield_wer_tv}}
+      \caption{
+          \label{fig:tv_noise}
+      }
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.5\textwidth} 
+      {\includegraphics[width=75mm]{../figures/plot_farfield_wer_music}}
+
+    \caption{
+          \label{fig:music_noise}
+    }
+    \end{subfigure}
+
+    \begin{subfigure}[b]{0.5\textwidth} 
+      {\includegraphics[width=75mm]{../figures/plot_farfield_wer_babble}}
+    \caption{
+          \label{fig:babble_noise}
+    }
+    \end{subfigure}
+
+  %\vspace{-6mm}
+ \caption{\label{fig:plot_farfield_wer}
+  Speech recognition accuracy at different Signal-to-Noise Ratios (SNRs)
+  under three different noisy conditions: direct TV noise (a)
+  , music noise (b), and babble noise (c). NBF, VTLP, and AS
+  stand for Neural Beam Former (NBF) \cite{j_heymann_icassp_2016_00}, 
+  Vocal Tract Length Perturbation (VTLP) \cite{c_kim_interspeech_2019_00} , and
+  Acoustics Simulator (AS) \cite{c_kim_interspeech_2017_00,
+  c_kim_interspeech_2018_00},
+  respectively.
+  \vspace{-2mm}
+ }
+\end{figure}
+%
+%
+%
+Table \ref{tbl:vtlp_result_with_trans_lm} shows word error rates on the
+  LibriSpeech testsets obtained 
+  by applying shallow-fusion with a Transformer LM 
+  \cite{a_vaswani_nips_2017_00, c_luscher_arxiv_2019_00} using
+  \eqref{eq:lm_fusion}. As shown in this table, we conducted experiments with
+  different beam sizes, $\lambda_p$ and $\lambda_{\text{lm}}$ parameters in
+  \eqref{eq:lm_fusion}. The best result we obtained using a Transformer LM
+  in Table \ref{tbl:vtlp_result_with_trans_lm} is significantly better than the result we obtained with a LSTM LM in 
+  Table \ref{tbl:vtlp_result}.
+
+  
+
+%
+%
+%
+In Table \ref{tbl:near_field_result}, we summarize our WER results for 
+both the LibriSpeech and Bixby end-to-end ASR models.
+In the case of the Bixby model, we optionally used an external RNN-LM 
+trained using around 65GB of 
+the Bixby LM corpus with an architecture exactly similar to the
+LibriSpeech LM model used in \cite{a_zeyer_interspeech_2018_00}.
+The cell sizes of the LibriSpeech model and the Bixby model 
+in Table \ref{tbl:near_field_result} are 1536 and 1024 respectively.
+For comparison, the best WFST based conventional LSTM-HMM based ASR system
+gives a WER of 8.85\% on the Bixby same open domain test set.
+We can see that our current Bixby end-to-end BFA model is $\sim$10\% better, while
+our MoChA streaming model is $\sim$10\% poorer compared to
+the conventional WFST based DNN-HMM system.
+%
+\begin{table}[!tbhp]
+  \renewcommand{\arraystretch}{1.3}
+  \centering
+        \caption{\label{tbl:near_field_result}
+        Summary of Word Error Rates (WERs) obtained for different
+        LibriSpeech and Bixby near-field end-to-end ASR models 
+        with and without an RNN LM.
+        }
+        %\vspace{-3mm}
+        \begin{tabular}{| c | c  || c | c |}
+          \hline
+          \multicolumn{2}{| l ||}{Models}
+                                 & BFA
+                                 & MoChA \\
+          \hline \hline
+          \multirow{3}{*}{\specialcell{LibriSpeech \\ (1536-cell) \\ test-clean}}
+                  & w/o LM  &   3.66  \% &  6.78  \%  \\  
+                  & RNN-LM  &   2.85  \% &  5.54  \%  \\  
+                  & Transformer LM  &   2.44  \% &   -   \\  
+          \hline
+          \multirow{2}{*}{\specialcell{Bixby \\ (1024-cell) }}
+                  & w/o LM  &   8.25  \% &  10.77  \% \\  
+                  & RNN-LM  &   7.92  \% &   9.95  \% \\  
+          \hline
+       \end{tabular}
+       \vspace{-2mm}
+\end{table}
+%
+%
+The performance of our far-field end-to-end ASR model trained using the proposed
+structure in Fig. \ref{fig:entire_diagram} is shown 
+in Fig. \ref{fig:plot_farfield_wer}. In this experiment, we used
+the same anonymized 10,000 hours of the English Bixby training set.
+The performance of the far-field
+models were evaluated on the English Bixby command test set.
+The Bixby command test set
+include utterancesare sampled from the anonymized Bixby usage log. 
+Examples in this
+test set include ``Set an alarm for tomorrow at 6 a.m", 
+``Tell me remaining time of my timers", ``Play the most latest added 
+song", and so on.
+
+Far-field recording using this Bixby command set was performed
+by playing back utterances using a loud speaker at 5-meter distance 
+in a real room.
+The reverberation time in this
+recording room was measured to be $T_{60}=430 ms$. We used two microphones
+on a prototype {\it Galaxy Home Mini} to record this far-field speech.
+The distance between two microphones is 6.8 cm. We simulated 
+far-field additive noise by playing back three different types of noise using loud speakers.
+In Fig. \ref{fig:tv_noise}, we used a single loud speaker located at 
+1-meter distance from the microphone to simulate direct noise from 
+a television. In Figs. \ref{fig:music_noise} and \ref{fig:babble_noise},
+we used four loud speakers oriented to different directions to simulate
+diffuse noise. On the prototype {\it Galaxy home Mini} device, 
+the two-microphone signals are enhanced using a beamformer 
+based on the Neural Network supported
+Generalized Eigenvalue (NN-GEV) algorithm \cite{j_heymann_icassp_2016_00}. 
+In Fig.  \ref{fig:plot_farfield_wer}, we evaluated speech recognition accuracy
+using three different systems. {\tt NBP+VTLP+AS} denotes a system
+which uses the VTLP system and the acoustic simulator described in this paper for 
+data augmentation in model training, and additionally uses this NN-GEV-based 
+beamformer for signal enhancement. {\it NBF} in this future stands for
+this Neural Beam Former (NBF).  {\tt VTLP+AS} denotes a system employing
+the VTLP system and the acoustic simulator without using this beamformer.
+{\tt baseline} denotes a system which was trained using utterances
+recorded in close-talking environments without any further processing. 
+As can be seen in these figures,
+data augmentation technique significantly enhances speech recognition
+accuracy under the far-field environments. We also observe that
+the data augmentation algorithm described in Sec. \ref{sec:training_cpu_gpu}
+does not harm the clean performance, thus we may use the same 
+data augmentation both for the close-talking and the far-field environments.
+In case of the direct
+TV noise in Fig. \ref{fig:tv_noise} and babble noise in Fig.
+\ref{fig:babble_noise}, we observe that further improvement is 
+achieved by employing a NN-GEV-based beamformer.
+%
+%
+%
+%%
+%
+%
+\section{Conclusions}
+\label{sec:conclusions}
+We presented a new end-to-end training framework and
+ strategies for training 
+state-of-the-art end-to-end speech recognition systems.
+Our training system utilizes a cluster of Central Processing Units 
+  (CPUs) and Graphics Processing Units (GPUs).
+The entire data reading, large scale data augmentation,
+neural network parameter updates are performed on-the-fly
+using example servers and sharded {\tt TFRecords} and {\tt tf.data}. 
+  We use vocal tract length perturbation and an acoustic simulator 
+for data augmentation. Horovod {\tt allreduce} approach is employed 
+to train the neural network parameters using Adam optimizer.
+We evaluated the effectiveness of our system on the standard 
+Librispeech corpus \cite{v_panayotov_icassp_2015_00} and 
+  10,000-hr anonymized Bixby English training 
+ and test sets both in near-field as well as
+far-field scenarios.  
+%\clearpage
+%\newpage
+\bibliographystyle{IEEEtran}
+\bibliography{../../common_bib_file/common_bib_file}
+
+
+\end{document}
