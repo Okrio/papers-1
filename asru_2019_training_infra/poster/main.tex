@@ -1,0 +1,336 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% a0poster Landscape Poster
+% LaTeX Template
+% Version 1.0 (22/06/13)
+%
+% The a0poster class was created by:
+% Gerlinde Kettl and Matthias Weiser (tex@kettl.de)
+% 
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[a0,portrait]{a0poster}
+%\documentclass[a4]{article}
+
+\usepackage{multicol} % This is so we can have multiple columns of text side-by-side
+\columnsep=100pt % This is the amount of white space between the columns in the poster
+\columnseprule=3pt % This is the thickness of the black line between the columns in the poster
+
+\usepackage[svgnames]{xcolor} % Specify colors by their 'svgnames', for a full list of all colors available see here: http://www.latextemplates.com/svgnames-colors
+
+\usepackage{times} % Use the times font
+%\usepackage{palatino} % Uncomment to use the Palatino font
+
+\usepackage{float}
+\usepackage{graphicx} % Required for including images
+\usepackage{booktabs} % Top and bottom rules for table
+\usepackage[export]{adjustbox}
+\usepackage[font=large,labelfont=bf]{caption} % Required for specifying captions to tables and figures
+%\usepackage{tikzpagenodes}
+\usepackage{amsfonts, amsmath, amsthm, amssymb, bm} % For math fonts, symbols and environments
+\usepackage{wrapfig} % Allows wrapping text around tables and figures
+\usepackage{multirow}
+\usepackage[justification=centering]{caption}
+\usepackage[caption = false]{subfig}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+
+\usepackage{tikz,placeins}
+\usetikzlibrary{arrows,decorations.markings}
+\tikzstyle{every picture}+=[font=\rmfamily\it\bfseries\tiny]
+\usetikzlibrary{positioning, shapes}
+%\usepackage{xcolor} %already loaded by tikz
+%
+\pgfdeclarelayer{background}
+\pgfdeclarelayer{foreground}
+\pgfsetlayers{background,main,foreground}
+
+
+\graphicspath{{../figures/}}
+
+\newcommand{\specialcell}[2][c]{%
+     \begin{tabular}[#1]{@{}c@{}}#2\end{tabular}}
+
+\newcommand{\chanwcom}{{C. Kim}}
+
+\newenvironment{Figure}
+  {\par\medskip\noindent\minipage{\linewidth}}
+  {\endminipage\par\medskip}
+
+\begin{document}
+
+%----------------------------------------------------------------------------------------
+%	POSTER HEADER 
+%----------------------------------------------------------------------------------------
+
+% The header is divided into three boxes:
+% The first is 55% wide and houses the title, subtitle, names and university/organization
+% The second is 25% wide and houses contact information
+% The third is 19% wide and houses a logo for your university/organization or a photo of you
+% The widths of these boxes can be easily edited to accommodate your content as you see fit
+
+\begin{minipage}[t]{1.0\linewidth}
+\begin{center}
+  \begin{minipage}[t]{0.1\textwidth}
+    \centering
+    \vspace{0pt}
+    \includegraphics[width=10cm, valign=t]{samsung_research} % Logo or a photo of you, adjust its dimensions here
+  \end{minipage} \hfill
+  \begin{minipage}[t]{0.79\textwidth}
+    \begin{center}
+  \huge \color{NavyBlue} 
+      \textbf{End-to-end Training of a Large Vocabulary \\ End-to-end Speech Recognition System
+      } \\
+      \Large \textbf{
+      Chanwoo Kim, Sungsoo Kim, Kwangyoun Kim, Mehul Kumar,  Jiyeon Kim, \\ 
+      Kyungmin Lee, Changwoo Han, Abhinav Garg, Eunhyang Kim,  \\ 
+      Minkyoo Shin, Shatrughan Singh, Larry Heck, Dhananjaya Gowda
+      }
+  \\
+\Large Samsung Research, Seoul, South Korea\\ % University/organization
+{ \large \tt  \{chanw.com, ss216.kim, ky85.kim, mehul3.kumar, jstacey7.kim,} \\ 
+  \large \tt  {k.m.lee, cw1105.han, abhinav.garg, sc.ehkim.jin,} \\
+  \large \tt  {mk0211.shin, shatrughan.s, larry.h, d.gowda\}@samsung.com }
+    \end{center}
+  \end{minipage}
+  \begin{minipage}[t]{0.1\textwidth}
+    \begin{center}
+    \includegraphics[width=10cm]{samsung_research} % Logo or a photo of you, adjust its dimensions here
+    \end{center}
+  \end{minipage} \hfill
+\end{center}
+\end{minipage}
+%
+%\begin{minipage}[b]{0.25\linewidth}
+%\color{DarkSlateGray}\Large \textbf{Contact Information:}\\
+%Department Name\\ % Address
+%University Name\\
+%123 Broadway, State, Country\\\\
+%Phone: +1 (000) 111 1111\\ % Phone number
+%Email: \texttt{john@LaTeXTemplates.com}\\ % Email address
+%\end{minipage}
+%
+%
+\vspace{-2mm} % A bit of extra whitespace between the header and poster content
+%
+%----------------------------------------------------------------------------------------
+%
+\begin{multicols}{2} % This is how many columns your poster will be broken into, a poster with many figures may benefit from less columns whereas a text-heavy poster benefits from more
+%
+%----------------------------------------------------------------------------------------
+%	ABSTRACT
+%----------------------------------------------------------------------------------------
+%
+%
+\large
+%
+\color{Navy} % Navy color for the abstract
+%
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+%
+\color{SaddleBrown} % SaddleBrown color for the introduction
+%
+\section{Summary}
+%
+\begin{itemize}
+\item Achieves the state of the art speech recognition performance for commercial products using an end-to-end pipeline that performs all of data reading,  large scale data augmentation \cite{c_kim_interspeech_2019_00}, power-mel feature extraction \cite{c_kim_asru_2019_00}, and  distributed neural network parameter updates in an “on-the-fly” way.
+\item Performs Vocal Tract Length Perturbation and Acoustic Simulation \cite{C_Kim_INTERSPEECH_2017_1} on the CPU queue using example servers.
+\item Performs Neural Beamforming \cite{j_heymann_icassp_2016_00} on the device side for further improvement in far-field noisy environments.
+\item Performs experiments both using the on-line MoCha \cite{k_kim_asru_2019_00} and the Bidirectional Full-Attention (BFA) approach.
+\end{itemize}
+%
+%
+\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
+  \section{Overall Structure}
+The overall structure is shown in Fig. \ref{fig:end_to_end_training_system}
+\begin{itemize}
+\item \textbf{Data reading}: Using sharded {\tt TFRecords} and {\tt tf.data}.
+\item \textbf{Data augmentation and feature extraction}: VTLP, AS, and power-mel feature extraction are running on the example servers.
+\item \textbf{Connection between the example servers and the GPU servers}: Using {\tt ZeroMQ} for asynchronous message queueing.
+\item \textbf{Distributed neural net training}: Training on the GPU server using {\tt horovod}.
+\end{itemize}
+%
+%
+\begin{Figure}
+  \begin{center}
+    \resizebox{\textwidth}{!}{\input{../figures/end_to_end_training_system_poster.tex}}
+      \captionof{figure} { The Samsung Research end-to-end training framework for building an end-to-end
+  speech recognition system with multi CPU-GPU clusters and on-the-fly data
+  processing and augmentation pipeline.
+     }
+     \label{fig:end_to_end_training_system}
+  \end{center}
+\vspace{-5mm}
+\end{Figure}
+%
+%
+%
+%
+\begin{minipage}[]{0.45\linewidth}
+  {
+    \normalsize
+  \begin{center}
+  \resizebox{120mm}{!}{\input{../figures/e2e_asr_block_diagram_poster.tex}}
+  \end{center}
+\captionof{figure}{ 
+  The neural network structure for end-to-end speech recognition.}
+  }
+\end{minipage}
+%
+%
+\begin{minipage}[]{0.54\linewidth}
+  We used the RETURNN speech recognition system \cite{a_zeyer_interspeech_2018_00} with various modifications:
+    \begin{itemize}
+      \item{MoCha\cite{k_kim_asru_2019_00} and the modified beam search decoder.}
+      \item{Gradient clipping, modified learning-late warm-up, and so on.}
+      \item{Power-mel feature} Motivated by the power-law nonlinearity of ($(\cdot)^{\frac{1}{15}}$).
+      \item{Modified shallow fusion with a Transformer LM \cite{c_kim_interspeech_2019_00}}
+        \begin{align}
+  y_{0:L}^{*} = & \argmax_{y_{0:L}} \sum_{l=0}^{L-1} \Big[ \log P \left(y_l
+  |\vec{x}[0:M], y_{0:l} \right)
+  \nonumber \\
+                           & \qquad - \lambda_p \log P(y_l)
+                           + \lambda_{\text{lm}} \log P \left(y_l   |y_{0:l} \right)  \Big],
+                           \label{eq:lm_fusion}
+\end{align}
+    \item{Example queues for efficient data augmentation}
+    \end{itemize}
+\end{minipage}
+%
+%
+\begin{Figure}
+  \captionsetup[subfigure]{justification=centering}
+    \centering
+    \begin{minipage}{0.49\linewidth}
+			\centering
+      {\includegraphics[width=175mm]{../figures/plot_example_server_time}  \label{fig:plot_example_server_time} }
+			{(a)}	
+    \end{minipage}
+    \begin{minipage}{0.49\linewidth}
+			\centering
+      {\includegraphics[width=175mm]{../figures/plot_gpu_time_percentage} \label{fig:plot_gpu_time_percentage} }
+			{(b)}	
+    \end{minipage}
+  \captionof{figure} {\label{fig:plot_example_server_performance}
+  The efficiency of the {\it example server} with respect to
+  the number of CPUs per GPU: (a) The required time to
+  process a single epoch during the training phase and (b)
+  the percentage of {\tt Tensorflow } computation time defined by
+  $t_{\text{session}} =  \frac{\text{Time Spent in {\tt Tensorflow}
+  Session}}{\text{Elapsed Time}}$.
+  The blue horizontal dotted lines in each figure represent the case
+  when data augmentation with example servers is not employed.
+  }
+\end{Figure}
+%
+%
+\section{Experimental Results}
+%
+%
+%
+%
+\begin{itemize}
+\item \textbf{LibriSpeech experiments} (960-hr training and evaluation on 5.4-hr LibriSpeech {\tt test-clean}) \\
+\end{itemize}
+\begin{minipage}[b]{1.0\linewidth}
+%\begin{table}[!tbhp]
+  \renewcommand{\arraystretch}{1.3}
+  \centering
+        \captionof{table}{\label{tbl:near_field_result}
+        Summary of Word Error Rates (WERs) obtained for different
+        LibriSpeech and {\tt Bixby } near-field end-to-end ASR models
+        with and without an RNN LM.
+        }
+        %\vspace{-3mm}
+        \begin{tabular}{| c | c  || c | c |}
+          \hline
+          \multicolumn{2}{| l ||}{Models}
+                                 & BFA
+                                 & MoChA \\
+          \hline \hline
+          \multirow{3}{*}{\specialcell{LibriSpeech \\ (1536-cell) \\ test-clean}}
+                  & w/o LM  &   3.66  \% &  6.78  \%  \\
+                  & RNN-LM  &   2.85  \% &  5.54  \%  \\
+                  & Transformer LM  &   2.44  \% &   -   \\
+          \hline
+          \multirow{2}{*}{\specialcell{Bixby \\ (1024-cell) }}
+                  & w/o LM  &   8.25  \% &  10.77  \% \\
+                  & RNN-LM  &   7.92  \% &   9.95  \% \\
+          \hline
+       \end{tabular}
+       \vspace{-2mm}
+%\end{table}
+\end{minipage}
+%
+%
+%
+%
+\begin{itemize}
+\item \textbf{Bixby English command-set experiments} (10,000-hr {\tt Bixby } training set and {\tt Bixby} command test sets) \\
+\item Note that the MoCha version of the system trained using  {\tt Bixby } training set was commercialized for on-device dictation for high-end Samsung mobile phones. \\
+\end{itemize}
+\begin{Figure}
+  \captionsetup[subfigure]{justification=centering}
+    \centering
+    \begin{minipage}{0.49\textwidth}
+			\centering
+      {\includegraphics[width=175mm]{../figures/plot_farfield_wer_tv}}
+			{(a)}	
+    \end{minipage}
+%
+    \begin{minipage}{0.49\textwidth}
+			\centering
+      {\includegraphics[width=175mm]{../figures/plot_farfield_wer_music}}
+		{(b)}
+    \end{minipage}
+%
+%
+  %\vspace{-6mm}
+ \captionof{figure} {\label{fig:plot_farfield_wer}
+  Speech recognition accuracy at different Signal-to-Noise Ratios (SNRs)
+  under three different noisy conditions: direct TV noise (a)
+  , music noise (b), and babble noise (c). NBF, VTLP, and AS
+  stand for Neural Beam Former (NBF) \cite{j_heymann_icassp_2016_00},
+  Vocal Tract Length Perturbation (VTLP) \cite{c_kim_interspeech_2019_00} , and
+  Acoustics Simulator (AS) \cite{c_kim_interspeech_2017_00},
+  respectively.
+  \vspace{-2mm}
+ }
+\end{Figure}
+ %----------------------------------------------------------------------------------------
+%	REFERENCES
+%----------------------------------------------------------------------------------------
+
+%\nocite{*} % Print all references regardless of whether they were cited in the poster or not
+%\bibliographystyle{plain} % Plain referencing style
+%\bibliography{sample} % Use the example bibliography file sample.bib
+
+%
+\color{SaddleBrown} % SaddleBrown color for the introduction
+%\section{Conclusions}
+%%
+%\begin{enumerate}
+%\item We achieved 2.44 \% WER and 8.29 \% WER
+%  on the Librispeech {\it test-clean} and {\it test-other} databases.
+%%
+%\end{enumerate}
+%
+\color{DarkSlateGray} % DarkSlateGray color for the rest of the content
+%----------------------------------------------------------------------------------------
+\small
+\bibliographystyle{IEEEtran}
+\bibliography{../../common_bib_file/common_bib_file}
+\end{multicols}
+\end{document}
