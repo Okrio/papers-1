@@ -94,7 +94,7 @@
       \LARGE \textbf{Chanwoo Kim, Mehul Kumar, Kwangyoun Kim, and Dhananjaya Gowda}
   \\
 \LARGE Samsung Research, Seoul, South Korea\\ % University/organization
-\large \{chanw.com, mk0211.shin, ky85.kim, d.gowda\}@samsung.com
+\large \{chanw.com, mehul3.kumar, ky85.kim, d.gowda\}@samsung.com
     \end{center}
   \end{minipage}
   \begin{minipage}[t]{0.1\textwidth}
@@ -136,56 +136,161 @@
 
 \color{SaddleBrown} % SaddleBrown color for the introduction
 
-\section{Motivation}
+\section{Summary about Maximum Uniformity of Distribution (MUD)}
+%
+\begin{itemize}
+  \item We developed a novel approach for obtaining {the \color{Navy} nonlinearity function} in a {\it data-driven } way.
+  \item This approach is based on the assumption that neural-network training would be easier 
+  and the converged parameters would show better
+  performance when feature distribution is not too much
+  skewed or too much concentrated in an extremely narrow interval. 
 
-\begin{enumerate}
-  \item Applies Vocal Tract Length Perturbation (VTLP) to diversify the
-    training database \cite{n_jaitly_icml_workshop_2013_00}.
-  \item Resynthesizes VTLP-processed waveforms before performing feature extraction.
+  \item The criterion is to maximize {\color{Navy} the Uniformity of Distribution}.
+  \item We develop two different types of MUD. 
     \begin{itemize}
-        \item We can apply the acoustic simulator after performing the VTLP
-          processing.
-        \item We may use a different window length for the frequency warping from
-          the one used in feature processing for performance optimization.
+      \item Power Function-Based MUD
+      \item Histogram-Based MUD
     \end{itemize}
-\end{enumerate}
-
-
+  \item Power function-based MUD shows better results than the histogram-based MUD.
+  \item We achieved 4.02 \%  WER on test-clean and 13.34 \% WER on test-other without using any Language Models (LMs).
+  \item This approach may be extended to other domains as well.
+\end{itemize}
+%
+%
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
   \section{Maximization of Distribution Uniformity}
 
-\begin{Figure}
+\begin{itemize}
+  \item The MUD nonlinearity is applied to mel-filterbank energy for each channel.
+\end{itemize}
+
+\subsection{Power-function based maximization of distribution
+uniformity}
+%
+\begin{itemize}
+\item The transformation based on the power function:
+\begin{align}
+  \mathbf{Y} = \sigma_{p} \left(\mathbf{X} \right) = (X - x_{\text{min}})^{\alpha}.
+    \label{eq:power_mud}
+\end{align}
+%
+\item We expect $Y$ to follow the following uniform distribution:
+\begin{align}
+ \mathbf{Y} \sim 
+  \mathcal{U}(0, \left(x_{\text{max}} - x_{\text{min}} \right)^{\alpha} ).
+    \label{eq:pdf_y}
+\end{align}
+%
+\item
+The log likelihood of the data $X$ assuming the PDF in \eqref{eq:pdf_y}
+is given by (Refer to the paper for mathematical details):
+%
+%
+\begin{align}
+  \mathcal{L}\left(\alpha ; X\right) 
+      & = \sum_{i=0}^{N-1} \ln p_{\mathbf{X}} \left( x_i \right)  \nonumber \\
+      & = \sum_{i=0}^{N-1} 
+              \ln \left[ \frac{ \alpha (x_i - x_{\text{min}} )^{\alpha-1}}  
+              {\left(x_{\text{max}} - x_{\text{min}} \right)^{\alpha}} \right]  \nonumber \\
+      & = N \ln(\alpha) + \left(\alpha-1 \right) \sum_{i=0}^{N-1}
+        \ln \left(x_i - x_{\text{min}} \right)  
+       - N \alpha \ln \left(x_{\text{max}} - x_{\text{min}} \right).
+        \label{eq:x_likelihood}
+\end{align}
+%
+%
+%
+%
+%
+\item 
+%
+The following $\hat{\alpha}$ maximizes the log-likelihood of $\mathcal{L}\left(\alpha ; X\right)$
+(Refer to the paper for mathematical details).
+%
+%
+\begin{align}
+  \hat{\alpha} = \frac{1}{
+    \ln \left(\max \left\{x_i - x_{\text{min}}, \delta \right\} \right)
+    - \frac{1}{N} \sum_{i=0}^{N-1} \ln \left(x_i - x_{\text{min}}\right)}.
+  \label{eq:alpha_estimation}
+\end{align}
+%
+%
+\end{itemize}
+%
+%
+  \begin{Figure}
+    \begin{center}
+      \includegraphics[width=170mm]{estimated_power_coeff}
+      \captionof{figure} {
+        \label{fig:estimated_power_coeff}
+        The estimated power coefficients for each mel filterbank channels using
+        \eqref{eq:alpha_estimation}.
+      }
+    \end{center}
+    \vspace{-7mm}
+  \end{Figure}
+%
+%
+%
+\subsection{Histogram-based maximization of distribution uniformity}
+\begin{itemize}
+\item The distribution is uniformized using the empirical CDF (Refer to the paper for mathematical details):
+\begin{align}
+  \mathbf{Y} = \sigma_{np}(\mathbf{X}) 
+     = F_u^{-1} \left(\hat{F}_x(\mathbf{X})\right)
+      = \hat{F}_x(\mathbf{X}).
+  \label{eq:histogram_mud_simple}
+\end{align}
+\end{itemize}
+%
+%
+\begin{minipage}[]{0.54\linewidth}
+  \begin{Figure}
   \begin{center}
     {
       \includegraphics[width=170mm]{mel_filterbank_energy_histogram}
-      \label{fig:mel_filterbank_energy_histogram}
+      \label{fig:mel_filterbank_energy_histogram} \\
+      (a)
     }   
     \\  
     {
       \includegraphics[width=170mm]{power_function_based_mud_output_histogram}
-      \label{fig:power_function_based_mud_output_histogram}
+      \label{fig:power_function_based_mud_output_histogram} \\
+      (b)
     }   
-  \vspace{-2mm}
     \\  
     {
       \includegraphics[width=170mm]{histogram_based_mud_output_histogram}
-      \label{fig:histogram_based_mud_output_histogram}
+      \label{fig:histogram_based_mud_output_histogram} \\
+      (c)
     }   
-  \vspace{-2mm}
+    \\
     \captionof{figure} {
       The Probability Density Functions for the third filterbank channel
-       of (a): the mel filterbank energy $p[m, l], l = 3$ in  
-       \eqref{eq:mel_filterbank_energy}, (b): the power-function based MUD 
+       of (a): the mel filterbank energy $p[m, l], l = 3$ 
+       , (b): the power-function based MUD 
       output of this mel filterbank energy in \eqref{eq:power_mud}, (c) 
-      the histogram based-MUD in \eqref{eq:histogram_mud}. 
+      the histogram based-MUD in \eqref{eq:histogram_mud_simple}. 
       \label{fig:pdf_mud}
     }   
    \vspace{-7mm}
   \end{center}
 \end{Figure}
+\end{minipage}
+%
+%
+\begin{minipage}[]{0.45\linewidth}
+  \begin{Figure}
+  \begin{center}
+  \resizebox{150mm}{!}{\input{../figures/e2e_asr_block_diagram_poster.tex}}
+  \end{center}
+  \captionof{figure}{ 
+  The structure of the entire end-to-end speech recognition system.}
+  \end{Figure}
+\end{minipage}
 
-
-
+%
 %\begin{center}
 %  \includegraphics[width=0.2\linewidth]{power_function_based_mud_output_histogram}
 
@@ -205,41 +310,11 @@
 
 
 \section{End-to-End Speech recognition}
-
-\begin{minipage}{1.0\linewidth}
-  {
-    \normalsize
-  \begin{center}
-  \resizebox{180mm}{!}{\input{../figures/e2e_asr_block_diagram_poster.tex}}
-  \end{center}
-\captionof{figure}{ 
-  The structure of the entire end-to-end speech recognition system.}
-  }
-\end{minipage}
-
-
-  We used the RETURNN speech recognition system
-  \cite{a_zeyer_interspeech_2018_00} with various modifications:
+ We used the RETURNN speech recognition system \cite{a_zeyer_interspeech_2018_00} with various modifications:
     \begin{itemize}
-      \item{Gradient clipping and learning-late warm-up.}
-      \item{Power-mel feature} Motivated by the power-law nonlinearity of ($(\cdot)^{\frac{1}{15}}$) in PNCC \cite{C_Kim_IEEETran_2016_1}.
-      \item{Modified shallow fusion with a Transformer LM}
-
-
-        \begin{align}
-  y_{0:L}^{*} = & \argmax_{y_{0:L}} \sum_{l=0}^{L-1} \Big[ \log P \left(y_l
-  |\vec{x}[0:M], y_{0:l} \right)
-  \nonumber \\
-                           & \qquad - \lambda_p \log P(y_l)
-                           + \lambda_{\text{lm}} \log P \left(y_l   |y_{0:l} \right)  \Big],
-                           \label{eq:lm_fusion}
-\end{align}
-
-
-
+      \item{MoCha\cite{k_kim_asru_2019_00} and the modified beam search decoder.}
+      \item{Gradient clipping, modified learning-late warm-up, and so on.}
     \end{itemize}
-
-
 
 %----------------------------------------------------------------------------------------
 %	OBJECTIVES
@@ -252,13 +327,10 @@
 %----------------------------------------------------------------------------------------
 
 \section{Experimental Results}
-\begin{itemize}
-  \item For training, we used { \bf the Librispeech train-clean and
-    train-other}.
-  \item For evaluation, we used { \bf the test-clean and test-other of this Libri
-    Speech database. }
-\end{itemize}
 
+\begin{itemize}
+\item \textbf{LibriSpeech experiments} (960-hr training and evaluation on LibriSpeech {\tt test-clean} and {\tt test-other} ) 
+\end{itemize}
 
 \begin{minipage}[b]{1.0\linewidth}
   %\begin{table*}[!htbp]
@@ -298,6 +370,12 @@
      \end{tabular}
      \vspace{-4mm}
 \end{minipage}
+\begin{itemize}
+\item The Power-Function Based MUD shows slightly better result than the power-law nonlinearity with the power coefficient of $\frac{1}{15}$ \cite{
+C_Kim_IEEETran_2016_1}.
+\item We hypothesize that the reason why histogram-based MUD does slightly worse than the power-
+function based MUD is that it somewhat obscured the energy boundary between speech vs non-speech.
+\end{itemize}
  %----------------------------------------------------------------------------------------
 %	REFERENCES
 %----------------------------------------------------------------------------------------
@@ -307,32 +385,10 @@
 %\bibliography{sample} % Use the example bibliography file sample.bib
 
 %
-\color{SaddleBrown} % SaddleBrown color for the introduction
-\section{Conclusions}
-%
-{ \color{red}
-We achieved 2.44 \% WER and 8.29 \% WER
-  on the Librispeech {\it test-clean} and {\it test-other} databases.
-To the best of our knowledge, the 2.44 \% WER on the {\it test-clean}
-is the best result ever reported on this database
-}
-%
-%
-\begin{enumerate}
-  \item Applies Vocal Tract Length Perturbation (VTLP) to diversify the
-    training database. \cite{n_jaitly_icml_workshop_2013_00}
-  \item Resynthesizes VTLP-processed waveforms before performing feature extraction.
-    \begin{itemize}
-        \item We can apply the acoustic simulator after performing the VTLP
-          processing.
-        \item We may use a different window length (50 {\it ms}) for the frequency warping from
-          the one used in feature processing (25 {\it ms}).
-    \end{itemize}
-  \item Applies the power-mel feature.
-  \item Applies a modified shallow-fusion with a Transformer LM.
-\end{enumerate}
+
 \color{DarkSlateGray} % DarkSlateGray color for the rest of the content
 %----------------------------------------------------------------------------------------
+\small
 \bibliographystyle{IEEEtran}
 \bibliography{../../common_bib_file/common_bib_file}
 \end{multicols}
